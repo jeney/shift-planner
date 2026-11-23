@@ -1,0 +1,16 @@
+# Secrets & local env
+.env
+.env.*
+!.env.example
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# Never commit real planning data
+*.shiftplan.json
+!**/demo*.shiftplan.json
