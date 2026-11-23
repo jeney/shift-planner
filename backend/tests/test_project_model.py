@@ -7,7 +7,7 @@ from shift_planner.domain.project import Project
 
 
 def minimal(**overrides: Any) -> dict[str, Any]:
-    raw: dict[str, Any] = {"schemaVersion": 1, "id": "p1", "month": "2027-02"}
+    raw: dict[str, Any] = {"schemaVersion": 2, "id": "p1", "month": "2027-02"}
     raw.update(overrides)
     return raw
 
@@ -42,6 +42,7 @@ def test_defaults_match_store_decisions() -> None:
     assert rules.min_rest_hours == 11
     assert rules.max_consecutive_days == 6
     assert rules.max_weekly_hours == 48
+    assert rules.full_time_contract_warning is True
     assert rules.monthly_tolerance_hours == 2
     assert rules.balancing_period_weeks == 16
     assert rules.monthly_target_mode == "weeks_per_month"
@@ -65,7 +66,7 @@ def test_json_uses_camel_case_and_round_trips() -> None:
 
 def test_accepts_snake_case_too() -> None:
     project = Project.model_validate(
-        {"schema_version": 1, "id": "p1", "month": "2027-02", "solver": {"time_limit_seconds": 5}}
+        {"schema_version": 2, "id": "p1", "month": "2027-02", "solver": {"time_limit_seconds": 5}}
     )
     assert project.solver.time_limit_seconds == 5
 

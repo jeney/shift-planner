@@ -14,4 +14,4 @@ export type DayType = CalendarDay['dayType']
 export type ApiError = Schemas['ApiError']
 
 /** Must match the backend. Fails to compile if the generated schema moves to a new version. */
-export const CURRENT_SCHEMA_VERSION: Project['schemaVersion'] = 1
+export const CURRENT_SCHEMA_VERSION: Project['schemaVersion'] = 2

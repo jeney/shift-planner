@@ -24,7 +24,7 @@ def test_new_project(client: TestClient) -> None:
     response = client.get("/api/project/new", params={"month": "2027-02"})
     assert response.status_code == 200
     body = response.json()
-    assert body["schemaVersion"] == 1
+    assert body["schemaVersion"] == 2
     assert body["month"] == "2027-02"
     assert body["employees"] == []
     assert body["store"]["openingHours"]["monday"]["closes"] == "20:00"
@@ -47,14 +47,14 @@ def test_migrate_newer_version(client: TestClient) -> None:
     assert response.status_code == 422
     assert response.json() == {
         "code": "project.newerSchemaVersion",
-        "params": {"version": 5, "supported": 1},
+        "params": {"version": 5, "supported": 2},
         "details": [],
     }
 
 
 def test_migrate_invalid_project(client: TestClient) -> None:
     response = client.post(
-        "/api/project/migrate", json={"schemaVersion": 1, "id": "p", "month": "nope"}
+        "/api/project/migrate", json={"schemaVersion": 2, "id": "p", "month": "nope"}
     )
     assert response.status_code == 422
     body = response.json()

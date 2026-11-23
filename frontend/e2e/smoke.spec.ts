@@ -54,7 +54,7 @@ test('a saved project can be opened in another browser', async ({ page, browser 
   const download = await downloadPromise
   expect(download.suggestedFilename()).toMatch(/^demo-plan-\d{4}-\d{2}\.shiftplan\.json$/)
   const saved = JSON.parse(await readFile(await download.path(), 'utf8'))
-  expect(saved.schemaVersion).toBe(1)
+  expect(saved.schemaVersion).toBe(2)
   expect(saved.employees).toHaveLength(9)
 
   // A fresh browser context has no autosave, like opening the file on another computer.

@@ -14,7 +14,7 @@ from pydantic import Field, model_validator
 from shift_planner.domain.base import ApiModel, HexColor, Id, TimeOfDay, YearMonth, to_minutes
 from shift_planner.domain.calendar import DayType, month_dates
 
-CURRENT_SCHEMA_VERSION: Literal[1] = 1
+CURRENT_SCHEMA_VERSION: Literal[2] = 2
 
 Hours = Annotated[float, Field(ge=0, le=24)]
 WeeklyHours = Annotated[float, Field(ge=0, le=168)]
@@ -330,8 +330,8 @@ class Rules(ApiModel):
     max_weekly_hours: WeeklyHours = 48
     full_time_threshold_hours: WeeklyHours = 37
     """Employees with at least this many contract hours per week count as full-time."""
-    full_time_weekly_warning_hours: WeeklyHours | None = 37
-    """Warn (don't block) when a full-timer is planned above this in a week."""
+    full_time_contract_warning: bool = True
+    """Warn (don't block) when a full-timer is planned above their own contract hours in a week."""
     monthly_tolerance_hours: float = Field(2, ge=0, le=100)
     monthly_hard_limit_hours: float | None = Field(None, ge=0, le=200)
     """Optional hard limit on |planned − target| per month. None = soft only."""
@@ -426,7 +426,7 @@ class Plan(ApiModel):
 
 
 class Project(ApiModel):
-    schema_version: Literal[1] = CURRENT_SCHEMA_VERSION
+    schema_version: Literal[2] = CURRENT_SCHEMA_VERSION
     id: Id
     name: str = Field("Shift plan", max_length=100)
     month: YearMonth

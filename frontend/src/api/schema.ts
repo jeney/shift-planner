@@ -467,10 +467,10 @@ export interface components {
         Project: {
             /**
              * Schemaversion
-             * @default 1
+             * @default 2
              * @constant
              */
-            schemaVersion: 1;
+            schemaVersion: 2;
             /** Id */
             id: string;
             /**
@@ -537,10 +537,10 @@ export interface components {
              */
             fullTimeThresholdHours: number;
             /**
-             * Fulltimeweeklywarninghours
-             * @default 37
+             * Fulltimecontractwarning
+             * @default true
              */
-            fullTimeWeeklyWarningHours: number | null;
+            fullTimeContractWarning: boolean;
             /**
              * Monthlytolerancehours
              * @default 2

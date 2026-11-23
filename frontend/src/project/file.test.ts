@@ -39,7 +39,7 @@ describe('project files', () => {
         Response.json(
           {
             code: 'project.newerSchemaVersion',
-            params: { version: 3, supported: 1 },
+            params: { version: 3, supported: 2 },
             details: [],
           },
           { status: 422 },
@@ -47,7 +47,7 @@ describe('project files', () => {
     })
     await expect(loadProjectFile(blob('{"schemaVersion": 3}'))).rejects.toMatchObject({
       key: 'errors.project.newerSchemaVersion',
-      params: { version: 3, supported: 1 },
+      params: { version: 3, supported: 2 },
     })
   })
 
