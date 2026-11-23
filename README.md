@@ -15,7 +15,7 @@ with Google OR-Tools CP-SAT, and you can fine-tune it by hand with live rule che
 
 | Light | Dark |
 |---|---|
-| ![App shell, light theme](docs/screenshots/shell-light.png) | ![App shell, dark theme](docs/screenshots/shell-dark.png) |
+| ![Welcome screen, light theme](docs/screenshots/welcome-light.png) | ![Welcome screen, dark theme](docs/screenshots/welcome-dark.png) |
 
 ## Quick start
 
@@ -181,6 +181,25 @@ compose.yaml       Production-like stack: nginx serves the frontend and proxies 
 compose.dev.yaml   Development overrides with hot reload
 ```
 
+### API
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /api/health` | Liveness check |
+| `GET /api/calendar/{YYYY-MM}` | Days of the month with day types, Danish public holidays and notable days |
+| `GET /api/project/new?month=YYYY-MM` | An empty project with every default |
+| `GET /api/project/demo?month=YYYY-MM` | The fictional demo team |
+| `POST /api/project/migrate` | Upgrade a saved project file to the current schema version and validate it |
+
+Interactive docs: `/api/docs`. Errors come back as `{ code, params, details }`, and the frontend translates `code`.
+
+### Project files and schema versions
+
+Saved files (`*.shiftplan.json`) include a `schemaVersion`. When the schema changes, bump
+`CURRENT_SCHEMA_VERSION` in `backend/src/shift_planner/domain/project.py` and add a migration in
+`backend/src/shift_planner/domain/migrations.py`. Older files and autosaves are upgraded automatically
+when they're opened.
+
 ### API types
 
 The Pydantic models are the canonical schema. The frontend's TypeScript types are generated from
@@ -213,7 +232,7 @@ production-like stack.
 ## Roadmap
 
 0. ✅ Scaffold: repo, Docker, CI, health endpoint, app shell with language switcher
-1. Schema: project model, generated TS types, save/open, autosave, demo project
+1. ✅ Schema: project model, generated TS types, save/open, autosave, demo project
 2. Setup UI: Store, Employees, Availability & wishes, Advanced settings
 3. Solver core: hard constraints, coverage, `/api/solve`
 4. Objective: wishes, hour-balance steering, daily targets

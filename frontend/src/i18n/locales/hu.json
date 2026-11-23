@@ -38,5 +38,52 @@
   "empty": {
     "comingSoon": "Hamarosan",
     "comingSoonBody": "Ez a lépés egy következő kiadásban érkezik."
+  },
+  "common": {
+    "cancel": "Mégse"
+  },
+  "project": {
+    "menu": "Projekt",
+    "new": "Új beosztás…",
+    "open": "Megnyitás…",
+    "save": "Mentés",
+    "demo": "Demó projekt betöltése",
+    "newTitle": "Új beosztás indítása",
+    "newDescription": "Válaszd ki a hónapot, amelyet tervezni szeretnél.",
+    "month": "Hónap",
+    "year": "Év",
+    "create": "Beosztás létrehozása",
+    "replaceTitle": "Lecseréled a jelenlegi beosztást?",
+    "replaceDescription": "A jelenlegi beosztásod lecserélődik. Ha meg szeretnéd tartani, előbb mentsd el.",
+    "replace": "Csere",
+    "created": "Új beosztás létrehozva: {{month}}",
+    "demoLoaded": "A demó projekt betöltve",
+    "opened": "Projekt megnyitva",
+    "saved": "Mentve: {{file}}"
+  },
+  "welcome": {
+    "title": "Tervezd meg a következő havi beosztást",
+    "subtitle": "Add meg a nyitvatartást, a csapatodat és a kéréseiket. A Beosztástervező szabálykövető beosztást készít, amelyet kézzel is finomíthatsz.",
+    "newTitle": "Új beosztás indítása",
+    "newDescription": "Kezdj ésszerű alapbeállításokkal a választott hónapra.",
+    "demoTitle": "Próbáld ki a demót",
+    "demoDescription": "Egy 9 fős kitalált csapat elérhetőséggel és kérésekkel, tervezésre készen.",
+    "openTitle": "Mentett beosztás megnyitása",
+    "openDescription": "Folytasd egy korábban mentett .json fájlból.",
+    "chooseFile": "Fájl kiválasztása…",
+    "privacy": "Az adataid ebben a böngészőben maradnak. A szerver csak a beosztás kiszámításához használja őket, és semmit sem tárol."
+  },
+  "errors": {
+    "offline": "A tervező szolgáltatás nem érhető el. Ellenőrizd, hogy fut-e, és próbáld újra.",
+    "unknown": "Hiba történt. Kérjük, próbáld újra.",
+    "fileNotJson": "Ez a fájl nem Beosztástervező projekt.",
+    "restoreFailed": "Az automatikusan mentett beosztást nem sikerült visszaállítani. Egy biztonsági másolat megmaradt ebben a böngészőben.",
+    "project": {
+      "missingSchemaVersion": "Ez a fájl nem Beosztástervező projekt (nincs formátumverzió).",
+      "newerSchemaVersion": "Ezt a fájlt a Beosztástervező egy újabb verziója mentette ({{version}}. formátum; ez az alkalmazás legfeljebb a {{supported}}. formátumot támogatja).",
+      "noMigration": "Ez a fájl a(z) {{version}}. formátumot használja, amely nem frissíthető automatikusan.",
+      "invalid_one": "A projektfájlban {{count}} hiba van, ezért nem nyitható meg.",
+      "invalid_other": "A projektfájlban {{count}} hiba van, ezért nem nyitható meg."
+    }
   }
 }
