@@ -183,3 +183,36 @@ test('edit the plan by hand with live checks, undo, and keep edits when re-gener
   })
   await expect(cell).toContainText('09:00–13:00')
 })
+
+test('exports the plan as .ods, .xlsx and a printable A4 page', async ({ page }) => {
+  needsBackend()
+  test.setTimeout(120_000)
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Load demo project' }).click()
+  await page.getByRole('tab', { name: /Generate/ }).click()
+  await page.getByRole('button', { name: 'Generate plan' }).click()
+  await expect(page.getByText(/^(Best possible|Good) plan found$/)).toBeVisible({ timeout: 60_000 })
+  await page.getByRole('tab', { name: /Export/ }).click()
+
+  for (const [button, extension] of [
+    ['Download for LibreOffice (.ods)', 'ods'],
+    ['Download for Excel (.xlsx)', 'xlsx'],
+  ] as const) {
+    const downloading = page.waitForEvent('download')
+    await page.getByRole('button', { name: button }).click()
+    const download = await downloading
+    expect(download.suggestedFilename()).toMatch(
+      new RegExp(`^demo-bakery-plan-\\d{4}-\\d{2}\\.${extension}$`),
+    )
+    const bytes = await readFile(await download.path())
+    expect(bytes.subarray(0, 2).toString()).toBe('PK') // a zip package
+  }
+
+  // The print view is hidden on screen and is the only thing shown when printing.
+  await expect(page.getByTestId('print-view')).toBeHidden()
+  await page.emulateMedia({ media: 'print' })
+  await expect(page.getByTestId('print-view')).toBeVisible()
+  await expect(page.getByTestId('print-view')).toContainText('Anna Holm')
+  const pdf = await page.pdf({ preferCSSPageSize: true })
+  expect(pdf.subarray(0, 4).toString()).toBe('%PDF')
+})

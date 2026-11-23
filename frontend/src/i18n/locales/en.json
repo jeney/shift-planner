@@ -613,5 +613,27 @@
     "emptyTitle": "No plan yet",
     "emptyBody": "Generate a plan on the Generate step, or start with an empty plan and add shifts by hand.",
     "planByHand": "Plan by hand"
+  },
+  "export": {
+    "subtitle": "Shift plan",
+    "peoplePerDay": "People per day",
+    "hoursPerDay": "Staff hours per day",
+    "legendTimes": "Shifts are shown as start–end (24-hour clock).",
+    "legendShaded": "Shaded columns are weekends and public holidays.",
+    "legendHolidays": "Public holidays: {{list}}.",
+    "legendHours": "Planned and target hours are worked (paid) hours. New balance = carried in + difference.",
+    "title": "Export the plan",
+    "description": "Print it, save it as PDF, or open it in LibreOffice Calc or Excel. Only the plan and the hour summary are included.",
+    "print": "Print or save as PDF",
+    "printHelp": "Opens your browser's print dialog (A4 landscape). Choose “Save as PDF” to get a file.",
+    "ods": "Download for LibreOffice (.ods)",
+    "xlsx": "Download for Excel (.xlsx)",
+    "sheetName": "Plan",
+    "downloaded": "Downloaded {{file}}",
+    "noPlanTitle": "Nothing to export yet",
+    "noPlanBody": "Generate a plan, or plan by hand, first.",
+    "waiting": "Calculating hours…",
+    "summary_one": "{{count}} shift for {{people}} people",
+    "summary_other": "{{count}} shifts for {{people}} people"
   }
 }

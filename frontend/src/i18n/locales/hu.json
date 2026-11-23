@@ -613,5 +613,27 @@
     "emptyTitle": "Még nincs beosztás",
     "emptyBody": "Készíts beosztást a Generálás lépésben, vagy kezdj üres beosztással, és add hozzá kézzel a műszakokat.",
     "planByHand": "Kézi tervezés"
+  },
+  "export": {
+    "subtitle": "Beosztás",
+    "peoplePerDay": "Létszám naponta",
+    "hoursPerDay": "Munkaórák naponta",
+    "legendTimes": "A műszakok kezdés–befejezés formában szerepelnek (24 órás formátum).",
+    "legendShaded": "A szürke oszlopok a hétvégék és az ünnepnapok.",
+    "legendHolidays": "Ünnepnapok: {{list}}.",
+    "legendHours": "A tervezett és a cél órák ledolgozott (fizetett) órák. Új egyenleg = áthozott + eltérés.",
+    "title": "A beosztás exportálása",
+    "description": "Nyomtasd ki, mentsd PDF-be, vagy nyisd meg LibreOffice Calcban vagy Excelben. Csak a beosztás és az óraösszesítő kerül bele.",
+    "print": "Nyomtatás vagy mentés PDF-be",
+    "printHelp": "Megnyitja a böngésző nyomtatási ablakát (A4 fekvő). Fájlhoz válaszd a „Mentés PDF-ként” lehetőséget.",
+    "ods": "Letöltés LibreOffice-hoz (.ods)",
+    "xlsx": "Letöltés Excelhez (.xlsx)",
+    "sheetName": "Beosztás",
+    "downloaded": "Letöltve: {{file}}",
+    "noPlanTitle": "Még nincs mit exportálni",
+    "noPlanBody": "Előbb készíts beosztást, vagy tervezz kézzel.",
+    "waiting": "Órák számítása…",
+    "summary_one": "{{count}} műszak, {{people}} munkatárs",
+    "summary_other": "{{count}} műszak, {{people}} munkatárs"
   }
 }
