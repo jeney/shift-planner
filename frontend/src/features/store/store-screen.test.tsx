@@ -93,4 +93,25 @@ describe('StoreScreen', () => {
     await userEvent.click(screen.getByRole('switch', { name: 'Allow someone to work alone' }))
     expect(project().store.allowWorkingAlone).toBe(true)
   })
+
+  it('converts expected guests into staff-hour targets when guest demand is on', async () => {
+    useProjectStore.getState().updateProject((p) => {
+      p.guestDemand.enabled = true
+    })
+    renderWithProviders(<StoreScreen />)
+    const input = await screen.findByLabelText('Wed, Dec 1')
+    fireEvent.focus(input)
+    fireEvent.change(input, { target: { value: '1100' } })
+    expect(project().guestDemand.guestsByDate).toEqual({ '2027-12-01': 1100 })
+    expect(screen.getByText('→ 22 h')).toBeInTheDocument()
+    expect(screen.getByText('1 of 31 days have a guest count.')).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Clear all' }))
+    expect(project().guestDemand.guestsByDate).toEqual({})
+  })
+
+  it('hides the guest section while guest demand is off', () => {
+    renderWithProviders(<StoreScreen />)
+    expect(screen.queryByText('Expected guests')).not.toBeInTheDocument()
+  })
 })

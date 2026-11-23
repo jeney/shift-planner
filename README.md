@@ -93,9 +93,14 @@ The defaults match the store this app was built for:
   - Nobody works alone unless *Allow someone to work alone* is on.
   - Optional time-range minimums, e.g. "≥ 2 people 11:00–14:00 on Saturdays".
   - Optional daily total-hours targets per day type.
-- **Guest-based demand** (optional, off by default): enter the expected guests per day. A table of points such as
-  1000 → 20 h, 1250 → 25 h, 1500 → 30 h converts guests into that day's total staff hours, with linear
-  interpolation or step tiers.
+- **Guest-based demand** (optional, off by default; turn it on in *Advanced settings*): enter the expected guests per
+  day on the Store step. A table of points such as 1000 → 20 h, 1250 → 25 h, 1500 → 30 h converts guests into that
+  day's total staff hours, by linear interpolation or step tiers, clamped below the first point and above the last.
+  - The result is a **soft** target, ± a tolerance, steered by the *daily hour targets* weight, because guest counts
+    are estimates. It stays soft even when *daily hours are hard limits* is on.
+  - Opening, closing and no-one-alone rules still apply.
+  - Misses show as warnings, and the plan grid shows each day's target under its hours.
+  - Days without a guest count get no target, and the pre-check warns about them.
 
 ### Employees and hour balances
 
@@ -340,7 +345,7 @@ production-like stack.
 5. ✅ Diagnostics and best-effort plans with violation reporting
 6. ✅ Plan grid: editing, live validation, undo/redo, pin & re-generate
 7. ✅ Export: PDF/print, ODS/XLSX
-8. Guest-based demand (optional feature)
+8. ✅ Guest-based demand (optional feature)
 9. Polish: design pass, translations review, e2e tests, docs
 
 ## License

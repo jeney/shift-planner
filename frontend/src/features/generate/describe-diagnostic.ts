@@ -18,6 +18,7 @@ const KNOWN = new Set([
   'hours_above_demand',
   'rider_without_driver',
   'no_driver_early',
+  'guest_counts_missing',
   'solver.timeout',
 ])
 const LISTS_UNAVAILABLE = new Set([

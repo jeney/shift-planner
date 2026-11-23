@@ -28,7 +28,24 @@ def precheck(ctx: Context) -> list[Diagnostic]:
     diagnostics += _working_days(ctx)
     diagnostics += _hours(ctx)
     diagnostics += _rides(ctx)
+    diagnostics += _guests(ctx)
     return diagnostics
+
+
+def _guests(ctx: Context) -> list[Diagnostic]:
+    """Guest-based demand is on, but some open days have no expected guest count."""
+    if not ctx.project.guest_demand.enabled:
+        return []
+    missing = [info for info in ctx.days if info.window is not None and info.guest_target is None]
+    if not missing:
+        return []
+    return [
+        Diagnostic(
+            code="guest_counts_missing",
+            severity="warning",
+            params={"count": len(missing), "first": missing[0].date.isoformat()},
+        )
+    ]
 
 
 def _blocked_at(ctx: Context, info: DayInfo, window: Window) -> list[str]:

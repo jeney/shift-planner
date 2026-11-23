@@ -174,7 +174,12 @@
     "rangeInvalid": "Vælg mindst én dagtype og et sluttidspunkt efter starttidspunktet.",
     "removeRange": "Fjern travl periode",
     "dailyHard": "Timer pr. dag er faste grænser",
-    "dailyHardHelp": "Fra: planlæggeren sigter efter timerne pr. dag, men må gå uden for dem, hvis det er nødvendigt. Til: der planlægges aldrig uden for dem, hvilket kan gøre en måned umulig at planlægge."
+    "dailyHardHelp": "Fra: planlæggeren sigter efter timerne pr. dag, men må gå uden for dem, hvis det er nødvendigt. Til: der planlægges aldrig uden for dem, hvilket kan gøre en måned umulig at planlægge.",
+    "guestsTitle": "Forventede gæster",
+    "guestsDescription": "Antallet af gæster sætter dagens mål for personaletimer (± {{tolerance}} t) ud fra omregningstabellen under Avancerede indstillinger. Lad en dag stå tom for intet mål.",
+    "guestsClear": "Ryd alle",
+    "guestsFilled": "{{filled}} af {{total}} dage har et antal gæster.",
+    "guestsHours": "→ {{hours}}"
   },
   "rules": {
     "minShiftHours": {
@@ -429,7 +434,6 @@
     "weightsDescription": "Hvor meget hvert blødt mål vægter i forhold til de andre. Højere betyder vigtigere.",
     "guestsTitle": "Bemanding ud fra gæster",
     "guestsDescription": "Omsæt forventede gæster pr. dag til dagens samlede personaletimer.",
-    "comingSoon": "Kommer snart",
     "solverTitle": "Beregning",
     "solverDescription": "Hvor længe planlæggeren må lede efter den bedste plan."
   },
@@ -466,7 +470,7 @@
   "guestDemand": {
     "enabled": {
       "label": "Brug bemanding ud fra gæster",
-      "help": "Kommer i en senere version. Du kan allerede forberede omregningstabellen."
+      "help": "Sæt dagens samlede personaletimer ud fra det forventede antal gæster. Indtast antal gæster under Butik. Målet er blødt: planlæggeren sigter efter det inden for tolerancen."
     },
     "mode": {
       "label": "Mellem punkterne",
@@ -557,7 +561,9 @@
     "daily_hours_above_max": "{{date}}: {{planned}} t planlagt, over dagens mål på {{max}} t.",
     "no_ride_early": "{{name}} starter kl. {{start}} {{date}}, før første bus ({{cutoff}}), uden chauffør.",
     "no_ride_late": "{{name}} slutter kl. {{end}} {{date}}, efter sidste bus ({{cutoff}}), uden chauffør.",
-    "monthly_limit_exceeded": "{{name}} er {{deviation}} t fra månedsmålet (grænse ±{{limit}} t)."
+    "monthly_limit_exceeded": "{{name}} er {{deviation}} t fra månedsmålet (grænse ±{{limit}} t).",
+    "guest_hours_below": "{{date}}: {{planned}} t planlagt til {{guests}} forventede gæster, under målet på {{target}} t (± {{tolerance}} t).",
+    "guest_hours_above": "{{date}}: {{planned}} t planlagt til {{guests}} forventede gæster, over målet på {{target}} t (± {{tolerance}} t)."
   },
   "diagnostic": {
     "no_employees": "Der er ingen at planlægge for endnu. Tilføj personer under Medarbejdere.",
@@ -576,7 +582,8 @@
       "timeout": "Der blev ikke fundet en plan inden for {{seconds}} s."
     },
     "unknown": "Planlæggeren rapporterede et problem med denne måned.",
-    "unavailableList": "Utilgængelige: {{names}}."
+    "unavailableList": "Utilgængelige: {{names}}.",
+    "guest_counts_missing": "Bemanding ud fra gæster er slået til, men {{count}} dage mangler et forventet antal gæster (første: {{first}}). De dage får intet mål for personaletimer."
   },
   "plan": {
     "gridLabel": "Vagtplan",
@@ -612,7 +619,8 @@
     "issuesLabel": "Brudte regler og advarsler",
     "emptyTitle": "Ingen plan endnu",
     "emptyBody": "Generér en plan under Generér, eller start med en tom plan og tilføj vagter manuelt.",
-    "planByHand": "Planlæg manuelt"
+    "planByHand": "Planlæg manuelt",
+    "guestTarget": "mål {{hours}}"
   },
   "export": {
     "subtitle": "Vagtplan",

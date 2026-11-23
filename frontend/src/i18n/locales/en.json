@@ -174,7 +174,12 @@
     "rangeInvalid": "Pick at least one day type, and an end time after the start time.",
     "removeRange": "Remove busy period",
     "dailyHard": "Daily hours are hard limits",
-    "dailyHardHelp": "Off: the planner aims for the daily hours but may go outside them when needed. On: never planned outside them, which can make a month impossible to plan."
+    "dailyHardHelp": "Off: the planner aims for the daily hours but may go outside them when needed. On: never planned outside them, which can make a month impossible to plan.",
+    "guestsTitle": "Expected guests",
+    "guestsDescription": "Each day's guest count sets its staff-hours target (± {{tolerance}} h), using the conversion table in Advanced settings. Leave a day empty for no target.",
+    "guestsClear": "Clear all",
+    "guestsFilled": "{{filled}} of {{total}} days have a guest count.",
+    "guestsHours": "→ {{hours}}"
   },
   "rules": {
     "minShiftHours": {
@@ -429,7 +434,6 @@
     "weightsDescription": "How much each soft goal matters relative to the others. Higher means more important.",
     "guestsTitle": "Guest-based demand",
     "guestsDescription": "Turn expected guests per day into the day's total staff hours.",
-    "comingSoon": "Coming soon",
     "solverTitle": "Solver",
     "solverDescription": "How long the planner may search for the best plan."
   },
@@ -466,7 +470,7 @@
   "guestDemand": {
     "enabled": {
       "label": "Use guest-based demand",
-      "help": "Arrives in a later release. You can already prepare the conversion table."
+      "help": "Set each day's total staff hours from the expected number of guests. Enter guest counts on the Store step. The target is soft: the planner aims for it within the tolerance."
     },
     "mode": {
       "label": "Between the points",
@@ -557,7 +561,9 @@
     "daily_hours_above_max": "{{date}}: {{planned}} h planned, above the daily target of {{max}} h.",
     "no_ride_early": "{{name}} starts at {{start}} on {{date}}, before the first bus ({{cutoff}}), without a driver.",
     "no_ride_late": "{{name}} finishes at {{end}} on {{date}}, after the last bus ({{cutoff}}), without a driver.",
-    "monthly_limit_exceeded": "{{name}} is {{deviation}} h from the monthly target (limit ±{{limit}} h)."
+    "monthly_limit_exceeded": "{{name}} is {{deviation}} h from the monthly target (limit ±{{limit}} h).",
+    "guest_hours_below": "{{date}}: {{planned}} h planned for {{guests}} expected guests, below the {{target}} h target (± {{tolerance}} h).",
+    "guest_hours_above": "{{date}}: {{planned}} h planned for {{guests}} expected guests, above the {{target}} h target (± {{tolerance}} h)."
   },
   "diagnostic": {
     "no_employees": "There's nobody to plan yet. Add people on the Employees step.",
@@ -576,7 +582,8 @@
       "timeout": "No plan was found within {{seconds}} s."
     },
     "unknown": "The planner reported a problem with this month.",
-    "unavailableList": "Unavailable: {{names}}."
+    "unavailableList": "Unavailable: {{names}}.",
+    "guest_counts_missing": "Guest-based demand is on, but {{count}} days have no expected guest count (first: {{first}}). Those days get no staff-hours target."
   },
   "plan": {
     "gridLabel": "Shift plan",
@@ -612,7 +619,8 @@
     "issuesLabel": "Broken rules and warnings",
     "emptyTitle": "No plan yet",
     "emptyBody": "Generate a plan on the Generate step, or start with an empty plan and add shifts by hand.",
-    "planByHand": "Plan by hand"
+    "planByHand": "Plan by hand",
+    "guestTarget": "target {{hours}}"
   },
   "export": {
     "subtitle": "Shift plan",

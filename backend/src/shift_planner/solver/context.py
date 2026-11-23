@@ -8,6 +8,7 @@ from datetime import date, datetime, timedelta
 
 from shift_planner.domain.base import to_minutes
 from shift_planner.domain.calendar import CalendarDay, DayType, month_calendar
+from shift_planner.domain.guests import guest_hours
 from shift_planner.domain.hours import StaffedWindow, staffed_window, team_targets
 from shift_planner.domain.project import AvailabilityEntry, Employee, Project
 
@@ -41,6 +42,9 @@ class DayInfo:
     """Busy periods for this day type: ((start, end), min people)."""
     daily_min: int | None
     daily_max: int | None
+    guest_target: int | None
+    """Guest-based total staff minutes for the day (soft, ± guest_tolerance)."""
+    guest_tolerance: int
     early_cutoff: int
     late_cutoff: int
 
@@ -138,6 +142,8 @@ def build_context(project: Project) -> Context:
                 ],
                 daily_min=_minutes(staffing.daily_hours_min),
                 daily_max=_minutes(staffing.daily_hours_max),
+                guest_target=_guest_target(project, day.date),
+                guest_tolerance=round(project.guest_demand.tolerance_hours * 60),
                 early_cutoff=to_minutes(rules.bus_rule.early_cutoff.for_day_type(day.day_type)),
                 late_cutoff=to_minutes(rules.bus_rule.late_cutoff.for_day_type(day.day_type)),
             )
@@ -179,6 +185,15 @@ def build_context(project: Project) -> Context:
 def minutes_since(moment: datetime, month_start: datetime) -> int:
     """Whole minutes from `moment` until the start of the month (negative if after)."""
     return int((month_start - moment) / timedelta(minutes=1))
+
+
+def _guest_target(project: Project, day: date) -> int | None:
+    demand = project.guest_demand
+    guests = demand.guests_by_date.get(day)
+    if not demand.enabled or guests is None:
+        return None
+    hours = guest_hours(guests, demand)
+    return None if hours is None else round(hours * 60)
 
 
 def _hours(override: float | None, default: float) -> int:

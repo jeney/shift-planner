@@ -61,9 +61,10 @@ describe('AdvancedScreen', () => {
     expect(project().rules.breaks.rules).toEqual([{ afterHours: 9, minutes: 15 }])
   })
 
-  it('keeps guest-based demand switched off until it is implemented', () => {
+  it('turns guest-based demand on', async () => {
     renderWithProviders(<AdvancedScreen />)
-    expect(screen.getByRole('switch', { name: 'Use guest-based demand' })).toBeDisabled()
+    await userEvent.click(screen.getByRole('switch', { name: 'Use guest-based demand' }))
+    expect(project().guestDemand.enabled).toBe(true)
   })
 
   it('resets every setting to the backend defaults', async () => {

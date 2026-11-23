@@ -317,6 +317,21 @@ class Checker:
                 min=hours(info.daily_min),
                 planned=hours(total),
             )
+        if info.guest_target is not None:
+            low = info.guest_target - info.guest_tolerance
+            high = info.guest_target + info.guest_tolerance
+            guests = self.project.guest_demand.guests_by_date.get(info.date, 0)
+            if total < low or total > high:
+                self.add(
+                    "guest_hours_below" if total < low else "guest_hours_above",
+                    severity="warning",
+                    day=info.date,
+                    amount=hours(low - total if total < low else total - high),
+                    target=hours(info.guest_target),
+                    tolerance=hours(info.guest_tolerance),
+                    planned=hours(total),
+                    guests=guests,
+                )
         if info.daily_max is not None and total > info.daily_max:
             self.add(
                 "daily_hours_above_max",

@@ -31,6 +31,8 @@ RuleCode = Literal[
     "busy_period_understaffed",
     "daily_hours_below_min",
     "daily_hours_above_max",
+    "guest_hours_below",
+    "guest_hours_above",
     "no_ride_early",
     "no_ride_late",
     "monthly_limit_exceeded",

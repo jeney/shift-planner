@@ -174,7 +174,12 @@
     "rangeInvalid": "Válassz legalább egy naptípust, és a kezdésnél későbbi befejezést.",
     "removeRange": "Forgalmas időszak törlése",
     "dailyHard": "A napi órák kötelező határok",
-    "dailyHardHelp": "Kikapcsolva: a tervező a napi órákra törekszik, de szükség esetén eltérhet tőlük. Bekapcsolva: soha nem tér el tőlük, ami lehetetlenné teheti egy hónap beosztását."
+    "dailyHardHelp": "Kikapcsolva: a tervező a napi órákra törekszik, de szükség esetén eltérhet tőlük. Bekapcsolva: soha nem tér el tőlük, ami lehetetlenné teheti egy hónap beosztását.",
+    "guestsTitle": "Várható vendégek",
+    "guestsDescription": "A napi vendégszám határozza meg a nap munkaóra-célját (± {{tolerance}} ó) a Speciális beállítások átváltási táblázata alapján. Hagyd üresen a napot, ha nincs cél.",
+    "guestsClear": "Összes törlése",
+    "guestsFilled": "{{total}} napból {{filled}} napra van vendégszám.",
+    "guestsHours": "→ {{hours}}"
   },
   "rules": {
     "minShiftHours": {
@@ -429,7 +434,6 @@
     "weightsDescription": "Mennyit számít az egyes rugalmas célok a többihez képest. A nagyobb érték fontosabb.",
     "guestsTitle": "Vendégszám alapú igény",
     "guestsDescription": "A várható napi vendégszámból számolja ki a nap összes munkaóráját.",
-    "comingSoon": "Hamarosan",
     "solverTitle": "Számítás",
     "solverDescription": "Mennyi ideig keresheti a tervező a legjobb beosztást."
   },
@@ -466,7 +470,7 @@
   "guestDemand": {
     "enabled": {
       "label": "Vendégszám alapú igény használata",
-      "help": "Egy későbbi kiadásban érkezik. Az átváltási táblázatot már most előkészítheted."
+      "help": "A nap összes munkaóráját a várható vendégszám határozza meg. A vendégszámokat az Üzlet lépésben add meg. A cél rugalmas: a tervező a tűrésen belül törekszik rá."
     },
     "mode": {
       "label": "A pontok között",
@@ -557,7 +561,9 @@
     "daily_hours_above_max": "{{date}}: {{planned}} ó tervezve, a napi cél ({{max}} ó) fölött.",
     "no_ride_early": "{{name}} {{start}}-kor kezd ({{date}}), az első busz ({{cutoff}}) előtt, sofőr nélkül.",
     "no_ride_late": "{{name}} {{end}}-kor végez ({{date}}), az utolsó busz ({{cutoff}}) után, sofőr nélkül.",
-    "monthly_limit_exceeded": "{{name}} {{deviation}} órával tér el a havi céltól (korlát ±{{limit}} ó)."
+    "monthly_limit_exceeded": "{{name}} {{deviation}} órával tér el a havi céltól (korlát ±{{limit}} ó).",
+    "guest_hours_below": "{{date}}: {{guests}} várható vendégre {{planned}} ó van tervezve, a {{target}} órás cél alatt (± {{tolerance}} ó).",
+    "guest_hours_above": "{{date}}: {{guests}} várható vendégre {{planned}} ó van tervezve, a {{target}} órás cél fölött (± {{tolerance}} ó)."
   },
   "diagnostic": {
     "no_employees": "Még nincs kit beosztani. Adj hozzá munkatársakat a Munkatársak lépésben.",
@@ -576,7 +582,8 @@
       "timeout": "{{seconds}} mp alatt nem készült beosztás."
     },
     "unknown": "A tervező problémát jelzett ezzel a hónappal.",
-    "unavailableList": "Nem elérhető: {{names}}."
+    "unavailableList": "Nem elérhető: {{names}}.",
+    "guest_counts_missing": "A vendégszám alapú igény be van kapcsolva, de {{count}} napra nincs várható vendégszám (első: {{first}}). Ezeken a napokon nincs munkaóra-cél."
   },
   "plan": {
     "gridLabel": "Beosztás",
@@ -612,7 +619,8 @@
     "issuesLabel": "Megszegett szabályok és figyelmeztetések",
     "emptyTitle": "Még nincs beosztás",
     "emptyBody": "Készíts beosztást a Generálás lépésben, vagy kezdj üres beosztással, és add hozzá kézzel a műszakokat.",
-    "planByHand": "Kézi tervezés"
+    "planByHand": "Kézi tervezés",
+    "guestTarget": "cél {{hours}}"
   },
   "export": {
     "subtitle": "Beosztás",
