@@ -1,0 +1,42 @@
+{
+  "app": {
+    "name": "Shift Planner",
+    "tagline": "Plan next month's shifts in minutes."
+  },
+  "header": {
+    "language": "Language",
+    "theme": {
+      "toggle": "Change theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    }
+  },
+  "api": {
+    "online": "Solver online",
+    "offline": "Solver offline",
+    "checking": "Connecting…"
+  },
+  "steps": {
+    "store": "Store",
+    "employees": "Employees",
+    "availability": "Availability & wishes",
+    "generate": "Generate",
+    "plan": "Plan",
+    "export": "Export",
+    "advanced": "Advanced settings"
+  },
+  "stepDescriptions": {
+    "store": "Opening hours, special dates and how many people you need.",
+    "employees": "Your team, their contracts and hour balances.",
+    "availability": "When people can't work, and when they'd prefer to.",
+    "generate": "Let the planner find the best schedule.",
+    "plan": "Review and fine-tune the schedule by hand.",
+    "export": "Print it or open it in a spreadsheet.",
+    "advanced": "Every rule and weight. Optional – the defaults work well."
+  },
+  "empty": {
+    "comingSoon": "Coming soon",
+    "comingSoonBody": "This step is part of an upcoming release."
+  }
+}

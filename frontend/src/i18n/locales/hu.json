@@ -1,0 +1,42 @@
+{
+  "app": {
+    "name": "Beosztástervező",
+    "tagline": "Tervezd meg a következő havi beosztást percek alatt."
+  },
+  "header": {
+    "language": "Nyelv",
+    "theme": {
+      "toggle": "Téma váltása",
+      "light": "Világos",
+      "dark": "Sötét",
+      "system": "Rendszer"
+    }
+  },
+  "api": {
+    "online": "Tervező elérhető",
+    "offline": "Tervező nem elérhető",
+    "checking": "Kapcsolódás…"
+  },
+  "steps": {
+    "store": "Üzlet",
+    "employees": "Munkatársak",
+    "availability": "Elérhetőség és kérések",
+    "generate": "Generálás",
+    "plan": "Beosztás",
+    "export": "Exportálás",
+    "advanced": "Speciális beállítások"
+  },
+  "stepDescriptions": {
+    "store": "Nyitvatartás, különleges napok és a szükséges létszám.",
+    "employees": "A csapatod, a szerződéseik és az óraegyenlegeik.",
+    "availability": "Mikor nem tudnak dolgozni, és mikor dolgoznának szívesen.",
+    "generate": "A tervező megkeresi a legjobb beosztást.",
+    "plan": "Nézd át és finomítsd a beosztást kézzel.",
+    "export": "Nyomtasd ki, vagy nyisd meg táblázatkezelőben.",
+    "advanced": "Minden szabály és súly. Opcionális – az alapértékek jól működnek."
+  },
+  "empty": {
+    "comingSoon": "Hamarosan",
+    "comingSoonBody": "Ez a lépés egy következő kiadásban érkezik."
+  }
+}
