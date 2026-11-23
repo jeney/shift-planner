@@ -121,6 +121,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/diagnose": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Post Diagnose
+         * @description Fast pre-checks, without solving: why the month can't (or probably can't) be planned.
+         */
+        post: operations["diagnose"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/validate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Post Validate
+         * @description Check the project's plan (e.g. after hand edits) against every rule.
+         */
+        post: operations["validate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -412,6 +452,11 @@ export interface components {
             dailyHoursMin: number | null;
             /** Dailyhoursmax */
             dailyHoursMax: number | null;
+        };
+        /** DiagnoseResponse */
+        DiagnoseResponse: {
+            /** Diagnostics */
+            diagnostics: components["schemas"]["Diagnostic"][];
         };
         /**
          * Diagnostic
@@ -1299,6 +1344,15 @@ export interface components {
             /** Minpeople */
             minPeople: number;
         };
+        /** ValidateResponse */
+        ValidateResponse: {
+            /** Violations */
+            violations: components["schemas"]["Violation"][];
+            /** Stats */
+            stats: components["schemas"]["EmployeeStats"][];
+            /** Wishes */
+            wishes: components["schemas"]["WishOutcome"][];
+        };
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -1593,6 +1647,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SolveResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    diagnose: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Project-Input"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DiagnoseResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    validate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Project-Input"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidateResponse"];
                 };
             };
             /** @description Validation Error */
