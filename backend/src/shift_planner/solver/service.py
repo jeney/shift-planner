@@ -1,15 +1,22 @@
-import logging
 import time
 
 from shift_planner.domain.base import to_minutes
 from shift_planner.domain.project import Plan, Project
-from shift_planner.domain.solve import Diagnostic, EmployeeStats, SolveResponse, WishOutcome
+from shift_planner.domain.solve import (
+    DiagnoseResponse,
+    Diagnostic,
+    EmployeeStats,
+    SolveResponse,
+    SolveStatus,
+    ValidateResponse,
+    Violation,
+    WishOutcome,
+)
 from shift_planner.solver.checker import check_plan
 from shift_planner.solver.context import Context, build_context
+from shift_planner.solver.diagnostics import precheck
 from shift_planner.solver.model import solve_staged
 from shift_planner.solver.wishes import wish_outcomes
-
-logger = logging.getLogger(__name__)
 
 
 def plan_stats(
@@ -50,30 +57,35 @@ def plan_stats(
 
 
 def solve_project(project: Project, *, workers: int = 8) -> SolveResponse:
+    """Pre-check, solve strictly, and fall back to a best-effort plan if no plan follows
+    every rule (or none was found in time)."""
     started = time.perf_counter()
+    limit = project.solver.time_limit_seconds
     ctx = build_context(project)
-    outcome = solve_staged(ctx, project.solver.time_limit_seconds, workers=workers)
-    violations = []
-    stats = []
-    wishes = []
+    diagnostics = precheck(ctx)
+    impossible = any(d.severity == "error" for d in diagnostics)
+
+    outcome = None if impossible else solve_staged(ctx, limit, workers=workers)
+    if outcome is None or outcome.plan is None:
+        timed_out = outcome is not None and not outcome.proven
+        remaining = limit - (time.perf_counter() - started)
+        relaxed = solve_staged(ctx, max(remaining, limit / 2), workers=workers, relaxed=True)
+        if relaxed.plan is None and timed_out:
+            diagnostics.append(Diagnostic(code="solver.timeout", params={"seconds": limit}))
+        outcome = relaxed
+
+    violations: list[Violation] = []
+    stats: list[EmployeeStats] = []
+    wishes: list[WishOutcome] = []
+    status: SolveStatus = outcome.status
     if outcome.plan is not None:
         violations = check_plan(project, outcome.plan, ctx)
-        errors = [v for v in violations if v.severity == "error"]
-        if errors:
-            # The model and the checker disagree: a bug, but show it rather than hide it.
-            logger.error("Solver plan broke %d rules: %s", len(errors), errors[:5])
+        if any(v.severity == "error" for v in violations):
+            status = "best_effort"
         wishes = wish_outcomes(ctx, outcome.plan)
         stats = plan_stats(ctx, outcome.plan, wishes)
-    diagnostics = []
-    if outcome.plan is None and not outcome.proven:
-        diagnostics.append(
-            Diagnostic(
-                code="solver.timeout",
-                params={"seconds": project.solver.time_limit_seconds},
-            )
-        )
     return SolveResponse(
-        status=outcome.status,
+        status=status,
         plan=outcome.plan,
         violations=violations,
         diagnostics=diagnostics,
@@ -81,3 +93,18 @@ def solve_project(project: Project, *, workers: int = 8) -> SolveResponse:
         wishes=wishes,
         solve_time_ms=round((time.perf_counter() - started) * 1000),
     )
+
+
+def validate_plan(project: Project, plan: Plan) -> ValidateResponse:
+    """Check a (possibly hand-edited) plan: the single source of truth for rule checking."""
+    ctx = build_context(project)
+    wishes = wish_outcomes(ctx, plan)
+    return ValidateResponse(
+        violations=check_plan(project, plan, ctx),
+        stats=plan_stats(ctx, plan, wishes),
+        wishes=wishes,
+    )
+
+
+def diagnose_project(project: Project) -> DiagnoseResponse:
+    return DiagnoseResponse(diagnostics=precheck(build_context(project)))
