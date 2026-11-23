@@ -40,7 +40,8 @@
     "comingSoonBody": "Ez a lépés egy következő kiadásban érkezik."
   },
   "common": {
-    "cancel": "Mégse"
+    "cancel": "Mégse",
+    "loading": "Betöltés…"
   },
   "project": {
     "menu": "Projekt",
@@ -59,7 +60,13 @@
     "created": "Új beosztás létrehozva: {{month}}",
     "demoLoaded": "A demó projekt betöltve",
     "opened": "Projekt megnyitva",
-    "saved": "Mentve: {{file}}"
+    "saved": "Mentve: {{file}}",
+    "nextMonth": "Következő hónap indítása…",
+    "nextMonthTitle": "Indulhat a következő hónap tervezése?",
+    "nextMonthDescription": "Az üzlet, a csapat, a beállítások és az ismétlődő elérhetőségek megmaradnak. Mindenki egyenlege átkerül ennek a hónapnak a beosztásából, a kiegyenlítési időszak hete továbblép, a hónap dátumhoz kötött kérései és a beosztás törlődnek. Ez lecseréli a megnyitott projektet, ezért ha meg szeretnéd tartani, előbb mentsd el ezt a hónapot.",
+    "nextMonthConfirm": "Következő hónap indítása",
+    "saveFirst": "A hónap mentése",
+    "nextMonthDone": "Kezdődhet a következő hónap tervezése"
   },
   "welcome": {
     "title": "Tervezd meg a következő havi beosztást",

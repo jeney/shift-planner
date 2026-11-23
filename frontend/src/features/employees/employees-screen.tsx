@@ -141,7 +141,11 @@ export function EmployeesScreen() {
                         {employee.hasCar && (
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <span className="inline-flex" aria-label={t('employees.hasCar')}>
+                              <span
+                                className="inline-flex"
+                                role="img"
+                                aria-label={t('employees.hasCar')}
+                              >
                                 <Car aria-hidden className="size-4" />
                               </span>
                             </TooltipTrigger>

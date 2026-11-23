@@ -18,7 +18,14 @@ export function LanguageSwitcher() {
     <Select value={current} onValueChange={(lng) => void i18n.changeLanguage(lng)}>
       <SelectTrigger size="sm" aria-label={t('header.language')} className="gap-1.5">
         <Languages aria-hidden className="size-4 opacity-70" />
-        <SelectValue />
+        <SelectValue>
+          <span className="sm:hidden">
+            {SUPPORTED_LANGUAGES.find((l) => l.code === current)?.short}
+          </span>
+          <span className="hidden sm:inline">
+            {SUPPORTED_LANGUAGES.find((l) => l.code === current)?.label}
+          </span>
+        </SelectValue>
       </SelectTrigger>
       <SelectContent align="end">
         {SUPPORTED_LANGUAGES.map((lang) => (

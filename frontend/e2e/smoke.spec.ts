@@ -232,3 +232,21 @@ test('guest-based demand turns guest counts into daily targets', async ({ page }
   await page.getByRole('tab', { name: /Store/ }).click()
   await expect(page.getByText('→ 25 h')).toBeVisible()
 })
+
+test('starts the next month with the same team', async ({ page }) => {
+  needsBackend()
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Load demo project' }).click()
+  const badge = page.getByRole('banner').locator('[data-slot="badge"]')
+  const before = await badge.innerText()
+
+  await page.getByRole('button', { name: 'Project' }).click()
+  await page.getByRole('menuitem', { name: 'Start next month…' }).click()
+  await page.getByRole('button', { name: 'Start next month' }).click()
+
+  await expect(badge).not.toHaveText(before)
+  await page.getByRole('tab', { name: /Employees/ }).click()
+  await expect(page.getByText('Anna Holm')).toBeVisible()
+  // Anna's balancing period moved on from week 6.
+  await expect(page.getByRole('row', { name: /Anna Holm/ })).not.toContainText('6 of 16')
+})

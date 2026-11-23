@@ -1,7 +1,17 @@
-import { FilePlus2, FolderOpen, FolderKanban, Save, Sparkles } from 'lucide-react'
+import { CalendarArrowUp, FilePlus2, FolderKanban, FolderOpen, Save, Sparkles } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -28,6 +38,7 @@ export function ProjectMenu() {
   const fileInput = useRef<HTMLInputElement>(null)
   const [newOpen, setNewOpen] = useState(false)
   const [confirm, setConfirm] = useState<Pending>(null)
+  const [nextOpen, setNextOpen] = useState(false)
 
   // Replacing an existing project always asks first.
   const guarded = (action: Exclude<Pending, null>) => {
@@ -60,6 +71,9 @@ export function ProjectMenu() {
             <Save aria-hidden /> {t('project.save')}
             <DropdownMenuShortcut>.json</DropdownMenuShortcut>
           </DropdownMenuItem>
+          <DropdownMenuItem disabled={!actions.hasProject} onSelect={() => setNextOpen(true)}>
+            <CalendarArrowUp aria-hidden /> {t('project.nextMonth')}
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onSelect={() => guarded('demo')}>
             <Sparkles aria-hidden /> {t('project.demo')}
@@ -74,6 +88,24 @@ export function ProjectMenu() {
         onCreate={actions.createNew}
         busy={actions.busy === 'new'}
       />
+      <AlertDialog open={nextOpen} onOpenChange={setNextOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('project.nextMonthTitle')}</AlertDialogTitle>
+            <AlertDialogDescription>{t('project.nextMonthDescription')}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
+            <Button variant="outline" onClick={actions.save}>
+              <Save aria-hidden className="size-4" />
+              {t('project.saveFirst')}
+            </Button>
+            <AlertDialogAction onClick={() => void actions.startNextMonth()}>
+              {t('project.nextMonthConfirm')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <ConfirmReplace
         open={confirm !== null}
         onOpenChange={(open) => !open && setConfirm(null)}

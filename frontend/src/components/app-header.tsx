@@ -16,7 +16,9 @@ export function AppHeader() {
         <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
           <CalendarClock aria-hidden className="size-4" />
         </div>
-        <span className="font-heading text-base font-semibold tracking-tight">{t('app.name')}</span>
+        <span className="sr-only font-heading text-base font-semibold tracking-tight sm:not-sr-only">
+          {t('app.name')}
+        </span>
         <div className="mx-1 hidden h-5 w-px bg-border sm:block" aria-hidden />
         <ProjectMenu />
         <ProjectTitle />

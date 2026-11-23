@@ -3,58 +3,79 @@
 [![CI](https://github.com/jeney/shift-planner/actions/workflows/ci.yml/badge.svg)](https://github.com/jeney/shift-planner/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-A shift-planning web app for a single store manager with a small team. Enter opening hours,
-staffing needs, employees and their availability. The app generates an optimal monthly plan
-with Google OR-Tools CP-SAT, and you can fine-tune it by hand with live rule checking.
+Plan next month's shifts for a small store team in minutes. Enter opening hours, staffing needs, your team and their
+wishes. Shift Planner generates a plan that follows the rules (Danish labour law defaults, contract hours, rides to
+early shifts…). You can then fine-tune it by hand with live rule checking, and print it or open it in a spreadsheet.
 
-- **No accounts, no database.** The browser owns all data (autosave + save/open as `.json`).
-- **English, Danish and Hungarian.**
-- Simple by default. Every rule and weight is available under *Advanced settings*.
+- **Private by design:** no accounts, no database. Your project lives in your browser (autosaved), and you can save
+  and open it as a file.
+- **English, Danish and Hungarian**, with local date and number formats.
+- **Simple by default:** sensible defaults everywhere, with every rule and weight available under *Advanced settings*.
+- **Honest results:** the planner explains why a month can't be planned and still gives you the closest plan.
 
-> 🚧 Early development. See the [roadmap](#roadmap). [How it works](#how-it-works) describes the target behaviour.
-
-| Light | Dark |
-|---|---|
-| ![Welcome screen, light theme](docs/screenshots/welcome-light.png) | ![Welcome screen, dark theme](docs/screenshots/welcome-dark.png) |
+![The plan grid: people × days, with hours and balances per person](docs/screenshots/guide/06-plan.png)
 
 ## Quick start
 
-You need Docker with Docker Compose.
+You need [Docker](https://docs.docker.com/get-docker/) with Docker Compose.
 
 ```bash
+git clone https://github.com/jeney/shift-planner.git
+cd shift-planner
 docker compose up --build
 ```
 
-Then open <http://localhost:8080>. Set `FRONTEND_PORT=9000` to use another port.
+Open <http://localhost:8080> and click **Load demo project** to try it with a fictional team of nine. To use another
+port, set it first: `FRONTEND_PORT=9000 docker compose up`.
 
-### Development (hot reload)
+## Using Shift Planner
 
-```bash
-docker compose -f compose.yaml -f compose.dev.yaml up --build
-```
+The steps are tabs: work through them in order the first time, and jump around freely afterwards. Everything saves
+automatically in your browser. Use **Project → Save** to keep a file, for example to plan on another computer or to
+start next month from this one.
 
-| What | URL |
+| | |
 |---|---|
-| Frontend (Vite) | <http://localhost:5173> |
-| Backend API docs | <http://localhost:8000/api/docs> |
+| **Start:** create a plan for a month, load the demo, or open a saved file. | ![Welcome](docs/screenshots/guide/01-welcome.png) |
+| **1. Store:** opening hours per weekday and for public holidays, special dates (Danish holidays are listed; e.g. close an hour early on Christmas Eve), how many people you need at opening and closing, busy periods, and whether someone may work alone. | ![Store](docs/screenshots/guide/02-store.png) |
+| **2. Employees:** contract hours (the monthly target is calculated for you), car and ride needs, the hour balance carried in from earlier months, and optional personal limits. | ![Employees](docs/screenshots/guide/03-employees.png) |
+| **3. Availability & wishes:** click days to mark someone *unavailable* (a hard rule) or to add a *wish* (soft); drag across days for a vacation. Recurring entries such as "Mondays after 16:00" go through *Add*. The team view shows everyone at once. | ![Availability](docs/screenshots/guide/04-availability.png) |
+| **4. Generate:** problems in the setup are listed before you start. The planner searches for up to 20 seconds, then reports wishes honoured and hours per person, plus anything to check. | ![Generate](docs/screenshots/guide/05-generate.png) |
+| **5. Plan:** click a cell to add, change or remove a shift. Rules are re-checked as you type, and anything broken turns red with an explanation. Your edits are pinned (📌) and kept when you re-generate. Undo/redo with Ctrl+Z / Ctrl+Y. | ![Plan](docs/screenshots/guide/06-plan.png) |
+| **6. Export:** print or save as PDF (A4 landscape), or download for LibreOffice (`.ods`) or Excel (`.xlsx`). | ![Export](docs/screenshots/guide/07-export.png) |
+| **Advanced settings:** every rule and weight, each with a short explanation, plus *Reset to defaults*. Optional. | ![Advanced settings](docs/screenshots/guide/08-advanced.png) |
 
-### Without Docker
+<details>
+<summary>Dark mode and Danish</summary>
 
-Requirements: [uv](https://docs.astral.sh/uv/) and Node.js 22.
+![Plan in dark mode](docs/screenshots/guide/09-plan-dark.png)
+![Plan in Danish](docs/screenshots/guide/10-plan-danish.png)
 
-```bash
-# Terminal 1: backend
-cd backend
-uv sync
-uv run uvicorn shift_planner.main:app --reload
+</details>
 
-# Terminal 2: frontend (proxies /api to localhost:8000)
-cd frontend
-npm ci
-npm run dev
-```
+### Tips and troubleshooting
+
+- **"Solver offline" in the header:** the backend isn't reachable. With Docker, check `docker compose ps`. You can still
+  edit everything (it's saved in your browser), but generating, checking and creating new projects need the backend.
+- **"No plan found in time":** give the planner longer under *Advanced settings → Solver → Time limit*, or check the
+  *Before you generate* list for setup problems.
+- **"No plan follows every rule. Here's the closest one":** the month can't be planned as configured. The reasons are
+  listed (e.g. too few people available on a day), and the closest plan marks every broken rule. The planner prefers
+  leaving a staffing gap over breaking labour-law rules.
+- **Starting next month:** choose *Project → Start next month…*. The store, team, settings and recurring availability
+  carry over.
+  - Each person's balance becomes this month's *New balance*.
+  - The balancing-period week moves on by the weeks in the month, and a new period starts after the last week. If
+    your agreement settles the balance at the end of a period, set the carried-in balance by hand.
+  - The last shift and the days worked in a row at month end carry over too, so the rest and 6-day rules hold across
+    the month boundary.
+  - Save this month's file first if you want to keep it.
+- **Getting a PDF:** *Print or save as PDF*, then choose *Save as PDF* as the printer.
+- **Your data:** nothing is stored on the server. Clearing your browser data clears the autosave, so keep a saved file.
 
 ## How it works
+
+The reference for every rule, setting and decision.
 
 One manager plans **one calendar month** for a small team (about 8–10 people: full-timers ~40 h/week,
 part-timers ~20 h/week, student workers ~10 h/week). All times are local (Europe/Copenhagen), and weeks start
@@ -274,7 +295,36 @@ validator, so unpaid breaks are counted correctly.
   and older files are migrated automatically.
 - Demo data is fictional.
 
-## Project layout
+## Development
+
+### Run with hot reload
+
+```bash
+docker compose -f compose.yaml -f compose.dev.yaml up --build
+```
+
+| What | URL |
+|---|---|
+| Frontend (Vite) | <http://localhost:5173> |
+| Backend API docs | <http://localhost:8000/api/docs> |
+
+### Without Docker
+
+Requirements: [uv](https://docs.astral.sh/uv/) and Node.js 22.
+
+```bash
+# Terminal 1: backend
+cd backend
+uv sync
+uv run uvicorn shift_planner.main:app --reload
+
+# Terminal 2: frontend (proxies /api to localhost:8000)
+cd frontend
+npm ci
+npm run dev
+```
+
+### Project layout
 
 ```
 backend/    FastAPI + Pydantic v2 + OR-Tools CP-SAT (stateless; every request carries the full project)
@@ -315,7 +365,7 @@ the OpenAPI spec, and CI fails if they're out of date:
 ./scripts/gen-api.sh
 ```
 
-## Checks
+### Checks
 
 | | Backend (`cd backend`) | Frontend (`cd frontend`) |
 |---|---|---|
@@ -325,17 +375,32 @@ the OpenAPI spec, and CI fails if they're out of date:
 | Tests | `uv run pytest` | `npm test` |
 | E2E | | `npm run e2e` (or `E2E_BASE_URL=http://localhost:8080 npm run e2e` against Docker) |
 
-CI runs all of these on every pull request, along with a Docker build and an e2e smoke test against the
-production-like stack.
+CI runs all of these on every pull request, along with a Docker build and the Playwright suite against the
+production-like stack. The Playwright suite covers the main flows, a WCAG 2.1 AA accessibility audit (axe, light and
+dark) and a translation check that walks every screen in Danish and Hungarian looking for raw keys or English text.
 
-## Contributing workflow
+### Contributing workflow
 
 - `main` only changes through pull requests.
 - Use branches named `feat/…`, `fix/…` or `chore/…`, with [Conventional Commits](https://www.conventionalcommits.org/).
 - PRs are squash-merged once CI is green.
 - Never commit real employee data. Demo data is fictional.
 
+### Hosting
+
+The frontend is a static site (`frontend/dist` after `npm run build`), and the backend is a single stateless
+container (`backend/Dockerfile`, target `prod`). Any static host plus any container host will do:
+
+- Serve the static site so that `/api` reaches the backend. The production image's nginx does this through
+  `API_UPSTREAM`.
+- Alternatively, build the frontend with `VITE_API_BASE_URL=https://your-backend` and set the backend's
+  `SP_CORS_ORIGINS` to the frontend's origin.
+
+The solver uses up to 8 CPU threads per request, so give the backend at least 2 vCPUs for snappy results.
+
 ## Roadmap
+
+All nine phases of the original plan are done:
 
 0. ✅ Scaffold: repo, Docker, CI, health endpoint, app shell with language switcher
 1. ✅ Schema: project model, generated TS types, save/open, autosave, demo project
@@ -346,7 +411,7 @@ production-like stack.
 6. ✅ Plan grid: editing, live validation, undo/redo, pin & re-generate
 7. ✅ Export: PDF/print, ODS/XLSX
 8. ✅ Guest-based demand (optional feature)
-9. Polish: design pass, translations review, e2e tests, docs
+9. ✅ Polish: accessibility audit, mobile layout, code splitting, translation checks, user guide
 
 ## License
 
