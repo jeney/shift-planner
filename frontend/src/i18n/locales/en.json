@@ -172,7 +172,9 @@
     "people": "Minimum people",
     "peopleUnit": "people",
     "rangeInvalid": "Pick at least one day type, and an end time after the start time.",
-    "removeRange": "Remove busy period"
+    "removeRange": "Remove busy period",
+    "dailyHard": "Daily hours are hard limits",
+    "dailyHardHelp": "Off: the planner aims for the daily hours but may go outside them when needed. On: never planned outside them, which can make a month impossible to plan."
   },
   "rules": {
     "minShiftHours": {
@@ -487,5 +489,64 @@
       "label": "Time limit",
       "help": "The planner returns the best plan found within this time. 20 seconds is usually plenty."
     }
+  },
+  "generate": {
+    "title": "Plan {{month}}",
+    "people_one": "{{count}} person",
+    "people_other": "{{count}} people",
+    "wishes_one": "{{count}} wish",
+    "wishes_other": "{{count}} wishes",
+    "timeLimit": "Up to {{seconds}} s",
+    "generate": "Generate plan",
+    "regenerate": "Generate again",
+    "searching": "Finding the best plan…",
+    "elapsed": "{{elapsed}} of {{seconds}} s",
+    "searchingHelp": "The planner keeps improving the plan until the time limit. You can change the limit in Advanced settings.",
+    "failed": "The plan couldn't be generated",
+    "status": {
+      "optimal": "Best possible plan found",
+      "feasible": "Good plan found",
+      "infeasible": "No plan follows all the rules",
+      "timeout": "No plan found in time"
+    },
+    "summary": "{{shifts}} shifts · {{honoured}} of {{wishes}} wish days honoured · {{seconds}} s",
+    "infeasibleHelp": "Some hard rules can't all be met this month. Check unavailability, staffing needs and limits. Detailed explanations are coming in a later release.",
+    "timeoutHelp": "The planner couldn't find a plan within {{seconds}} s. Try a longer time limit in Advanced settings.",
+    "issuesTitle": "Things to check",
+    "issuesDescription": "Rules the plan breaks (red) and warnings (amber).",
+    "hoursTitle": "Hours per person",
+    "columns": {
+      "shifts": "Shifts",
+      "planned": "Planned",
+      "target": "Target",
+      "deviation": "Difference",
+      "carryIn": "Carried in",
+      "newBalance": "New balance",
+      "wishes": "Wishes"
+    }
+  },
+  "violation": {
+    "inactive_employee": "{{name}} is inactive but has a shift on {{date}}.",
+    "store_closed": "{{name}} has a shift on {{date}}, but the store is closed.",
+    "outside_opening_hours": "{{name}}'s shift on {{date}} ({{start}}–{{end}}) is outside the staffed hours ({{windowStart}}–{{windowEnd}}).",
+    "overlapping_shifts": "{{name}} has overlapping shifts on {{date}}.",
+    "shift_too_short": "{{name}}'s shift on {{date}} is shorter than {{min}} h.",
+    "shift_too_long": "{{name}}'s shift on {{date}} is longer than {{max}} h.",
+    "too_many_shifts": "{{name}} has more than one shift on {{date}}.",
+    "day_too_long": "{{name}} works more than {{max}} h on {{date}}.",
+    "rest_too_short": "{{name}} only rests {{rest}} h before the shift on {{date}} (minimum {{min}} h).",
+    "too_many_days_in_a_row": "{{name}} works more than {{max}} days in a row, on {{date}}.",
+    "weekly_hours_exceeded": "{{name}} works {{planned}} h in the week of {{date}} (maximum {{max}} h).",
+    "weekly_above_contract": "{{name}} works {{planned}} h in the week of {{date}}, above the {{contract}} h contract.",
+    "unavailable": "{{name}} is unavailable on {{date}} {{start}}–{{end}} but has a shift.",
+    "understaffed": "{{date}} {{start}}–{{end}}: {{required}} people needed, {{missing}} missing.",
+    "opening_understaffed": "{{date}}: {{required}} people needed at {{start}}, {{missing}} missing.",
+    "closing_understaffed": "{{date}}: {{required}} people needed until {{end}}, {{missing}} missing.",
+    "busy_period_understaffed": "{{date}} {{start}}–{{end}}: the busy period needs {{required}} people, {{missing}} missing.",
+    "daily_hours_below_min": "{{date}}: {{planned}} h planned, below the daily target of {{min}} h.",
+    "daily_hours_above_max": "{{date}}: {{planned}} h planned, above the daily target of {{max}} h.",
+    "no_ride_early": "{{name}} starts at {{start}} on {{date}}, before the first bus ({{cutoff}}), without a driver.",
+    "no_ride_late": "{{name}} finishes at {{end}} on {{date}}, after the last bus ({{cutoff}}), without a driver.",
+    "monthly_limit_exceeded": "{{name}} is {{deviation}} h from the monthly target (limit ±{{limit}} h)."
   }
 }
