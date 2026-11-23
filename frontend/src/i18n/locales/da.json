@@ -40,7 +40,8 @@
     "comingSoonBody": "Dette trin kommer i en kommende version."
   },
   "common": {
-    "cancel": "Annullér"
+    "cancel": "Annullér",
+    "loading": "Indlæser…"
   },
   "project": {
     "menu": "Projekt",
@@ -59,7 +60,13 @@
     "created": "Ny plan for {{month}} oprettet",
     "demoLoaded": "Demoprojektet er indlæst",
     "opened": "Projektet er åbnet",
-    "saved": "Gemt som {{file}}"
+    "saved": "Gemt som {{file}}",
+    "nextMonth": "Start næste måned…",
+    "nextMonthTitle": "Start planlægning af næste måned?",
+    "nextMonthDescription": "Butik, team, indstillinger og faste tilgængeligheder beholdes. Hver persons saldo overføres fra denne måneds plan, ugen i udligningsperioden rykker frem, og denne måneds daterede ønsker og planen ryddes. Det åbne projekt erstattes, så gem denne måned først, hvis du vil beholde den.",
+    "nextMonthConfirm": "Start næste måned",
+    "saveFirst": "Gem denne måned",
+    "nextMonthDone": "Klar til at planlægge næste måned"
   },
   "welcome": {
     "title": "Planlæg næste måneds vagter",

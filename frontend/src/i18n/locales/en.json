@@ -40,7 +40,8 @@
     "comingSoonBody": "This step is part of an upcoming release."
   },
   "common": {
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "loading": "Loading…"
   },
   "project": {
     "menu": "Project",
@@ -59,7 +60,13 @@
     "created": "New plan for {{month}} created",
     "demoLoaded": "Demo project loaded",
     "opened": "Project opened",
-    "saved": "Saved as {{file}}"
+    "saved": "Saved as {{file}}",
+    "nextMonth": "Start next month…",
+    "nextMonthTitle": "Start planning next month?",
+    "nextMonthDescription": "Keeps the store, team, settings and recurring availability. Each person's balance carries over from this month's plan, the balancing-period week moves on, and this month's dated wishes and the plan are cleared. This replaces the open project, so save this month first if you want to keep it.",
+    "nextMonthConfirm": "Start next month",
+    "saveFirst": "Save this month",
+    "nextMonthDone": "Ready to plan next month"
   },
   "welcome": {
     "title": "Plan next month's shifts",
