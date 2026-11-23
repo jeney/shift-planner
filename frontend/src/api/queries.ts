@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { api } from './client'
+import { fetchMonthCalendar } from './project-api'
 
 export function useHealth() {
   return useQuery({
@@ -12,5 +13,13 @@ export function useHealth() {
     },
     refetchInterval: 30_000,
     retry: 1,
+  })
+}
+
+export function useMonthCalendar(month: string) {
+  return useQuery({
+    queryKey: ['calendar', month],
+    queryFn: () => fetchMonthCalendar(month),
+    staleTime: Infinity,
   })
 }

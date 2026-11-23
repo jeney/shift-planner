@@ -10,18 +10,21 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import type { ComponentType } from 'react'
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { StoreScreen } from '@/features/store/store-screen'
 
 const STEPS = [
-  { id: 'store', icon: Store },
-  { id: 'employees', icon: Users },
-  { id: 'availability', icon: CalendarDays },
-  { id: 'generate', icon: Sparkles },
-  { id: 'plan', icon: Table2 },
-  { id: 'export', icon: Download },
-  { id: 'advanced', icon: SlidersHorizontal },
-] as const satisfies readonly { id: string; icon: LucideIcon }[]
+  { id: 'store', icon: Store, screen: StoreScreen },
+  { id: 'employees', icon: Users, screen: null },
+  { id: 'availability', icon: CalendarDays, screen: null },
+  { id: 'generate', icon: Sparkles, screen: null },
+  { id: 'plan', icon: Table2, screen: null },
+  { id: 'export', icon: Download, screen: null },
+  { id: 'advanced', icon: SlidersHorizontal, screen: null },
+] as const satisfies readonly { id: string; icon: LucideIcon; screen: ComponentType | null }[]
 
 export function PlannerTabs() {
   const { t } = useTranslation()
@@ -44,21 +47,33 @@ export function PlannerTabs() {
         ))}
       </TabsList>
 
-      {STEPS.map(({ id, icon: Icon }) => (
-        <TabsContent key={id} value={id}>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-xl">{t(`steps.${id}`)}</CardTitle>
-              <CardDescription>{t(`stepDescriptions.${id}`)}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed py-16 text-center text-muted-foreground">
-                <Icon aria-hidden className="size-8 opacity-40" />
-                <p className="font-medium text-foreground">{t('empty.comingSoon')}</p>
-                <p className="text-sm">{t('empty.comingSoonBody')}</p>
-              </div>
-            </CardContent>
-          </Card>
+      {STEPS.map(({ id, icon: Icon, screen: Screen }) => (
+        <TabsContent key={id} value={id} className="grid gap-4">
+          {Screen ? (
+            <>
+              <header className="grid gap-1">
+                <h2 className="font-heading text-xl font-semibold tracking-tight">
+                  {t(`steps.${id}`)}
+                </h2>
+                <p className="text-sm text-muted-foreground">{t(`stepDescriptions.${id}`)}</p>
+              </header>
+              <Screen />
+            </>
+          ) : (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-xl">{t(`steps.${id}`)}</CardTitle>
+                <CardDescription>{t(`stepDescriptions.${id}`)}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed py-16 text-center text-muted-foreground">
+                  <Icon aria-hidden className="size-8 opacity-40" />
+                  <p className="font-medium text-foreground">{t('empty.comingSoon')}</p>
+                  <p className="text-sm">{t('empty.comingSoonBody')}</p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
       ))}
     </Tabs>

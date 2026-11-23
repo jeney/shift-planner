@@ -120,3 +120,38 @@ export function makeEmployee(overrides: Partial<Employee> = {}): Employee {
     ...overrides,
   }
 }
+
+type CalendarDay = import('@/api/types').CalendarDay
+type MonthCalendar = import('@/api/types').MonthCalendar
+
+/** A month calendar like the backend's, with the given holidays and notable days. */
+export function makeCalendar(
+  month: string,
+  extras: {
+    holidays?: Record<string, NonNullable<CalendarDay['holiday']>>
+    notable?: Record<string, NonNullable<CalendarDay['notable']>>
+  } = {},
+): MonthCalendar {
+  const [year, mon] = month.split('-').map(Number)
+  const length = new Date(year, mon, 0).getDate()
+  const days: CalendarDay[] = Array.from({ length }, (_, i) => {
+    const date = `${month}-${String(i + 1).padStart(2, '0')}`
+    const weekday = (new Date(year, mon - 1, i + 1).getDay() + 6) % 7
+    const holiday = extras.holidays?.[date] ?? null
+    return {
+      date,
+      weekday,
+      isoWeek: 1,
+      dayType: holiday
+        ? 'holiday'
+        : weekday === 5
+          ? 'saturday'
+          : weekday === 6
+            ? 'sunday'
+            : 'weekday',
+      holiday,
+      notable: extras.notable?.[date] ?? null,
+    }
+  })
+  return { month, days }
+}
