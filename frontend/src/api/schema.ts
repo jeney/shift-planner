@@ -1375,7 +1375,7 @@ export interface components {
              * Rule
              * @enum {string}
              */
-            rule: "inactive_employee" | "store_closed" | "outside_opening_hours" | "overlapping_shifts" | "shift_too_short" | "shift_too_long" | "too_many_shifts" | "day_too_long" | "rest_too_short" | "too_many_days_in_a_row" | "weekly_hours_exceeded" | "weekly_above_contract" | "unavailable" | "understaffed" | "opening_understaffed" | "closing_understaffed" | "busy_period_understaffed" | "daily_hours_below_min" | "daily_hours_above_max" | "no_ride_early" | "no_ride_late" | "monthly_limit_exceeded";
+            rule: "inactive_employee" | "store_closed" | "outside_opening_hours" | "overlapping_shifts" | "shift_too_short" | "shift_too_long" | "too_many_shifts" | "day_too_long" | "rest_too_short" | "too_many_days_in_a_row" | "weekly_hours_exceeded" | "weekly_above_contract" | "unavailable" | "understaffed" | "opening_understaffed" | "closing_understaffed" | "busy_period_understaffed" | "daily_hours_below_min" | "daily_hours_above_max" | "guest_hours_below" | "guest_hours_above" | "no_ride_early" | "no_ride_late" | "monthly_limit_exceeded";
             /**
              * Severity
              * @default error
