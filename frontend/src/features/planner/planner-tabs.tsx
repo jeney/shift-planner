@@ -14,6 +14,7 @@ import type { ComponentType } from 'react'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { AdvancedScreen } from '@/features/advanced/advanced-screen'
 import { AvailabilityScreen } from '@/features/availability/availability-screen'
 import { EmployeesScreen } from '@/features/employees/employees-screen'
 import { StoreScreen } from '@/features/store/store-screen'
@@ -25,7 +26,7 @@ const STEPS = [
   { id: 'generate', icon: Sparkles, screen: null },
   { id: 'plan', icon: Table2, screen: null },
   { id: 'export', icon: Download, screen: null },
-  { id: 'advanced', icon: SlidersHorizontal, screen: null },
+  { id: 'advanced', icon: SlidersHorizontal, screen: AdvancedScreen },
 ] as const satisfies readonly { id: string; icon: LucideIcon; screen: ComponentType | null }[]
 
 export function PlannerTabs() {

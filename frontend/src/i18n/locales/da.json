@@ -90,7 +90,8 @@
     "hours": "{{value}} t",
     "h": "t",
     "min": "min",
-    "hPerWeek": "t/uge"
+    "hPerWeek": "t/uge",
+    "s": "s"
   },
   "dayTypes": {
     "weekday": "Hverdage",
@@ -197,6 +198,92 @@
     "maxWeeklyHours": {
       "label": "Maks. timer pr. uge",
       "help": "Fast grænse for enhver kalenderuge."
+    },
+    "granularityMin": {
+      "label": "Tidsinterval for foreslåede vagter",
+      "help": "Genererede vagter starter og slutter på dette interval. Ved manuel redigering kan du bruge ethvert minut."
+    },
+    "oneShiftPerDay": {
+      "label": "Højst én vagt pr. dag",
+      "help": "Når den er slået fra, kan en person have delt vagt."
+    },
+    "fullTimeThresholdHours": {
+      "label": "Fuldtid fra",
+      "help": "Personer med mindst så mange kontrakttimer om ugen regnes som fuldtid."
+    },
+    "fullTimeContractWarning": {
+      "label": "Advar, når en fuldtidsansat arbejder over kontrakt i en uge",
+      "help": "Kun en advarsel. Ugemaksimum ovenfor er den faste grænse."
+    },
+    "monthlyTargetMode": {
+      "label": "Månedsmål",
+      "weeks_per_month": {
+        "label": "52/12 ≈ 4,33 uger pr. måned",
+        "help": "Samme faktor hver måned."
+      },
+      "fixed_4_4": {
+        "label": "4,4 uger pr. måned",
+        "help": "En lidt højere fast faktor."
+      },
+      "actual_weekdays": {
+        "label": "Faktiske hverdage i måneden",
+        "help": "Antal mandage–fredage i måneden ÷ 5."
+      }
+    },
+    "holidaysReduceTarget": {
+      "label": "Helligdage nedsætter målet",
+      "help": "Hver helligdag på en hverdag nedsætter målet med en femtedel af en uge. Slået fra, fordi butikken har åbent på helligdage."
+    },
+    "balancingPeriodWeeks": {
+      "label": "Udligningsperiode (uger)",
+      "help": "Timerne udlignes over denne periode. Butiksoverenskomsten bruger 16 uger for deltidsansatte."
+    },
+    "monthlyToleranceHours": {
+      "label": "Månedlig tolerance (±)",
+      "help": "Afvigelse fra saldomålet, der er i orden denne måned. Ud over den gør planlæggeren sig langt mere umage."
+    },
+    "monthlyHardLimitHours": {
+      "label": "Fast grænse (±)",
+      "help": "Valgfrit. Planlæg aldrig nogen længere fra deres månedsmål end dette."
+    },
+    "teamAdjustmentHours": {
+      "label": "Teamjustering",
+      "help": "Flyt hele teamets mål denne måned, fx −10 t efter en måned med for mange timer. Fordeles efter kontrakttimer."
+    },
+    "busRule": {
+      "enabled": {
+        "label": "Liftregel for tidlige vagter",
+        "help": "En person, der skal have lift og starter før grænsen, skal starte præcis samtidig med en, der må køre vedkommende."
+      },
+      "earlyCutoff": {
+        "label": "Første bus",
+        "help": "Vagter, der starter på eller efter dette tidspunkt, er i orden, fordi bussen kører."
+      },
+      "lateEnabled": {
+        "label": "Liftregel for sene vagter",
+        "help": "Slået fra som standard. En person, der skal have lift hjem og slutter efter grænsen, skal slutte samtidig med en chauffør."
+      },
+      "lateCutoff": {
+        "label": "Sidste bus",
+        "help": "Vagter, der slutter på eller før dette tidspunkt, er i orden."
+      }
+    },
+    "breaks": {
+      "enabled": {
+        "label": "Medtag pauser",
+        "help": "Lange vagter indeholder en pause af den angivne længde."
+      },
+      "paid": {
+        "label": "Pauser er betalte",
+        "help": "Når den er slået fra, tæller pausetid ikke som arbejdstid."
+      },
+      "rules": "Pauseregler",
+      "shiftLongerThan": "Vagt længere end",
+      "afterHours": "Vagtlængde",
+      "minutes": "Pauselængde",
+      "break": "pause",
+      "add": "Tilføj pauseregel",
+      "remove": "Fjern pauseregel"
     }
   },
   "employees": {
@@ -317,6 +404,88 @@
       "allDay": "hele dagen",
       "from": "fra {{time}}",
       "until": "indtil {{time}}"
+    }
+  },
+  "advanced": {
+    "reset": "Nulstil til standard",
+    "resetTitle": "Nulstil alle regler og vægte?",
+    "resetDescription": "Alle indstillinger på denne side vender tilbage til standard. Butik, team og tilgængelighed påvirkes ikke.",
+    "resetDone": "Indstillingerne er nulstillet",
+    "shiftsTitle": "Vagter",
+    "shiftsDescription": "Længde og placering af de vagter, planlæggeren foreslår.",
+    "workingTimeTitle": "Arbejdstid",
+    "workingTimeDescription": "Lovmæssige og overenskomstmæssige grænser pr. person.",
+    "balanceTitle": "Månedstimer og saldo",
+    "balanceDescription": "Hvordan kontrakttimer bliver til et månedsmål, og hvordan saldoen udlignes.",
+    "customWeeks": "Eget antal uger",
+    "weeks": "uger",
+    "busTitle": "Lift til tidlige og sene vagter",
+    "busDescription": "For personer, der ikke kan tage bussen i starten eller slutningen af dagen.",
+    "breaksTitle": "Pauser",
+    "breaksDescription": "Slået fra som standard. Når de er slået til, indeholder lange vagter en pause.",
+    "weightsTitle": "Planlæggerens prioriteter",
+    "weightsDescription": "Hvor meget hvert blødt mål vægter i forhold til de andre. Højere betyder vigtigere.",
+    "guestsTitle": "Bemanding ud fra gæster",
+    "guestsDescription": "Omsæt forventede gæster pr. dag til dagens samlede personaletimer.",
+    "comingSoon": "Kommer snart",
+    "solverTitle": "Beregning",
+    "solverDescription": "Hvor længe planlæggeren må lede efter den bedste plan."
+  },
+  "weights": {
+    "wishOff": {
+      "label": "Ønsker om fri",
+      "help": "Straf for at planlægge en, der har ønsket fri."
+    },
+    "wishWork": {
+      "label": "Ønsker om arbejde",
+      "help": "Belønning for at planlægge en, der gerne vil arbejde."
+    },
+    "hourBalance": {
+      "label": "Timesaldo",
+      "help": "Styr alles saldo mod nul. Stærkere mod slutningen af udligningsperioden."
+    },
+    "beyondTolerance": {
+      "label": "Uden for tolerance",
+      "help": "Ekstra straf pr. time uden for den månedlige tolerance."
+    },
+    "dailyTarget": {
+      "label": "Daglige timemål",
+      "help": "Straf for at ramme ved siden af de daglige timemål under Butik."
+    },
+    "shortGap": {
+      "label": "Undgå korte pauser mellem arbejdsdage",
+      "help": "En diskret tie-breaker."
+    },
+    "contiguousDaysOff": {
+      "label": "Sammenhængende fridage",
+      "help": "En diskret tie-breaker, der foretrækker fridage i træk."
+    }
+  },
+  "guestDemand": {
+    "enabled": {
+      "label": "Brug bemanding ud fra gæster",
+      "help": "Kommer i en senere version. Du kan allerede forberede omregningstabellen."
+    },
+    "mode": {
+      "label": "Mellem punkterne",
+      "linear": "Lineær interpolation",
+      "steps": "Trin"
+    },
+    "points": "Gæster → personaletimer",
+    "guests": "Gæster",
+    "guestsUnit": "gæster",
+    "hours": "Personaletimer",
+    "add": "Tilføj punkt",
+    "remove": "Fjern punkt",
+    "tolerance": {
+      "label": "Tolerance (±)",
+      "help": "Hvor meget dagens samlede timer må afvige fra målet."
+    }
+  },
+  "solver": {
+    "timeLimit": {
+      "label": "Tidsgrænse",
+      "help": "Planlæggeren returnerer den bedste plan, den har fundet inden for tiden. 20 sekunder er som regel rigeligt."
     }
   }
 }

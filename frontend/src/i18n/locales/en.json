@@ -90,7 +90,8 @@
     "hours": "{{value}} h",
     "h": "h",
     "min": "min",
-    "hPerWeek": "h/wk"
+    "hPerWeek": "h/wk",
+    "s": "s"
   },
   "dayTypes": {
     "weekday": "Weekdays",
@@ -197,6 +198,92 @@
     "maxWeeklyHours": {
       "label": "Max hours per week",
       "help": "Hard limit for any calendar week."
+    },
+    "granularityMin": {
+      "label": "Time grid for suggested shifts",
+      "help": "Generated shifts start and end on this grid. You can still use any minute when editing by hand."
+    },
+    "oneShiftPerDay": {
+      "label": "At most one shift per day",
+      "help": "When off, a person can have a split shift."
+    },
+    "fullTimeThresholdHours": {
+      "label": "Full-time from",
+      "help": "People with at least this many contract hours per week count as full-time."
+    },
+    "fullTimeContractWarning": {
+      "label": "Warn when a full-timer works above contract in a week",
+      "help": "A warning only. The weekly maximum above is the hard limit."
+    },
+    "monthlyTargetMode": {
+      "label": "Monthly target",
+      "weeks_per_month": {
+        "label": "52/12 ≈ 4.33 weeks per month",
+        "help": "The same factor every month."
+      },
+      "fixed_4_4": {
+        "label": "4.4 weeks per month",
+        "help": "A slightly higher fixed factor."
+      },
+      "actual_weekdays": {
+        "label": "Actual weekdays in the month",
+        "help": "Monday–Friday days in the month ÷ 5."
+      }
+    },
+    "holidaysReduceTarget": {
+      "label": "Public holidays reduce the target",
+      "help": "Each public holiday on a weekday reduces the target by a fifth of a week. Off, because the store is open on holidays."
+    },
+    "balancingPeriodWeeks": {
+      "label": "Balancing period (weeks)",
+      "help": "Hours are averaged over this period. The Danish retail agreement uses 16 weeks for part-timers."
+    },
+    "monthlyToleranceHours": {
+      "label": "Monthly tolerance (±)",
+      "help": "Deviation from the hour-balance goal that's fine this month. Beyond it the planner tries much harder."
+    },
+    "monthlyHardLimitHours": {
+      "label": "Hard limit (±)",
+      "help": "Optional. Never plan anyone further than this from their monthly target."
+    },
+    "teamAdjustmentHours": {
+      "label": "Team adjustment",
+      "help": "Shift the whole team's target this month, e.g. −10 h after a month with too many hours. Spread by contract hours."
+    },
+    "busRule": {
+      "enabled": {
+        "label": "Ride rule for early shifts",
+        "help": "Someone who needs a ride and starts before the cutoff must start at exactly the same time as someone allowed to drive them."
+      },
+      "earlyCutoff": {
+        "label": "First bus",
+        "help": "Shifts starting at or after this time are fine, because the bus runs."
+      },
+      "lateEnabled": {
+        "label": "Ride rule for late shifts",
+        "help": "Off by default. Someone who needs a ride home and ends after the cutoff must end together with a driver."
+      },
+      "lateCutoff": {
+        "label": "Last bus",
+        "help": "Shifts ending at or before this time are fine."
+      }
+    },
+    "breaks": {
+      "enabled": {
+        "label": "Include breaks",
+        "help": "Long shifts include a break of the given length."
+      },
+      "paid": {
+        "label": "Breaks are paid",
+        "help": "When off, break time doesn't count as worked hours."
+      },
+      "rules": "Break rules",
+      "shiftLongerThan": "Shift longer than",
+      "afterHours": "Shift length",
+      "minutes": "Break length",
+      "break": "break",
+      "add": "Add break rule",
+      "remove": "Remove break rule"
     }
   },
   "employees": {
@@ -317,6 +404,88 @@
       "allDay": "all day",
       "from": "from {{time}}",
       "until": "until {{time}}"
+    }
+  },
+  "advanced": {
+    "reset": "Reset to defaults",
+    "resetTitle": "Reset all rules and weights?",
+    "resetDescription": "Every setting on this page goes back to its default. Your store, team and availability are not affected.",
+    "resetDone": "Settings reset to defaults",
+    "shiftsTitle": "Shifts",
+    "shiftsDescription": "Length and spacing of the shifts the planner suggests.",
+    "workingTimeTitle": "Working time",
+    "workingTimeDescription": "Legal and contractual limits per person.",
+    "balanceTitle": "Monthly hours & balance",
+    "balanceDescription": "How contract hours become a monthly target, and how the balance is evened out.",
+    "customWeeks": "Custom number of weeks",
+    "weeks": "wk",
+    "busTitle": "Rides to early and late shifts",
+    "busDescription": "For people who can't take the bus at the start or end of the day.",
+    "breaksTitle": "Breaks",
+    "breaksDescription": "Off by default. When on, long shifts include a break.",
+    "weightsTitle": "Planner priorities",
+    "weightsDescription": "How much each soft goal matters relative to the others. Higher means more important.",
+    "guestsTitle": "Guest-based demand",
+    "guestsDescription": "Turn expected guests per day into the day's total staff hours.",
+    "comingSoon": "Coming soon",
+    "solverTitle": "Solver",
+    "solverDescription": "How long the planner may search for the best plan."
+  },
+  "weights": {
+    "wishOff": {
+      "label": "Day-off wishes",
+      "help": "Penalty for planning someone who asked for time off."
+    },
+    "wishWork": {
+      "label": "Work wishes",
+      "help": "Reward for planning someone who asked to work."
+    },
+    "hourBalance": {
+      "label": "Hour balance",
+      "help": "Steer everyone's balance toward zero. Stronger near the end of the balancing period."
+    },
+    "beyondTolerance": {
+      "label": "Beyond tolerance",
+      "help": "Extra penalty per hour outside the monthly tolerance."
+    },
+    "dailyTarget": {
+      "label": "Daily hour targets",
+      "help": "Penalty for missing the daily hour targets on the Store step."
+    },
+    "shortGap": {
+      "label": "Avoid short breaks between workdays",
+      "help": "A subtle tie-breaker."
+    },
+    "contiguousDaysOff": {
+      "label": "Days off together",
+      "help": "A subtle tie-breaker that prefers days off next to each other."
+    }
+  },
+  "guestDemand": {
+    "enabled": {
+      "label": "Use guest-based demand",
+      "help": "Arrives in a later release. You can already prepare the conversion table."
+    },
+    "mode": {
+      "label": "Between the points",
+      "linear": "Interpolate linearly",
+      "steps": "Use steps"
+    },
+    "points": "Guests → staff hours",
+    "guests": "Guests",
+    "guestsUnit": "guests",
+    "hours": "Staff hours",
+    "add": "Add point",
+    "remove": "Remove point",
+    "tolerance": {
+      "label": "Tolerance (±)",
+      "help": "How far the day's total may differ from the target."
+    }
+  },
+  "solver": {
+    "timeLimit": {
+      "label": "Time limit",
+      "help": "The planner returns the best plan found within this time. 20 seconds is usually plenty."
     }
   }
 }

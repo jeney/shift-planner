@@ -70,3 +70,43 @@ test('a saved project can be opened in another browser', async ({ page, browser 
   await expect(other.getByRole('tab', { name: /Employees/ })).toBeVisible()
   await context.close()
 })
+
+test('setup screens edit the project and changes persist', async ({ page }) => {
+  needsBackend()
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Load demo project' }).click()
+
+  // Store
+  await page.getByLabel('Store name').fill('Corner Shop')
+  await expect(page.getByRole('banner').getByText('Corner Shop')).toBeVisible()
+
+  // Employees
+  await page.getByRole('tab', { name: /Employees/ }).click()
+  await page.getByRole('button', { name: 'Add employee' }).click()
+  const drawer = page.getByRole('dialog')
+  await drawer.getByLabel('Name').fill('Zoe Test')
+  await drawer.getByRole('radio', { name: '10 h' }).click()
+  await expect(drawer.getByTestId('target-calculation')).toContainText('43.3 h')
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('row', { name: /Zoe Test/ })).toBeVisible()
+
+  // Availability: click a day for the new person
+  await page.getByRole('tab', { name: /Availability/ }).click()
+  await page.getByRole('combobox', { name: 'Person' }).click()
+  await page.getByRole('option', { name: 'Zoe Test' }).click()
+  await page.getByRole('gridcell').nth(9).click()
+  await expect(page.getByRole('list', { name: 'Availability and wishes' })).toContainText(
+    'Unavailable',
+  )
+
+  // Advanced
+  await page.getByRole('tab', { name: /Advanced settings/ }).click()
+  await page.getByRole('radio', { name: '15 min' }).click()
+
+  // Everything survives a reload (autosave).
+  await page.waitForTimeout(600)
+  await page.reload()
+  await expect(page.getByRole('banner').getByText('Corner Shop')).toBeVisible()
+  await page.getByRole('tab', { name: /Advanced settings/ }).click()
+  await expect(page.getByRole('radio', { name: '15 min' })).toHaveAttribute('aria-checked', 'true')
+})
