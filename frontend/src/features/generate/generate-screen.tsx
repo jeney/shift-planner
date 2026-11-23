@@ -11,7 +11,7 @@ import {
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { SolveResponse } from '@/api/types'
+import type { Diagnostic, SolveResponse } from '@/api/types'
 import { Section } from '@/components/form/section'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -30,7 +30,9 @@ import { formatMonth } from '@/lib/month'
 import { cn } from '@/lib/utils'
 import { useProject } from '@/project/hooks'
 
+import { describeDiagnostic } from './describe-diagnostic'
 import { describeViolation } from './describe-violation'
+import { useDiagnose } from './use-diagnose'
 import { useSolve, useSolveStore } from './use-solve'
 
 export function GenerateScreen() {
@@ -79,6 +81,8 @@ export function GenerateScreen() {
           {project.plan ? t('generate.regenerate') : t('generate.generate')}
         </Button>
       </Card>
+
+      {!result && !solve.isPending && <Precheck />}
 
       {solve.isPending && <Progress seconds={limit} />}
 
@@ -175,7 +179,15 @@ function Result({ result }: { result: SolveResponse }) {
 
   return (
     <div className="grid gap-6">
-      {result.plan ? (
+      {result.plan && result.status === 'best_effort' ? (
+        <Notice tone="error" title={t('generate.status.best_effort')}>
+          {t('generate.bestEffortSummary', {
+            count: errors.length,
+            shifts: result.plan.shifts.length,
+            seconds,
+          })}
+        </Notice>
+      ) : result.plan ? (
         <Notice
           tone={errors.length ? 'error' : 'success'}
           title={
@@ -200,6 +212,13 @@ function Result({ result }: { result: SolveResponse }) {
             ? t('generate.timeoutHelp', { seconds: project.solver.timeLimitSeconds })
             : t('generate.infeasibleHelp')}
         </Notice>
+      )}
+
+      {result.diagnostics.some((d) => d.code !== 'solver.timeout') && (
+        <DiagnosticList
+          title={t('generate.diagnosticsTitle')}
+          diagnostics={result.diagnostics.filter((d) => d.code !== 'solver.timeout')}
+        />
       )}
 
       {(errors.length > 0 || warnings.length > 0) && (
@@ -280,5 +299,59 @@ function Result({ result }: { result: SolveResponse }) {
         </Card>
       )}
     </div>
+  )
+}
+
+function Precheck() {
+  const { t } = useTranslation()
+  const project = useProject()
+  const diagnose = useDiagnose(project)
+  if (diagnose.isError) return null
+  if (!diagnose.data) {
+    return <p className="text-sm text-muted-foreground">{t('generate.precheckRunning')}</p>
+  }
+  if (diagnose.data.length === 0) {
+    return <Notice tone="success" title={t('generate.precheckOk')} />
+  }
+  const impossible = diagnose.data.some((d) => d.severity === 'error')
+  return (
+    <DiagnosticList
+      title={t('generate.precheckTitle')}
+      description={impossible ? t('generate.precheckErrors') : undefined}
+      diagnostics={diagnose.data}
+    />
+  )
+}
+
+function DiagnosticList({
+  title,
+  description,
+  diagnostics,
+}: {
+  title: string
+  description?: string
+  diagnostics: Diagnostic[]
+}) {
+  const { t } = useTranslation()
+  const format = useFormat()
+  const project = useProject()
+  const sorted = [...diagnostics].sort(
+    (a, b) => Number(b.severity === 'error') - Number(a.severity === 'error'),
+  )
+  return (
+    <Section title={title} description={description}>
+      <ul className="grid gap-2" aria-label={title}>
+        {sorted.slice(0, 40).map((d, i) => (
+          <li key={i} className="flex items-start gap-2 text-sm">
+            {d.severity === 'error' ? (
+              <CircleAlert aria-hidden className="mt-0.5 size-4 shrink-0 text-destructive" />
+            ) : (
+              <AlertTriangle aria-hidden className="mt-0.5 size-4 shrink-0 text-amber-600" />
+            )}
+            <span>{describeDiagnostic(d, t, format, project.employees)}</span>
+          </li>
+        ))}
+      </ul>
+    </Section>
   )
 }

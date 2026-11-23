@@ -91,3 +91,13 @@ class SolveResponse(ApiModel):
     stats: list[EmployeeStats] = Field(default_factory=list)
     wishes: list[WishOutcome] = Field(default_factory=list)
     solve_time_ms: int
+
+
+class ValidateResponse(ApiModel):
+    violations: list[Violation] = Field(default_factory=list)
+    stats: list[EmployeeStats] = Field(default_factory=list)
+    wishes: list[WishOutcome] = Field(default_factory=list)
+
+
+class DiagnoseResponse(ApiModel):
+    diagnostics: list[Diagnostic] = Field(default_factory=list)

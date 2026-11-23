@@ -507,7 +507,8 @@
       "optimal": "Den bedst mulige plan er fundet",
       "feasible": "En god plan er fundet",
       "infeasible": "Ingen plan overholder alle regler",
-      "timeout": "Ingen plan fundet i tide"
+      "timeout": "Ingen plan fundet i tide",
+      "best_effort": "Ingen plan overholder alle regler. Her er den nærmeste"
     },
     "summary": "{{shifts}} vagter · {{honoured}} af {{wishes}} ønskedage opfyldt · {{seconds}} s",
     "infeasibleHelp": "Nogle faste regler kan ikke overholdes på samme tid denne måned. Tjek utilgængelighed, bemanding og grænser. Detaljerede forklaringer kommer i en senere version.",
@@ -523,7 +524,14 @@
       "carryIn": "Overført",
       "newBalance": "Ny saldo",
       "wishes": "Ønsker"
-    }
+    },
+    "precheckTitle": "Før du genererer",
+    "precheckOk": "Ingen problemer fundet i opsætningen.",
+    "precheckErrors": "Ingen plan kan overholde alle regler med den nuværende opsætning. Du kan stadig generere: du får den nærmeste mulige plan, hvor de brudte regler er markeret.",
+    "precheckRunning": "Tjekker opsætningen…",
+    "diagnosticsTitle": "Hvorfor reglerne ikke alle kan overholdes",
+    "bestEffortSummary_one": "{{count}} regel er brudt; se listen nedenfor. {{shifts}} vagter · {{seconds}} s",
+    "bestEffortSummary_other": "{{count}} regler er brudt; se listen nedenfor. {{shifts}} vagter · {{seconds}} s"
   },
   "violation": {
     "inactive_employee": "{{name}} er inaktiv, men har en vagt {{date}}.",
@@ -539,14 +547,33 @@
     "weekly_hours_exceeded": "{{name}} arbejder {{planned}} t i ugen fra {{date}} (højst {{max}} t).",
     "weekly_above_contract": "{{name}} arbejder {{planned}} t i ugen fra {{date}}, over kontraktens {{contract}} t.",
     "unavailable": "{{name}} er utilgængelig {{date}} {{start}}–{{end}}, men har en vagt.",
-    "understaffed": "{{date}} {{start}}–{{end}}: {{required}} personer kræves, {{missing}} mangler.",
-    "opening_understaffed": "{{date}}: {{required}} personer kræves kl. {{start}}, {{missing}} mangler.",
-    "closing_understaffed": "{{date}}: {{required}} personer kræves indtil {{end}}, {{missing}} mangler.",
-    "busy_period_understaffed": "{{date}} {{start}}–{{end}}: den travle periode kræver {{required}} personer, {{missing}} mangler.",
+    "understaffed": "{{date}} {{start}}–{{end}}: for få personer (krævet: {{required}}, mangler: {{missing}}).",
+    "opening_understaffed": "{{date}}: for få personer kl. {{start}} (krævet: {{required}}, mangler: {{missing}}).",
+    "closing_understaffed": "{{date}}: for få personer indtil {{end}} (krævet: {{required}}, mangler: {{missing}}).",
+    "busy_period_understaffed": "{{date}} {{start}}–{{end}}: for få personer i den travle periode (krævet: {{required}}, mangler: {{missing}}).",
     "daily_hours_below_min": "{{date}}: {{planned}} t planlagt, under dagens mål på {{min}} t.",
     "daily_hours_above_max": "{{date}}: {{planned}} t planlagt, over dagens mål på {{max}} t.",
     "no_ride_early": "{{name}} starter kl. {{start}} {{date}}, før første bus ({{cutoff}}), uden chauffør.",
     "no_ride_late": "{{name}} slutter kl. {{end}} {{date}}, efter sidste bus ({{cutoff}}), uden chauffør.",
     "monthly_limit_exceeded": "{{name}} er {{deviation}} t fra månedsmålet (grænse ±{{limit}} t)."
+  },
+  "diagnostic": {
+    "no_employees": "Der er ingen at planlægge for endnu. Tilføj personer under Medarbejdere.",
+    "opening_short": "{{date}}: for få personer tilgængelige ved åbning, {{time}} (tilgængelige: {{available}}, krævet: {{required}}).",
+    "closing_short": "{{date}}: for få personer tilgængelige indtil lukning, {{time}} (tilgængelige: {{available}}, krævet: {{required}}).",
+    "moment_short": "{{date}}: for få personer tilgængelige kl. {{time}} (tilgængelige: {{available}}, krævet: {{required}}).",
+    "busy_period_short": "{{date}}: for få personer tilgængelige i den travle periode kl. {{time}} (tilgængelige: {{available}}, krævet: {{required}}).",
+    "day_short_of_people": "{{date}}: for få personer kan arbejde til at dække hele dagen (tilgængelige: {{available}}, krævet: {{required}}).",
+    "window_shorter_than_min_shift": "{{date}}: der skal kun bruges personale {{start}}–{{end}}, hvilket er kortere end den korteste vagt på {{min}} t.",
+    "not_enough_working_days": "Måneden kræver mindst {{required}} arbejdsdage i alt, men teamet kan højst arbejde {{available}} (grænsen for dage i træk og fravær).",
+    "hours_below_demand": "Teamets kontrakter giver {{contract}} t denne måned, men bemandingen kræver mindst {{demand}} t.",
+    "hours_above_demand": "Teamets kontrakter giver {{contract}} t denne måned, langt mere end de {{demand}} t, butikken mindst kræver.",
+    "rider_without_driver": "{{names}} skal have lift, men ingen må køre vedkommende, så personen kan aldrig starte før første bus.",
+    "no_driver_early": "{{date}}: ingen chauffør er tilgængelig før {{cutoff}}, så {{names}} kan ikke starte tidligt.",
+    "solver": {
+      "timeout": "Der blev ikke fundet en plan inden for {{seconds}} s."
+    },
+    "unknown": "Planlæggeren rapporterede et problem med denne måned.",
+    "unavailableList": "Utilgængelige: {{names}}."
   }
 }

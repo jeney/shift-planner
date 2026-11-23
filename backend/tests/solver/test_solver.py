@@ -20,9 +20,9 @@ from shift_planner.solver.service import solve_project
 from tests.factories import employee, project, store, unavailable
 
 
-def solve(p: Project) -> SolveResponse:
+def solve(p: Project, strict: bool = True) -> SolveResponse:
     result = solve_project(p, workers=4)
-    if result.plan is not None:
+    if result.plan is not None and strict:
         errors = [v for v in result.violations if v.severity == "error"]
         assert errors == [], "solver output must pass the checker"
     return result
@@ -150,9 +150,8 @@ def test_days_in_a_row_carried_in_from_last_month() -> None:
 
 def test_one_person_cannot_cover_every_day() -> None:
     """Seven open days a week with a single employee breaks the days-in-a-row limit."""
-    result = solve(project(employee("a")))
-    assert result.status == "infeasible"
-    assert result.diagnostics == []  # proven, not a time-out
+    result = solve(project(employee("a")), strict=False)
+    assert result.status == "best_effort"
 
 
 def test_weekly_limit_on_the_partial_first_week() -> None:
@@ -194,11 +193,13 @@ class TestBusRule:
 
     def test_without_any_driver_the_rider_never_starts_early(self) -> None:
         # Only the two walkers can open, so they'd both work every day: impossible.
-        result = solve(self.bus_project(opens="06:00", with_driver=False))
-        assert result.status == "infeasible"
+        result = solve(self.bus_project(opens="06:00", with_driver=False), strict=False)
+        assert result.status == "best_effort"
+        assert all(v.rule != "no_ride_early" for v in result.violations)
 
     def test_late_starts_need_no_driver(self) -> None:
-        assert solve(self.bus_project(opens="08:00", with_driver=False)).status != "infeasible"
+        result = solve(self.bus_project(opens="08:00", with_driver=False))
+        assert result.status in ("optimal", "feasible")
 
 
 def test_unpaid_breaks_count_toward_stats() -> None:

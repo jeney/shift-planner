@@ -507,7 +507,8 @@
       "optimal": "A lehető legjobb beosztás elkészült",
       "feasible": "Jó beosztás készült",
       "infeasible": "Egyetlen beosztás sem felel meg minden szabálynak",
-      "timeout": "Nem készült beosztás időben"
+      "timeout": "Nem készült beosztás időben",
+      "best_effort": "Egyik beosztás sem felel meg minden szabálynak. Ez a legközelebbi"
     },
     "summary": "{{shifts}} műszak · {{wishes}} kérésnapból {{honoured}} teljesült · {{seconds}} mp",
     "infeasibleHelp": "Ebben a hónapban egyes kötelező szabályok nem teljesíthetők egyszerre. Ellenőrizd az elérhetőséget, a létszámigényt és a korlátokat. Részletes magyarázatok egy későbbi kiadásban érkeznek.",
@@ -523,7 +524,14 @@
       "carryIn": "Áthozott",
       "newBalance": "Új egyenleg",
       "wishes": "Kérések"
-    }
+    },
+    "precheckTitle": "Generálás előtt",
+    "precheckOk": "A beállításokban nincs probléma.",
+    "precheckErrors": "A jelenlegi beállításokkal egyetlen beosztás sem felelhet meg minden szabálynak. Így is generálhatsz: a lehető legközelebbi beosztást kapod, a megszegett szabályok megjelölésével.",
+    "precheckRunning": "A beállítások ellenőrzése…",
+    "diagnosticsTitle": "Miért nem teljesíthető minden szabály",
+    "bestEffortSummary_one": "{{count}} szabály sérül, lásd lent. {{shifts}} műszak · {{seconds}} mp",
+    "bestEffortSummary_other": "{{count}} szabály sérül, lásd lent. {{shifts}} műszak · {{seconds}} mp"
   },
   "violation": {
     "inactive_employee": "{{name}} inaktív, mégis van műszakja: {{date}}.",
@@ -539,14 +547,33 @@
     "weekly_hours_exceeded": "{{name}} {{planned}} órát dolgozik a(z) {{date}} kezdetű héten (maximum {{max}} ó).",
     "weekly_above_contract": "{{name}} {{planned}} órát dolgozik a(z) {{date}} kezdetű héten, a szerződéses {{contract}} ó fölött.",
     "unavailable": "{{name}} nem elérhető ({{date}}, {{start}}–{{end}}), mégis műszakot kapott.",
-    "understaffed": "{{date}} {{start}}–{{end}}: {{required}} fő kell, {{missing}} hiányzik.",
-    "opening_understaffed": "{{date}}: {{start}}-kor {{required}} fő kell, {{missing}} hiányzik.",
-    "closing_understaffed": "{{date}}: {{end}}-ig {{required}} fő kell, {{missing}} hiányzik.",
-    "busy_period_understaffed": "{{date}} {{start}}–{{end}}: a forgalmas időszakban {{required}} fő kell, {{missing}} hiányzik.",
+    "understaffed": "{{date}} {{start}}–{{end}}: kevés a munkatárs (szükséges: {{required}}, hiányzik: {{missing}}).",
+    "opening_understaffed": "{{date}}: {{start}}-kor kevés a munkatárs (szükséges: {{required}}, hiányzik: {{missing}}).",
+    "closing_understaffed": "{{date}}: {{end}}-ig kevés a munkatárs (szükséges: {{required}}, hiányzik: {{missing}}).",
+    "busy_period_understaffed": "{{date}} {{start}}–{{end}}: a forgalmas időszakban kevés a munkatárs (szükséges: {{required}}, hiányzik: {{missing}}).",
     "daily_hours_below_min": "{{date}}: {{planned}} ó tervezve, a napi cél ({{min}} ó) alatt.",
     "daily_hours_above_max": "{{date}}: {{planned}} ó tervezve, a napi cél ({{max}} ó) fölött.",
     "no_ride_early": "{{name}} {{start}}-kor kezd ({{date}}), az első busz ({{cutoff}}) előtt, sofőr nélkül.",
     "no_ride_late": "{{name}} {{end}}-kor végez ({{date}}), az utolsó busz ({{cutoff}}) után, sofőr nélkül.",
     "monthly_limit_exceeded": "{{name}} {{deviation}} órával tér el a havi céltól (korlát ±{{limit}} ó)."
+  },
+  "diagnostic": {
+    "no_employees": "Még nincs kit beosztani. Adj hozzá munkatársakat a Munkatársak lépésben.",
+    "opening_short": "{{date}}: nyitáskor ({{time}}) kevés munkatárs érhető el (elérhető: {{available}}, szükséges: {{required}}).",
+    "closing_short": "{{date}}: zárásig ({{time}}) kevés munkatárs érhető el (elérhető: {{available}}, szükséges: {{required}}).",
+    "moment_short": "{{date}}: {{time}}-kor kevés munkatárs érhető el (elérhető: {{available}}, szükséges: {{required}}).",
+    "busy_period_short": "{{date}}: a {{time}}-kor kezdődő forgalmas időszakra kevés munkatárs érhető el (elérhető: {{available}}, szükséges: {{required}}).",
+    "day_short_of_people": "{{date}}: túl kevesen dolgozhatnak az egész nap lefedéséhez (elérhető: {{available}}, szükséges: {{required}}).",
+    "window_shorter_than_min_shift": "{{date}}: csak {{start}}–{{end}} között kell munkatárs, ami rövidebb a legrövidebb műszaknál ({{min}} ó).",
+    "not_enough_working_days": "A hónaphoz összesen legalább {{required}} munkanap kell, de a csapat legfeljebb {{available}} napot dolgozhat (egymás utáni napok korlátja és távollétek).",
+    "hours_below_demand": "A csapat szerződései ebben a hónapban {{contract}} órát tesznek ki, de a nyitva tartáshoz legalább {{demand}} óra kell.",
+    "hours_above_demand": "A csapat szerződései ebben a hónapban {{contract}} órát tesznek ki, jóval többet a minimálisan szükséges {{demand}} óránál.",
+    "rider_without_driver": "{{names}} fuvart igényel, de senki sem viheti, így soha nem kezdhet az első busz előtt.",
+    "no_driver_early": "{{date}}: {{cutoff}} előtt nincs elérhető sofőr, így {{names}} nem kezdhet korán.",
+    "solver": {
+      "timeout": "{{seconds}} mp alatt nem készült beosztás."
+    },
+    "unknown": "A tervező problémát jelzett ezzel a hónappal.",
+    "unavailableList": "Nem elérhető: {{names}}."
   }
 }

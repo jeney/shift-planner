@@ -252,6 +252,90 @@
           }
         }
       }
+    },
+    "/api/diagnose": {
+      "post": {
+        "tags": [
+          "solver"
+        ],
+        "summary": "Post Diagnose",
+        "description": "Fast pre-checks, without solving: why the month can't (or probably can't) be planned.",
+        "operationId": "diagnose",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project-Input"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiagnoseResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/validate": {
+      "post": {
+        "tags": [
+          "solver"
+        ],
+        "summary": "Post Validate",
+        "description": "Check the project's plan (e.g. after hand edits) against every rule.",
+        "operationId": "validate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project-Input"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -878,6 +962,23 @@
           "dailyHoursMax"
         ],
         "title": "DayTypeStaffing"
+      },
+      "DiagnoseResponse": {
+        "properties": {
+          "diagnostics": {
+            "items": {
+              "$ref": "#/components/schemas/Diagnostic"
+            },
+            "type": "array",
+            "title": "Diagnostics"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "diagnostics"
+        ],
+        "title": "DiagnoseResponse"
       },
       "Diagnostic": {
         "properties": {
@@ -2847,6 +2948,39 @@
         ],
         "title": "TimeRangeMinimum",
         "description": "E.g. \"at least 2 people 11:00–14:00 on Saturdays\"."
+      },
+      "ValidateResponse": {
+        "properties": {
+          "violations": {
+            "items": {
+              "$ref": "#/components/schemas/Violation"
+            },
+            "type": "array",
+            "title": "Violations"
+          },
+          "stats": {
+            "items": {
+              "$ref": "#/components/schemas/EmployeeStats"
+            },
+            "type": "array",
+            "title": "Stats"
+          },
+          "wishes": {
+            "items": {
+              "$ref": "#/components/schemas/WishOutcome"
+            },
+            "type": "array",
+            "title": "Wishes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "violations",
+          "stats",
+          "wishes"
+        ],
+        "title": "ValidateResponse"
       },
       "ValidationError": {
         "properties": {

@@ -48,6 +48,20 @@ Status = Literal["optimal", "feasible", "infeasible"]
 OFF = 2 * MINUTES_PER_DAY
 SCALE = 1000
 """Objective points per unit of weight."""
+
+RELAX_UNIT = 1_000_000
+"""Best-effort mode: points for one 'person-hour' of a broken hard rule, far above any
+regular objective term. Labour-law rules cost more than leaving a staffing gap, so a
+best-effort plan shows understaffing rather than illegal schedules."""
+RELAX_COST = {
+    "coverage": RELAX_UNIT // 60,  # per missing person-minute
+    "daily": RELAX_UNIT // 60,  # per minute outside hard daily hours
+    "monthly": 2 * RELAX_UNIT // 60,  # per minute beyond the monthly hard limit
+    "weekly": 4 * RELAX_UNIT // 60,  # per minute above the weekly maximum
+    "rest": 8 * RELAX_UNIT // 60,  # per minute of missing rest
+    "ride": 8 * RELAX_UNIT,  # per early/late start without a driver
+    "days_in_a_row": 24 * RELAX_UNIT,  # per extra day in a row
+}
 QUICK_RETURN = 14 * 60
 """Rest shorter than this between two working days counts as a quick return."""
 
@@ -118,9 +132,16 @@ def grid_points(info: DayInfo, granularity: int) -> list[int]:
 
 class ShiftModel:
     def __init__(
-        self, ctx: Context, granularity: int | None = None, tie_breakers: bool = True
+        self,
+        ctx: Context,
+        granularity: int | None = None,
+        tie_breakers: bool = True,
+        relaxed: bool = False,
     ) -> None:
         self.tie_breakers = tie_breakers
+        self.relaxed = relaxed
+        """Best-effort mode: hard rules get penalised slack instead of being strict."""
+        self.slack_terms: list[tuple[int, cp_model.LinearExprT]] = []
         self.primary: cp_model.LinearExpr = cp_model.LinearExpr.constant(0)
         """The main goals (wishes, balance, daily targets), without tie-breakers."""
         self.ctx = ctx
@@ -223,26 +244,29 @@ class ShiftModel:
         rest = self.ctx.limits[employee_id].min_rest
         for today, tomorrow in itertools.pairwise(days):
             if today is not None and tomorrow is not None:
-                self.model.add(tomorrow.start + MINUTES_PER_DAY - today.end >= rest)
+                slack = self._slack("rest", rest)
+                self.model.add(tomorrow.start + MINUTES_PER_DAY - today.end + slack >= rest)
         employee = next(e for e in self.ctx.employees if e.id == employee_id)
         last = employee.balance.last_shift_ended_at
         first = days[0] if days else None
         if last is not None and first is not None:
             needed = rest - minutes_since(last, self.ctx.month_start)
             if needed > 0:
-                self.model.add(first.start >= needed)
+                self.model.add(first.start + self._slack("rest", needed) >= needed)
 
     def _consecutive_days(self, employee_id: str) -> None:
         works = [d.works if d else 0 for d in self.vars[employee_id]]
         limit = self.ctx.limits[employee_id].max_consecutive_days
         for i in range(len(works) - limit):
-            self.model.add(sum(works[i : i + limit + 1]) <= limit)
+            slack = self._slack("days_in_a_row", 1)
+            self.model.add(sum(works[i : i + limit + 1]) - slack <= limit)
         employee = next(e for e in self.ctx.employees if e.id == employee_id)
         carried = employee.balance.consecutive_days_at_start
         for j in range(1, min(carried, limit) + 1):
             # The last j days of last month were worked: the first (limit + 1 − j) days of
             # this month may contain at most (limit − j) working days.
-            self.model.add(sum(works[: limit + 1 - j]) <= limit - j)
+            slack = self._slack("days_in_a_row", 1)
+            self.model.add(sum(works[: limit + 1 - j]) - slack <= limit - j)
 
     def _weekly_hours(self, employee_id: str) -> None:
         days = self.vars[employee_id]
@@ -250,18 +274,21 @@ class ShiftModel:
         for indexes in self.ctx.weeks().values():
             worked = [d.worked for i in indexes if (d := days[i]) is not None]
             if worked:
-                self.model.add(sum(worked) <= limit)
+                slack = self._slack("weekly", 7 * MINUTES_PER_DAY)
+                self.model.add(sum(worked) - slack <= limit)
 
-    def total_worked(self, employee_id: str) -> cp_model.LinearExprT:
-        return sum(d.worked for d in self.vars[employee_id] if d is not None)
+    def total_worked(self, employee_id: str) -> cp_model.LinearExpr:
+        return cp_model.LinearExpr.sum([d.worked for d in self.vars[employee_id] if d is not None])
 
     def _monthly_limit(self, employee_id: str) -> None:
         limit = self.ctx.project.rules.monthly_hard_limit_hours
         if limit is None:
             return
         target, total = self.ctx.targets[employee_id], self.total_worked(employee_id)
-        self.model.add(total <= target + round(limit * 60))
-        self.model.add(total >= target - round(limit * 60))
+        over = self._slack("monthly", 31 * MINUTES_PER_DAY)
+        under = self._slack("monthly", 31 * MINUTES_PER_DAY)
+        self.model.add(total - over <= target + round(limit * 60))
+        self.model.add(total + under >= target - round(limit * 60))
 
     def _coverage(self, i: int) -> None:
         info, points = self.ctx.days[i], self.points[i]
@@ -279,7 +306,8 @@ class ShiftModel:
                 if a <= points[k] and points[k + 1] <= b:
                     required = max(required, people)
             if required > 0:
-                self.model.add(sum(d.present[k] for d in days) >= required)
+                short = self._slack("coverage", required, minutes=points[k + 1] - points[k])
+                self.model.add(sum(d.present[k] for d in days) + short >= required)
         if info.daily_min is None and info.daily_max is None:
             return
         total = self.model.new_int_var(0, 100 * MINUTES_PER_DAY, f"day_total_{i}")
@@ -287,9 +315,11 @@ class ShiftModel:
         self.day_totals[i] = total
         if self.ctx.project.store.daily_hours_hard:
             if info.daily_min is not None:
-                self.model.add(total >= info.daily_min)
+                under = self._slack("daily", info.daily_min)
+                self.model.add(total + under >= info.daily_min)
             if info.daily_max is not None:
-                self.model.add(total <= info.daily_max)
+                over = self._slack("daily", 100 * MINUTES_PER_DAY)
+                self.model.add(total - over <= info.daily_max)
 
     def _rides(self, i: int) -> None:
         bus = self.ctx.project.rules.bus_rule
@@ -308,13 +338,13 @@ class ShiftModel:
                 for t in {c.start for c in rider.candidates if c.start < info.early_cutoff}:
                     self.model.add(
                         sum(c.var for c in rider.candidates if c.start == t)
-                        <= sum(c.var for c in from_drivers if c.start == t)
+                        <= sum(c.var for c in from_drivers if c.start == t) + self._slack("ride", 1)
                     )
             if bus.late_enabled and employee.needs_ride_late:
                 for t in {c.end for c in rider.candidates if c.end > info.late_cutoff}:
                     self.model.add(
                         sum(c.var for c in rider.candidates if c.end == t)
-                        <= sum(c.var for c in from_drivers if c.end == t)
+                        <= sum(c.var for c in from_drivers if c.end == t) + self._slack("ride", 1)
                     )
 
     def _objective(self) -> None:
@@ -327,13 +357,23 @@ class ShiftModel:
         4. subtle tie-breakers: quick returns and isolated single days off.
         """
         weights = self.ctx.project.weights
-        primary: list[tuple[int, cp_model.LinearExprT]] = []
+        # Broken hard rules (best-effort mode only) dominate everything else.
+        primary: list[tuple[int, cp_model.LinearExprT]] = list(self.slack_terms)
         primary += self._wish_terms()
         primary += self._balance_terms()
         primary += self._daily_target_terms(per_minute(weights.daily_target))
         self.primary = weighted(primary)
         ties = self._tie_breaker_terms() if self.tie_breakers else []
         self.model.minimize(weighted([(1, self.primary), *ties]))
+
+    def _slack(self, rule: str, upper: int, minutes: int = 1) -> cp_model.LinearExpr:
+        """How far a hard rule may be broken: always 0 when strict; in best-effort mode a
+        variable whose every unit costs RELAX_COST[rule] (× `minutes` for per-slot rules)."""
+        if not self.relaxed:
+            return cp_model.LinearExpr.constant(0)
+        var = self.model.new_int_var(0, upper, "")
+        self.slack_terms.append((RELAX_COST[rule] * minutes, var))
+        return var
 
     def bound_primary(self, value: float) -> None:
         """Only accept plans at least this good on the main goals (lexicographic polish)."""
@@ -513,7 +553,9 @@ LIGHT_PRESOLVE = {
 }
 
 
-def solve_staged(ctx: Context, time_limit_seconds: float, workers: int = 8) -> Outcome:
+def solve_staged(
+    ctx: Context, time_limit_seconds: float, workers: int = 8, relaxed: bool = False
+) -> Outcome:
     """Two stages:
 
     1. A coarse 60-minute grid, main goals only (no tie-breakers). Small, so it finds very
@@ -524,10 +566,10 @@ def solve_staged(ctx: Context, time_limit_seconds: float, workers: int = 8) -> O
     """
     started = time.perf_counter()
     coarse_grid = max(COARSE_GRID, ctx.project.rules.granularity_min)
-    coarse = ShiftModel(ctx, granularity=coarse_grid, tie_breakers=False).solve(
+    coarse = ShiftModel(ctx, granularity=coarse_grid, tie_breakers=False, relaxed=relaxed).solve(
         max(1.0, time_limit_seconds * COARSE_SHARE), workers
     )
-    fine = ShiftModel(ctx)
+    fine = ShiftModel(ctx, relaxed=relaxed)
     hinted = coarse.plan is not None and COARSE_GRID % ctx.project.rules.granularity_min == 0
     if hinted and coarse.plan is not None and coarse.primary is not None:
         fine.hint(coarse.plan)

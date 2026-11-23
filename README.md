@@ -188,8 +188,29 @@ but only accepts plans that are at least as good on goals 1–3. Tie-breakers ne
 
 **If the rules can't all be met**, you get both:
 
-- **Diagnostics:** plain-language explanations, e.g. "Sat 14 Feb: opening needs 2 people but only 1 is available".
-- **A best-effort plan:** every broken rule is listed and highlighted in red in the grid.
+- **Diagnostics:** fast pre-checks, shown on the Generate step before you generate. For example: *"Sat 14 Feb:
+  too few people available at opening, 06:00 (available: 1, needed: 2). Unavailable: Bence."* **Errors** are certain
+  impossibilities, and **warnings** are likely trouble. The checks cover:
+  - people available at opening, at closing, in busy periods and at every moment
+  - head count for long days
+  - staffed days shorter than the minimum shift
+  - total working days under the days-in-a-row limit
+  - contract hours vs demand
+  - riders without drivers
+- **A best-effort plan:** if the pre-check finds an error, or a strict solve gives no plan, the planner re-solves with
+  every relaxable hard rule turned into a heavily penalised soft one, and the checker lists what the plan breaks.
+  Labour-law rules cost more than staffing gaps, so a best-effort plan shows understaffing before it breaks
+  rest, days-in-a-row or weekly limits:
+
+  | Rule | Cost per unit |
+  |---|---|
+  | missing person-hour, hard daily target hour | 1 |
+  | monthly hard-limit hour | 2 |
+  | weekly-limit hour | 4 |
+  | rest hour, missing ride | 8 |
+  | extra day in a row | 24 |
+
+  Hard unavailability, shift length, opening hours and one shift per day are never relaxed.
 
 If the time limit runs out before any plan is found, the result says so (`solver.timeout`) rather than claiming the
 rules are impossible.
@@ -232,7 +253,9 @@ compose.dev.yaml   Development overrides with hot reload
 | `GET /api/project/new?month=YYYY-MM` | An empty project with every default |
 | `GET /api/project/demo?month=YYYY-MM` | The fictional demo team |
 | `POST /api/project/migrate` | Upgrade a saved project file to the current schema version and validate it |
-| `POST /api/solve` | Generate a plan: status, shifts, rule violations, diagnostics and hours per person |
+| `POST /api/solve` | Generate a plan: status (`optimal`, `feasible`, `best_effort`, `infeasible`), shifts, rule violations, diagnostics, hours and wishes per person |
+| `POST /api/diagnose` | Fast pre-checks only |
+| `POST /api/validate` | Check a (hand-edited) plan against every rule; the single source of truth for rule checking |
 
 Interactive docs: `/api/docs`. Errors come back as `{ code, params, details }`, and the frontend translates `code`.
 
@@ -279,7 +302,7 @@ production-like stack.
 2. ✅ Setup UI: Store, Employees, Availability & wishes, Advanced settings
 3. ✅ Solver core: hard constraints, coverage, `/api/solve`
 4. ✅ Objective: wishes, hour-balance steering, daily targets, plus a first *Generate* step
-5. Diagnostics and best-effort plans with violation reporting
+5. ✅ Diagnostics and best-effort plans with violation reporting
 6. Plan grid: editing, live validation, undo/redo, pin & re-generate
 7. Export: PDF/print, ODS/XLSX
 8. Guest-based demand (optional feature)
