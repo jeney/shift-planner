@@ -1,0 +1,42 @@
+{
+  "app": {
+    "name": "Vagtplanlægger",
+    "tagline": "Planlæg næste måneds vagter på få minutter."
+  },
+  "header": {
+    "language": "Sprog",
+    "theme": {
+      "toggle": "Skift tema",
+      "light": "Lyst",
+      "dark": "Mørkt",
+      "system": "System"
+    }
+  },
+  "api": {
+    "online": "Planlægger online",
+    "offline": "Planlægger offline",
+    "checking": "Forbinder…"
+  },
+  "steps": {
+    "store": "Butik",
+    "employees": "Medarbejdere",
+    "availability": "Tilgængelighed & ønsker",
+    "generate": "Generér",
+    "plan": "Vagtplan",
+    "export": "Eksport",
+    "advanced": "Avancerede indstillinger"
+  },
+  "stepDescriptions": {
+    "store": "Åbningstider, særlige datoer og hvor mange I skal være.",
+    "employees": "Dit team, deres kontrakter og timesaldi.",
+    "availability": "Hvornår folk ikke kan arbejde, og hvornår de helst vil.",
+    "generate": "Lad planlæggeren finde den bedste vagtplan.",
+    "plan": "Gennemse og finjustér vagtplanen manuelt.",
+    "export": "Udskriv den eller åbn den i et regneark.",
+    "advanced": "Alle regler og vægte. Valgfrit – standardindstillingerne virker godt."
+  },
+  "empty": {
+    "comingSoon": "Kommer snart",
+    "comingSoonBody": "Dette trin kommer i en kommende version."
+  }
+}
