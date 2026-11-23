@@ -1,0 +1,23 @@
+# Production-like stack: `docker compose up --build` → http://localhost:8080
+# For development with hot reload use: `docker compose -f compose.yaml -f compose.dev.yaml up --build`
+name: shift-planner
+
+services:
+  backend:
+    build:
+      context: ./backend
+      target: prod
+    restart: unless-stopped
+    environment:
+      SP_CORS_ORIGINS: '["http://localhost:8080"]'
+
+  frontend:
+    build:
+      context: ./frontend
+      target: prod
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_healthy

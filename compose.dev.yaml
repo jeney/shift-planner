@@ -1,0 +1,31 @@
+# Development overrides: hot reload for both services.
+#   docker compose -f compose.yaml -f compose.dev.yaml up --build
+# Frontend: http://localhost:5173   Backend API docs: http://localhost:8000/api/docs
+services:
+  backend:
+    build:
+      target: dev
+    restart: "no"
+    environment:
+      SP_CORS_ORIGINS: '["http://localhost:5173"]'
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  frontend:
+    build:
+      target: dev
+    restart: "no"
+    environment:
+      VITE_API_PROXY_TARGET: http://backend:8000
+    ports: !override
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
