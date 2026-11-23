@@ -89,7 +89,8 @@
   "units": {
     "hours": "{{value}} h",
     "h": "h",
-    "min": "min"
+    "min": "min",
+    "hPerWeek": "h/wk"
   },
   "dayTypes": {
     "weekday": "Weekdays",
@@ -171,5 +172,88 @@
     "peopleUnit": "people",
     "rangeInvalid": "Pick at least one day type, and an end time after the start time.",
     "removeRange": "Remove busy period"
+  },
+  "rules": {
+    "minShiftHours": {
+      "label": "Minimum shift length",
+      "help": "Shorter shifts are never planned."
+    },
+    "maxShiftHours": {
+      "label": "Maximum shift length",
+      "help": "Longer shifts are never planned."
+    },
+    "maxHoursPerDay": {
+      "label": "Max hours per day",
+      "help": "Total of all shifts on one day. Empty = same as the maximum shift length."
+    },
+    "minRestHours": {
+      "label": "Minimum rest between shifts",
+      "help": "Time off between the end of one shift and the start of the next (Danish law: 11 h)."
+    },
+    "maxConsecutiveDays": {
+      "label": "Max days in a row",
+      "help": "Working days in a row before a day off (Danish law: at most 6)."
+    },
+    "maxWeeklyHours": {
+      "label": "Max hours per week",
+      "help": "Hard limit for any calendar week."
+    }
+  },
+  "employees": {
+    "add": "Add employee",
+    "newName": "Employee {{n}}",
+    "unnamed": "Unnamed",
+    "summary_one": "{{count}} active person",
+    "summary_other": "{{count}} active people",
+    "emptyTitle": "No employees yet",
+    "emptyBody": "Add the people you plan for. You'll set their contract hours, transport and hour balance.",
+    "name": "Name",
+    "color": "Colour",
+    "active": "Active",
+    "activeHelp": "Inactive people stay in the project but aren't planned this month.",
+    "inactive": "Inactive",
+    "edit": "Edit {{name}}",
+    "sheetDescription": "Changes are saved automatically.",
+    "contract": "Contract",
+    "hoursPerWeek": "Hours per week",
+    "presets": "Common contracts",
+    "monthlyTarget": "Target this month",
+    "targetCalculation": "{{weekly}}/week × {{factor}} → {{target}} this month",
+    "includesTeamAdjustment": "(includes the team adjustment)",
+    "weekdaysFactor_one": "{{count}} weekday ÷ 5",
+    "weekdaysFactor_other": "{{count}} weekdays ÷ 5",
+    "transport": "Transport",
+    "hasCar": "Has a car",
+    "hasCarHelp": "Can drive colleagues to early or late shifts.",
+    "needsRide": "Needs a ride",
+    "needsRideEarly": "Needs a ride to early shifts",
+    "needsRideEarlyHelp": "Before the first bus, this person must start at exactly the same time as a driver.",
+    "needsRideLate": "Needs a ride home from late shifts",
+    "needsRideLateHelp": "After the last bus, this person must finish at exactly the same time as a driver.",
+    "needsRideLateOff": "Only used if the late-evening ride rule is turned on in Advanced settings.",
+    "whoCanDrive": "Who can drive them?",
+    "anyDriver": "Anyone with a car",
+    "someDrivers": "Only these people",
+    "noDrivers": "Nobody else has a car yet.",
+    "balance": "Hour balance",
+    "balanceHelp": "The app doesn't remember past months, so enter where this person stands today.",
+    "carryIn": "Balance carried in",
+    "carryInHelp": "Hours above (+) or below (−) target so far in the balancing period.",
+    "periodWeek": "Week in balancing period",
+    "periodWeekShort": "Period week",
+    "periodWeekHelp": "Which of the {{weeks}} weeks this month starts in. The planner evens out the balance harder near the end.",
+    "ofWeeks": "of {{weeks}}",
+    "weekOf": "{{week}} of {{weeks}}",
+    "lastShiftEnded": "Last shift ended",
+    "lastShiftEndedHelp": "Optional. Ensures enough rest before their first shift this month.",
+    "daysInARow": "Days worked in a row at month start",
+    "daysInARowHelp": "Optional. Counts toward the days-in-a-row limit at the start of the month.",
+    "limits": "Personal limits",
+    "limitsHelp": "Override the store-wide rules for this person. Leave empty to use the store-wide value.",
+    "globalValue": "Store-wide: {{value}}",
+    "total": "Total (active)",
+    "delete": "Delete employee",
+    "deleteTitle": "Delete {{name}}?",
+    "deleteDescription": "Their availability, wishes and shifts in this project are removed too."
   }
 }

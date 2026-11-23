@@ -89,7 +89,8 @@
   "units": {
     "hours": "{{value}} ó",
     "h": "ó",
-    "min": "perc"
+    "min": "perc",
+    "hPerWeek": "ó/hét"
   },
   "dayTypes": {
     "weekday": "Hétköznapok",
@@ -171,5 +172,88 @@
     "peopleUnit": "fő",
     "rangeInvalid": "Válassz legalább egy naptípust, és a kezdésnél későbbi befejezést.",
     "removeRange": "Forgalmas időszak törlése"
+  },
+  "rules": {
+    "minShiftHours": {
+      "label": "Legrövidebb műszak",
+      "help": "Ennél rövidebb műszak nem kerül a beosztásba."
+    },
+    "maxShiftHours": {
+      "label": "Leghosszabb műszak",
+      "help": "Ennél hosszabb műszak nem kerül a beosztásba."
+    },
+    "maxHoursPerDay": {
+      "label": "Napi max. óraszám",
+      "help": "Egy nap összes műszakjának összege. Üres = a leghosszabb műszakkal egyezik."
+    },
+    "minRestHours": {
+      "label": "Minimális pihenőidő",
+      "help": "Szabadidő az egyik műszak vége és a következő kezdete között (dán törvény: 11 ó)."
+    },
+    "maxConsecutiveDays": {
+      "label": "Max. napok egymás után",
+      "help": "Ennyi munkanap jöhet egymás után szabadnap nélkül (dán törvény: legfeljebb 6)."
+    },
+    "maxWeeklyHours": {
+      "label": "Heti max. óraszám",
+      "help": "Kötelező felső határ minden naptári hétre."
+    }
+  },
+  "employees": {
+    "add": "Munkatárs hozzáadása",
+    "newName": "Munkatárs {{n}}",
+    "unnamed": "Névtelen",
+    "summary_one": "{{count}} aktív munkatárs",
+    "summary_other": "{{count}} aktív munkatárs",
+    "emptyTitle": "Még nincsenek munkatársak",
+    "emptyBody": "Add hozzá azokat, akiket beosztasz. Megadhatod a szerződéses óraszámukat, a közlekedésüket és az óraegyenlegüket.",
+    "name": "Név",
+    "color": "Szín",
+    "active": "Aktív",
+    "activeHelp": "Az inaktív munkatársak a projektben maradnak, de ebben a hónapban nem kapnak beosztást.",
+    "inactive": "Inaktív",
+    "edit": "{{name}} szerkesztése",
+    "sheetDescription": "A változások automatikusan mentődnek.",
+    "contract": "Szerződés",
+    "hoursPerWeek": "Heti óraszám",
+    "presets": "Gyakori szerződések",
+    "monthlyTarget": "Havi cél",
+    "targetCalculation": "{{weekly}}/hét × {{factor}} → {{target}} ebben a hónapban",
+    "includesTeamAdjustment": "(a csapatszintű korrekcióval együtt)",
+    "weekdaysFactor_one": "{{count}} hétköznap ÷ 5",
+    "weekdaysFactor_other": "{{count}} hétköznap ÷ 5",
+    "transport": "Közlekedés",
+    "hasCar": "Van autója",
+    "hasCarHelp": "El tudja vinni a kollégákat a korai vagy késői műszakokra.",
+    "needsRide": "Fuvar kell",
+    "needsRideEarly": "Fuvar kell a korai műszakokra",
+    "needsRideEarlyHelp": "Az első busz előtt pontosan egy sofőrrel együtt kell kezdenie.",
+    "needsRideLate": "Fuvar kell haza a késői műszakokból",
+    "needsRideLateHelp": "Az utolsó busz után pontosan egy sofőrrel együtt kell végeznie.",
+    "needsRideLateOff": "Csak akkor számít, ha a Speciális beállításokban be van kapcsolva az esti fuvar szabálya.",
+    "whoCanDrive": "Ki viheti el?",
+    "anyDriver": "Bárki, akinek van autója",
+    "someDrivers": "Csak ezek a munkatársak",
+    "noDrivers": "Még senki másnak nincs autója.",
+    "balance": "Óraegyenleg",
+    "balanceHelp": "Az alkalmazás nem emlékszik a korábbi hónapokra, ezért add meg a mai állást.",
+    "carryIn": "Áthozott egyenleg",
+    "carryInHelp": "A kiegyenlítési időszakban eddig a célnál több (+) vagy kevesebb (−) óra.",
+    "periodWeek": "Hét a kiegyenlítési időszakban",
+    "periodWeekShort": "Időszak hete",
+    "periodWeekHelp": "A(z) {{weeks}} hétből melyikben kezdődik ez a hónap. Az időszak vége felé a tervező erősebben egyenlíti ki az egyenleget.",
+    "ofWeeks": "/ {{weeks}}",
+    "weekOf": "{{week}}/{{weeks}}",
+    "lastShiftEnded": "Az utolsó műszak vége",
+    "lastShiftEndedHelp": "Nem kötelező. Biztosítja a pihenőidőt a hónap első műszakja előtt.",
+    "daysInARow": "Egymás utáni munkanapok a hónap elején",
+    "daysInARowHelp": "Nem kötelező. A hónap elején beleszámít az egymás utáni napok korlátjába.",
+    "limits": "Egyéni korlátok",
+    "limitsHelp": "Felülírja az üzlet szabályait ennél a munkatársnál. Hagyd üresen az üzleti érték használatához.",
+    "globalValue": "Üzleti érték: {{value}}",
+    "total": "Összesen (aktív)",
+    "delete": "Munkatárs törlése",
+    "deleteTitle": "Törlöd: {{name}}?",
+    "deleteDescription": "Az elérhetősége, a kérései és a műszakjai is törlődnek a projektből."
   }
 }
