@@ -507,7 +507,8 @@
       "optimal": "Best possible plan found",
       "feasible": "Good plan found",
       "infeasible": "No plan follows all the rules",
-      "timeout": "No plan found in time"
+      "timeout": "No plan found in time",
+      "best_effort": "No plan follows every rule. Here's the closest one"
     },
     "summary": "{{shifts}} shifts · {{honoured}} of {{wishes}} wish days honoured · {{seconds}} s",
     "infeasibleHelp": "Some hard rules can't all be met this month. Check unavailability, staffing needs and limits. Detailed explanations are coming in a later release.",
@@ -523,7 +524,14 @@
       "carryIn": "Carried in",
       "newBalance": "New balance",
       "wishes": "Wishes"
-    }
+    },
+    "precheckTitle": "Before you generate",
+    "precheckOk": "No problems found in the setup.",
+    "precheckErrors": "No plan can follow every rule as things are set up. You can still generate: you'll get the closest possible plan, with the broken rules marked.",
+    "precheckRunning": "Checking the setup…",
+    "diagnosticsTitle": "Why the rules can't all be met",
+    "bestEffortSummary_one": "{{count}} rule is broken; see the list below. {{shifts}} shifts · {{seconds}} s",
+    "bestEffortSummary_other": "{{count}} rules are broken; see the list below. {{shifts}} shifts · {{seconds}} s"
   },
   "violation": {
     "inactive_employee": "{{name}} is inactive but has a shift on {{date}}.",
@@ -539,14 +547,33 @@
     "weekly_hours_exceeded": "{{name}} works {{planned}} h in the week of {{date}} (maximum {{max}} h).",
     "weekly_above_contract": "{{name}} works {{planned}} h in the week of {{date}}, above the {{contract}} h contract.",
     "unavailable": "{{name}} is unavailable on {{date}} {{start}}–{{end}} but has a shift.",
-    "understaffed": "{{date}} {{start}}–{{end}}: {{required}} people needed, {{missing}} missing.",
-    "opening_understaffed": "{{date}}: {{required}} people needed at {{start}}, {{missing}} missing.",
-    "closing_understaffed": "{{date}}: {{required}} people needed until {{end}}, {{missing}} missing.",
-    "busy_period_understaffed": "{{date}} {{start}}–{{end}}: the busy period needs {{required}} people, {{missing}} missing.",
+    "understaffed": "{{date}} {{start}}–{{end}}: too few people (needed: {{required}}, missing: {{missing}}).",
+    "opening_understaffed": "{{date}}: too few people at {{start}} (needed: {{required}}, missing: {{missing}}).",
+    "closing_understaffed": "{{date}}: too few people until {{end}} (needed: {{required}}, missing: {{missing}}).",
+    "busy_period_understaffed": "{{date}} {{start}}–{{end}}: too few people for the busy period (needed: {{required}}, missing: {{missing}}).",
     "daily_hours_below_min": "{{date}}: {{planned}} h planned, below the daily target of {{min}} h.",
     "daily_hours_above_max": "{{date}}: {{planned}} h planned, above the daily target of {{max}} h.",
     "no_ride_early": "{{name}} starts at {{start}} on {{date}}, before the first bus ({{cutoff}}), without a driver.",
     "no_ride_late": "{{name}} finishes at {{end}} on {{date}}, after the last bus ({{cutoff}}), without a driver.",
     "monthly_limit_exceeded": "{{name}} is {{deviation}} h from the monthly target (limit ±{{limit}} h)."
+  },
+  "diagnostic": {
+    "no_employees": "There's nobody to plan yet. Add people on the Employees step.",
+    "opening_short": "{{date}}: too few people available at opening, {{time}} (available: {{available}}, needed: {{required}}).",
+    "closing_short": "{{date}}: too few people available until closing, {{time}} (available: {{available}}, needed: {{required}}).",
+    "moment_short": "{{date}}: too few people available at {{time}} (available: {{available}}, needed: {{required}}).",
+    "busy_period_short": "{{date}}: too few people available for the busy period at {{time}} (available: {{available}}, needed: {{required}}).",
+    "day_short_of_people": "{{date}}: too few people can work to cover the whole day (available: {{available}}, needed: {{required}}).",
+    "window_shorter_than_min_shift": "{{date}}: staff are only needed {{start}}–{{end}}, which is shorter than the minimum shift of {{min}} h.",
+    "not_enough_working_days": "The month needs at least {{required}} working days in total, but the team can work at most {{available}} (days-in-a-row limit and absences).",
+    "hours_below_demand": "The team's contracts add up to {{contract}} h this month, but staffing the store needs at least {{demand}} h.",
+    "hours_above_demand": "The team's contracts add up to {{contract}} h this month, far more than the {{demand}} h the store needs at minimum.",
+    "rider_without_driver": "{{names}} needs a ride but nobody is allowed to drive them, so they can never start before the first bus.",
+    "no_driver_early": "{{date}}: no driver is available before {{cutoff}}, so {{names}} can't start early.",
+    "solver": {
+      "timeout": "No plan was found within {{seconds}} s."
+    },
+    "unknown": "The planner reported a problem with this month.",
+    "unavailableList": "Unavailable: {{names}}."
   }
 }

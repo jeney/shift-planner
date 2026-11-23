@@ -123,3 +123,26 @@ test('generates a plan for the demo team', async ({ page }) => {
   await expect(page.getByRole('table', { name: 'Hours per person' })).toContainText('Anna Holm')
   await expect(page.getByRole('button', { name: 'Generate again' })).toBeVisible()
 })
+
+test('an impossible month gets diagnostics and a best-effort plan', async ({ page }) => {
+  needsBackend()
+  test.setTimeout(90_000)
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Load demo project' }).click()
+
+  // The demo already needs 2 people 11–14 on Saturdays; ask for 12 (only 9 people exist).
+  const minimum = page.getByLabel('Minimum people')
+  await minimum.fill('12')
+  await minimum.blur()
+
+  await page.getByRole('tab', { name: /Generate/ }).click()
+  const precheck = page.getByRole('list', { name: 'Before you generate' })
+  await expect(precheck).toContainText('too few people available for the busy period')
+  await page.getByRole('button', { name: 'Generate plan' }).click()
+  await expect(page.getByText("No plan follows every rule. Here's the closest one")).toBeVisible({
+    timeout: 60_000,
+  })
+  await expect(page.getByRole('list', { name: 'Things to check' })).toContainText(
+    'too few people for the busy period',
+  )
+})
