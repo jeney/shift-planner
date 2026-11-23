@@ -120,7 +120,7 @@ test('generates a plan for the demo team', async ({ page }) => {
   await page.getByRole('tab', { name: /Generate/ }).click()
   await page.getByRole('button', { name: 'Generate plan' }).click()
   await expect(page.getByText(/^(Best possible|Good) plan found$/)).toBeVisible({ timeout: 60_000 })
-  await expect(page.getByRole('table', { name: 'Hours per person' })).toContainText('Anna Holm')
+  await expect(page.getByRole('table', { name: 'Hours per person' })).toContainText('Sophie')
   await expect(page.getByRole('button', { name: 'Generate again' })).toBeVisible()
 })
 
@@ -160,7 +160,7 @@ test('edit the plan by hand with live checks, undo, and keep edits when re-gener
 
   await page.getByRole('tab', { name: /Plan/ }).click()
   const grid = page.getByRole('grid', { name: 'Shift plan' })
-  const cell = grid.getByRole('gridcell', { name: /^Anna Holm, \w+, Dec 3\./ })
+  const cell = grid.getByRole('gridcell', { name: /^Sophie, \w+, \w+ 3\./ })
   await cell.click()
   await page.getByLabel('Start').fill('06:00')
   await page.getByLabel('End').fill('17:00') // 11 h: longer than the 8 h maximum
@@ -212,7 +212,7 @@ test('exports the plan as .ods, .xlsx and a printable A4 page', async ({ page })
   await expect(page.getByTestId('print-view')).toBeHidden()
   await page.emulateMedia({ media: 'print' })
   await expect(page.getByTestId('print-view')).toBeVisible()
-  await expect(page.getByTestId('print-view')).toContainText('Anna Holm')
+  await expect(page.getByTestId('print-view')).toContainText('Sophie')
   const pdf = await page.pdf({ preferCSSPageSize: true })
   expect(pdf.subarray(0, 4).toString()).toBe('%PDF')
 })
@@ -246,7 +246,7 @@ test('starts the next month with the same team', async ({ page }) => {
 
   await expect(badge).not.toHaveText(before)
   await page.getByRole('tab', { name: /Employees/ }).click()
-  await expect(page.getByText('Anna Holm')).toBeVisible()
-  // Anna's balancing period moved on from week 6.
-  await expect(page.getByRole('row', { name: /Anna Holm/ })).not.toContainText('6 of 16')
+  await expect(page.getByText('Sophie', { exact: true })).toBeVisible()
+  // Sophie's balancing period moved on from week 6.
+  await expect(page.getByRole('row', { name: /Sophie/ })).not.toContainText('6 of 16')
 })
