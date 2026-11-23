@@ -613,5 +613,27 @@
     "emptyTitle": "Ingen plan endnu",
     "emptyBody": "Generér en plan under Generér, eller start med en tom plan og tilføj vagter manuelt.",
     "planByHand": "Planlæg manuelt"
+  },
+  "export": {
+    "subtitle": "Vagtplan",
+    "peoplePerDay": "Personer pr. dag",
+    "hoursPerDay": "Personaletimer pr. dag",
+    "legendTimes": "Vagter vises som start–slut (24-timers ur).",
+    "legendShaded": "Skraverede kolonner er weekender og helligdage.",
+    "legendHolidays": "Helligdage: {{list}}.",
+    "legendHours": "Planlagte timer og mål er arbejdstimer (betalte). Ny saldo = overført + forskel.",
+    "title": "Eksportér planen",
+    "description": "Udskriv den, gem den som PDF, eller åbn den i LibreOffice Calc eller Excel. Kun planen og timeoversigten kommer med.",
+    "print": "Udskriv eller gem som PDF",
+    "printHelp": "Åbner browserens udskriftsdialog (A4 liggende). Vælg “Gem som PDF” for at få en fil.",
+    "ods": "Download til LibreOffice (.ods)",
+    "xlsx": "Download til Excel (.xlsx)",
+    "sheetName": "Plan",
+    "downloaded": "{{file}} er downloadet",
+    "noPlanTitle": "Intet at eksportere endnu",
+    "noPlanBody": "Generér en plan, eller planlæg manuelt, først.",
+    "waiting": "Beregner timer…",
+    "summary_one": "{{count}} vagt for {{people}} personer",
+    "summary_other": "{{count}} vagter for {{people}} personer"
   }
 }
