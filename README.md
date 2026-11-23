@@ -241,6 +241,27 @@ The **Plan** step shows people × days, with weekends and holidays shaded.
   they are and plans everything else around them. Turn pinning off for a shift in its editor, or use *Unpin all*.
   If a pinned shift breaks a rule, the planner keeps it and reports the rule rather than dropping your edit.
 
+### Exporting
+
+The **Export** step offers three outputs:
+
+- **Print or save as PDF:** an A4-landscape layout with the plan table (people × days, with start and end on two
+  lines), shaded weekends and holidays, totals per day, the hour summary and a legend. Use the browser's
+  *Save as PDF* to get a file.
+- **`.ods`** for LibreOffice Calc.
+- **`.xlsx`** for Excel.
+
+The two spreadsheets have the same layout, plus a frozen name column and header row, and number columns for
+planned/target hours, the difference and the new balance.
+
+Exports contain only the plan table and the hour summary, in the current UI language.
+
+**Why in the browser?** Exports need the UI's translations and locale formats, which live in the frontend. This also
+keeps the backend a small stateless solver, and both spreadsheet formats are just zipped XML (written with
+[fflate](https://github.com/101arrowz/fflate), with no large spreadsheet libraries). Printing gives correct fonts
+for every language, including Hungarian ő/ű, with no embedded PDF fonts. Hours still come from the backend's
+validator, so unpaid breaks are counted correctly.
+
 ### Your data
 
 - No accounts and no server-side storage.
@@ -318,7 +339,7 @@ production-like stack.
 4. ✅ Objective: wishes, hour-balance steering, daily targets, plus a first *Generate* step
 5. ✅ Diagnostics and best-effort plans with violation reporting
 6. ✅ Plan grid: editing, live validation, undo/redo, pin & re-generate
-7. Export: PDF/print, ODS/XLSX
+7. ✅ Export: PDF/print, ODS/XLSX
 8. Guest-based demand (optional feature)
 9. Polish: design pass, translations review, e2e tests, docs
 
