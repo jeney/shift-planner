@@ -90,7 +90,8 @@
     "hours": "{{value}} ó",
     "h": "ó",
     "min": "perc",
-    "hPerWeek": "ó/hét"
+    "hPerWeek": "ó/hét",
+    "s": "mp"
   },
   "dayTypes": {
     "weekday": "Hétköznapok",
@@ -197,6 +198,92 @@
     "maxWeeklyHours": {
       "label": "Heti max. óraszám",
       "help": "Kötelező felső határ minden naptári hétre."
+    },
+    "granularityMin": {
+      "label": "A javasolt műszakok időrácsa",
+      "help": "A generált műszakok erre a rácsra esnek. Kézi szerkesztésnél bármelyik perc használható."
+    },
+    "oneShiftPerDay": {
+      "label": "Naponta legfeljebb egy műszak",
+      "help": "Kikapcsolva valakinek osztott műszakja is lehet."
+    },
+    "fullTimeThresholdHours": {
+      "label": "Teljes munkaidő ettől",
+      "help": "Akinek legalább ennyi a heti szerződéses óraszáma, teljes munkaidősnek számít."
+    },
+    "fullTimeContractWarning": {
+      "label": "Figyelmeztetés, ha egy teljes munkaidős egy héten a szerződése fölött dolgozik",
+      "help": "Csak figyelmeztetés. A kötelező felső határ a fenti heti maximum."
+    },
+    "monthlyTargetMode": {
+      "label": "Havi cél",
+      "weeks_per_month": {
+        "label": "52/12 ≈ 4,33 hét havonta",
+        "help": "Minden hónapban ugyanaz a szorzó."
+      },
+      "fixed_4_4": {
+        "label": "4,4 hét havonta",
+        "help": "Kicsit magasabb, rögzített szorzó."
+      },
+      "actual_weekdays": {
+        "label": "A hónap tényleges hétköznapjai",
+        "help": "A hónap hétfő–péntek napjainak száma ÷ 5."
+      }
+    },
+    "holidaysReduceTarget": {
+      "label": "Az ünnepnapok csökkentik a célt",
+      "help": "Minden hétköznapra eső ünnepnap egy hét ötödével csökkenti a célt. Kikapcsolva, mert az üzlet ünnepnapokon is nyitva van."
+    },
+    "balancingPeriodWeeks": {
+      "label": "Kiegyenlítési időszak (hét)",
+      "help": "Az órák ennyi hét alatt átlagolódnak. A dán kiskereskedelmi kollektív szerződés részmunkaidősöknél 16 hetet használ."
+    },
+    "monthlyToleranceHours": {
+      "label": "Havi tűrés (±)",
+      "help": "Ennyi eltérés az egyenlegcéltól még rendben van ebben a hónapban. Ezen túl a tervező sokkal jobban igyekszik."
+    },
+    "monthlyHardLimitHours": {
+      "label": "Kötelező határ (±)",
+      "help": "Nem kötelező. Senki ne térjen el ennél jobban a havi céljától."
+    },
+    "teamAdjustmentHours": {
+      "label": "Csapatszintű korrekció",
+      "help": "Az egész csapat havi célját eltolja, pl. −10 óra egy túl sok órás hónap után. A szerződéses órák arányában oszlik el."
+    },
+    "busRule": {
+      "enabled": {
+        "label": "Fuvarszabály korai műszakokhoz",
+        "help": "Aki fuvart igényel és a határidő előtt kezd, annak pontosan együtt kell kezdenie valakivel, aki elviheti."
+      },
+      "earlyCutoff": {
+        "label": "Első busz",
+        "help": "Az ekkor vagy később kezdődő műszakok rendben vannak, mert jár a busz."
+      },
+      "lateEnabled": {
+        "label": "Fuvarszabály késői műszakokhoz",
+        "help": "Alapból kikapcsolva. Aki fuvart igényel haza és a határidő után végez, annak egy sofőrrel együtt kell végeznie."
+      },
+      "lateCutoff": {
+        "label": "Utolsó busz",
+        "help": "Az ekkor vagy korábban végződő műszakok rendben vannak."
+      }
+    },
+    "breaks": {
+      "enabled": {
+        "label": "Szünetek beszámítása",
+        "help": "A hosszú műszakokban megadott hosszúságú szünet van."
+      },
+      "paid": {
+        "label": "A szünet fizetett",
+        "help": "Kikapcsolva a szünet ideje nem számít munkaidőnek."
+      },
+      "rules": "Szünetszabályok",
+      "shiftLongerThan": "Ha a műszak hosszabb, mint",
+      "afterHours": "Műszakhossz",
+      "minutes": "Szünet hossza",
+      "break": "szünet",
+      "add": "Szünetszabály hozzáadása",
+      "remove": "Szünetszabály törlése"
     }
   },
   "employees": {
@@ -317,6 +404,88 @@
       "allDay": "egész nap",
       "from": "{{time}}-tól",
       "until": "{{time}}-ig"
+    }
+  },
+  "advanced": {
+    "reset": "Alapértékek visszaállítása",
+    "resetTitle": "Visszaállítod az összes szabályt és súlyt?",
+    "resetDescription": "Az oldal összes beállítása visszaáll az alapértékre. Az üzlet, a csapat és az elérhetőség nem változik.",
+    "resetDone": "A beállítások visszaálltak az alapértékre",
+    "shiftsTitle": "Műszakok",
+    "shiftsDescription": "A tervező által javasolt műszakok hossza és időzítése.",
+    "workingTimeTitle": "Munkaidő",
+    "workingTimeDescription": "Törvényi és szerződéses korlátok személyenként.",
+    "balanceTitle": "Havi órák és egyenleg",
+    "balanceDescription": "Hogyan lesz a szerződéses órákból havi cél, és hogyan egyenlítődik ki az egyenleg.",
+    "customWeeks": "Egyéni hetek száma",
+    "weeks": "hét",
+    "busTitle": "Fuvar korai és késői műszakokhoz",
+    "busDescription": "Azoknak, akik a nap elején vagy végén nem tudnak busszal közlekedni.",
+    "breaksTitle": "Szünetek",
+    "breaksDescription": "Alapból kikapcsolva. Bekapcsolva a hosszú műszakokban szünet van.",
+    "weightsTitle": "A tervező prioritásai",
+    "weightsDescription": "Mennyit számít az egyes rugalmas célok a többihez képest. A nagyobb érték fontosabb.",
+    "guestsTitle": "Vendégszám alapú igény",
+    "guestsDescription": "A várható napi vendégszámból számolja ki a nap összes munkaóráját.",
+    "comingSoon": "Hamarosan",
+    "solverTitle": "Számítás",
+    "solverDescription": "Mennyi ideig keresheti a tervező a legjobb beosztást."
+  },
+  "weights": {
+    "wishOff": {
+      "label": "Szabadnap-kérések",
+      "help": "Büntetés, ha valakit beosztanak, aki szabadnapot kért."
+    },
+    "wishWork": {
+      "label": "Munkakérések",
+      "help": "Jutalom, ha valakit beosztanak, aki dolgozni szeretne."
+    },
+    "hourBalance": {
+      "label": "Óraegyenleg",
+      "help": "Mindenki egyenlegét nulla felé tereli. A kiegyenlítési időszak vége felé erősebben."
+    },
+    "beyondTolerance": {
+      "label": "Tűrésen kívül",
+      "help": "Plusz büntetés minden órára a havi tűrésen kívül."
+    },
+    "dailyTarget": {
+      "label": "Napi órakeretek",
+      "help": "Büntetés, ha a beosztás eltér az Üzlet lépésben megadott napi óráktól."
+    },
+    "shortGap": {
+      "label": "Rövid szünetek kerülése a munkanapok között",
+      "help": "Finom döntetlenfeloldó."
+    },
+    "contiguousDaysOff": {
+      "label": "Egybefüggő szabadnapok",
+      "help": "Finom döntetlenfeloldó, amely az egymás melletti szabadnapokat részesíti előnyben."
+    }
+  },
+  "guestDemand": {
+    "enabled": {
+      "label": "Vendégszám alapú igény használata",
+      "help": "Egy későbbi kiadásban érkezik. Az átváltási táblázatot már most előkészítheted."
+    },
+    "mode": {
+      "label": "A pontok között",
+      "linear": "Lineáris interpoláció",
+      "steps": "Lépcsők"
+    },
+    "points": "Vendégek → munkaórák",
+    "guests": "Vendégek",
+    "guestsUnit": "vendég",
+    "hours": "Munkaórák",
+    "add": "Pont hozzáadása",
+    "remove": "Pont törlése",
+    "tolerance": {
+      "label": "Tűrés (±)",
+      "help": "Mennyivel térhet el a nap összes órája a céltól."
+    }
+  },
+  "solver": {
+    "timeLimit": {
+      "label": "Időkorlát",
+      "help": "A tervező az ennyi idő alatt talált legjobb beosztást adja vissza. Általában 20 másodperc bőven elég."
     }
   }
 }
