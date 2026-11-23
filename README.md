@@ -389,15 +389,23 @@ dark) and a translation check that walks every screen in Danish and Hungarian lo
 
 ### Hosting
 
-The frontend is a static site (`frontend/dist` after `npm run build`), and the backend is a single stateless
-container (`backend/Dockerfile`, target `prod`). Any static host plus any container host will do:
+- **Frontend:** a static site on **GitHub Pages**, deployed by `.github/workflows/pages.yml` on every push to `main`.
+  It reads the backend's address from the repository variable `API_BASE_URL` at build time (e.g.
+  `gh variable set API_BASE_URL --body https://your-backend.example`). Without it, the page shows *Solver offline*.
+- **Backend:** one stateless container (`backend/Dockerfile`, target `prod`). It listens on `$PORT` (default 8000)
+  and allows the frontend's origin through `SP_CORS_ORIGINS`, e.g. `["https://jeney.github.io"]`.
 
-- Serve the static site so that `/api` reaches the backend. The production image's nginx does this through
-  `API_UPSTREAM`.
-- Alternatively, build the frontend with `VITE_API_BASE_URL=https://your-backend` and set the backend's
-  `SP_CORS_ORIGINS` to the frontend's origin.
+**How much CPU the solver needs** (demo team, 31-day month, 20 s limit, measured with Docker CPU limits):
 
-The solver uses up to 8 CPU threads per request, so give the backend at least 2 vCPUs for snappy results.
+| CPU / RAM | Result |
+|---|---|
+| 0.1 vCPU / 512 MB (typical free container tiers) | no plan found |
+| 1 vCPU / 1 GB | a valid plan, far from targets (~150 h total deviation) |
+| 2 vCPU / 2 GB | a valid plan, ~65 h total deviation |
+| 4 vCPU / 2 GB | a good plan, ~16 h total deviation, every wish honoured |
+
+Peak memory is about 0.5–1.1 GB per solve. The solver runs about two threads per available CPU, between 4 and 8.
+Container CPU quotas are detected; set `SP_SOLVER_WORKERS` to override.
 
 ## Roadmap
 
