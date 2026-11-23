@@ -29,9 +29,11 @@ RUN useradd --system --uid 10001 app
 COPY --from=build /opt/venv /opt/venv
 USER app
 EXPOSE 8000
+# Hosts like Cloud Run, Render or Hugging Face set PORT; default 8000.
+ENV PORT=8000
 HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=5 \
-  CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"]
-CMD ["uvicorn", "shift_planner.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers"]
+  CMD ["sh", "-c", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:${PORT}/api/health')\""]
+CMD ["sh", "-c", "exec uvicorn shift_planner.main:app --host 0.0.0.0 --port ${PORT} --proxy-headers --forwarded-allow-ips='*'"]
 
 # ---- dev: all deps, source bind-mounted, hot reload ----
 # Kept last so the legacy builder doesn't build it for the prod target.
