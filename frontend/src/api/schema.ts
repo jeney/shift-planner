@@ -557,6 +557,16 @@ export interface components {
             carryInHours: number;
             /** Newbalancehours */
             newBalanceHours: number;
+            /**
+             * Wisheshonoured
+             * @default 0
+             */
+            wishesHonoured: number;
+            /**
+             * Wishestotal
+             * @default 0
+             */
+            wishesTotal: number;
         };
         /** ErrorDetail */
         ErrorDetail: {
@@ -792,10 +802,10 @@ export interface components {
         "Project-Input": {
             /**
              * Schemaversion
-             * @default 2
+             * @default 3
              * @constant
              */
-            schemaVersion: 2;
+            schemaVersion: 3;
             /** Id */
             id: string;
             /**
@@ -820,10 +830,10 @@ export interface components {
         "Project-Output": {
             /**
              * Schemaversion
-             * @default 2
+             * @default 3
              * @constant
              */
-            schemaVersion: 2;
+            schemaVersion: 3;
             /** Id */
             id: string;
             /**
@@ -1096,6 +1106,8 @@ export interface components {
             diagnostics: components["schemas"]["Diagnostic"][];
             /** Stats */
             stats: components["schemas"]["EmployeeStats"][];
+            /** Wishes */
+            wishes: components["schemas"]["WishOutcome"][];
             /** Solvetimems */
             solveTimeMs: number;
         };
@@ -1228,6 +1240,11 @@ export interface components {
              */
             allowWorkingAlone: boolean;
             staffing?: components["schemas"]["StaffingByDayType-Input"];
+            /**
+             * Dailyhourshard
+             * @default false
+             */
+            dailyHoursHard: boolean;
             /** Timerangeminimums */
             timeRangeMinimums?: components["schemas"]["TimeRangeMinimum"][];
         };
@@ -1258,6 +1275,11 @@ export interface components {
              */
             allowWorkingAlone: boolean;
             staffing: components["schemas"]["StaffingByDayType-Output"];
+            /**
+             * Dailyhourshard
+             * @default false
+             */
+            dailyHoursHard: boolean;
             /** Timerangeminimums */
             timeRangeMinimums: components["schemas"]["TimeRangeMinimum"][];
         };
@@ -1374,6 +1396,25 @@ export interface components {
             start: string | null;
             /** End */
             end: string | null;
+        };
+        /** WishOutcome */
+        WishOutcome: {
+            /** Entryid */
+            entryId: string;
+            /** Employeeid */
+            employeeId: string;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "wish_off" | "wish_work";
+            /** Honoured */
+            honoured: boolean;
         };
     };
     responses: never;

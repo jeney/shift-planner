@@ -172,7 +172,9 @@
     "people": "Minimális létszám",
     "peopleUnit": "fő",
     "rangeInvalid": "Válassz legalább egy naptípust, és a kezdésnél későbbi befejezést.",
-    "removeRange": "Forgalmas időszak törlése"
+    "removeRange": "Forgalmas időszak törlése",
+    "dailyHard": "A napi órák kötelező határok",
+    "dailyHardHelp": "Kikapcsolva: a tervező a napi órákra törekszik, de szükség esetén eltérhet tőlük. Bekapcsolva: soha nem tér el tőlük, ami lehetetlenné teheti egy hónap beosztását."
   },
   "rules": {
     "minShiftHours": {
@@ -487,5 +489,64 @@
       "label": "Időkorlát",
       "help": "A tervező az ennyi idő alatt talált legjobb beosztást adja vissza. Általában 20 másodperc bőven elég."
     }
+  },
+  "generate": {
+    "title": "{{month}} beosztása",
+    "people_one": "{{count}} munkatárs",
+    "people_other": "{{count}} munkatárs",
+    "wishes_one": "{{count}} kérés",
+    "wishes_other": "{{count}} kérés",
+    "timeLimit": "Legfeljebb {{seconds}} mp",
+    "generate": "Beosztás készítése",
+    "regenerate": "Újrakészítés",
+    "searching": "A legjobb beosztás keresése…",
+    "elapsed": "{{elapsed}} / {{seconds}} mp",
+    "searchingHelp": "A tervező az időkorlát lejártáig javítja a beosztást. A korlátot a Speciális beállításokban módosíthatod.",
+    "failed": "Nem sikerült elkészíteni a beosztást",
+    "status": {
+      "optimal": "A lehető legjobb beosztás elkészült",
+      "feasible": "Jó beosztás készült",
+      "infeasible": "Egyetlen beosztás sem felel meg minden szabálynak",
+      "timeout": "Nem készült beosztás időben"
+    },
+    "summary": "{{shifts}} műszak · {{wishes}} kérésnapból {{honoured}} teljesült · {{seconds}} mp",
+    "infeasibleHelp": "Ebben a hónapban egyes kötelező szabályok nem teljesíthetők egyszerre. Ellenőrizd az elérhetőséget, a létszámigényt és a korlátokat. Részletes magyarázatok egy későbbi kiadásban érkeznek.",
+    "timeoutHelp": "A tervező {{seconds}} mp alatt nem talált beosztást. Próbálj hosszabb időkorlátot a Speciális beállításokban.",
+    "issuesTitle": "Ellenőrizendő",
+    "issuesDescription": "Megszegett szabályok (piros) és figyelmeztetések (sárga).",
+    "hoursTitle": "Órák munkatársanként",
+    "columns": {
+      "shifts": "Műszakok",
+      "planned": "Tervezett",
+      "target": "Cél",
+      "deviation": "Eltérés",
+      "carryIn": "Áthozott",
+      "newBalance": "Új egyenleg",
+      "wishes": "Kérések"
+    }
+  },
+  "violation": {
+    "inactive_employee": "{{name}} inaktív, mégis van műszakja: {{date}}.",
+    "store_closed": "{{name}} műszakot kapott {{date}} napra, de az üzlet zárva van.",
+    "outside_opening_hours": "{{name}} műszakja ({{date}}, {{start}}–{{end}}) kívül esik a munkaidőn ({{windowStart}}–{{windowEnd}}).",
+    "overlapping_shifts": "{{name}} műszakjai átfedik egymást: {{date}}.",
+    "shift_too_short": "{{name}} műszakja ({{date}}) rövidebb, mint {{min}} ó.",
+    "shift_too_long": "{{name}} műszakja ({{date}}) hosszabb, mint {{max}} ó.",
+    "too_many_shifts": "{{name}} egynél több műszakot kapott: {{date}}.",
+    "day_too_long": "{{name}} több mint {{max}} órát dolgozik: {{date}}.",
+    "rest_too_short": "{{name}} csak {{rest}} órát pihen a(z) {{date}} műszak előtt (minimum {{min}} ó).",
+    "too_many_days_in_a_row": "{{name}} több mint {{max}} napot dolgozik egymás után: {{date}}.",
+    "weekly_hours_exceeded": "{{name}} {{planned}} órát dolgozik a(z) {{date}} kezdetű héten (maximum {{max}} ó).",
+    "weekly_above_contract": "{{name}} {{planned}} órát dolgozik a(z) {{date}} kezdetű héten, a szerződéses {{contract}} ó fölött.",
+    "unavailable": "{{name}} nem elérhető ({{date}}, {{start}}–{{end}}), mégis műszakot kapott.",
+    "understaffed": "{{date}} {{start}}–{{end}}: {{required}} fő kell, {{missing}} hiányzik.",
+    "opening_understaffed": "{{date}}: {{start}}-kor {{required}} fő kell, {{missing}} hiányzik.",
+    "closing_understaffed": "{{date}}: {{end}}-ig {{required}} fő kell, {{missing}} hiányzik.",
+    "busy_period_understaffed": "{{date}} {{start}}–{{end}}: a forgalmas időszakban {{required}} fő kell, {{missing}} hiányzik.",
+    "daily_hours_below_min": "{{date}}: {{planned}} ó tervezve, a napi cél ({{min}} ó) alatt.",
+    "daily_hours_above_max": "{{date}}: {{planned}} ó tervezve, a napi cél ({{max}} ó) fölött.",
+    "no_ride_early": "{{name}} {{start}}-kor kezd ({{date}}), az első busz ({{cutoff}}) előtt, sofőr nélkül.",
+    "no_ride_late": "{{name}} {{end}}-kor végez ({{date}}), az utolsó busz ({{cutoff}}) után, sofőr nélkül.",
+    "monthly_limit_exceeded": "{{name}} {{deviation}} órával tér el a havi céltól (korlát ±{{limit}} ó)."
   }
 }

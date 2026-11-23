@@ -162,20 +162,29 @@ The backend is stateless: each request carries the whole project. It uses
 It then picks at most one per day. Every hard rule becomes a simple linear constraint on those choices, and
 the solver searches in two stages:
 
-1. A 60-minute grid, which is small and finds good plans fast.
+1. A 60-minute grid, which is small and finds good plans fast. It gets 75% of the time limit and stops early if it
+   proves its plan is optimal.
 2. The configured grid, starting from that plan.
 
 An independent **rule checker** re-checks every plan the solver returns. The same checker will validate hand-edited
 plans, and the tests use it to verify that every rule is respected.
 
-**Objective**, in rough priority order:
+**Objective.** The weights are set in *Advanced settings → Planner priorities*. One weight unit is the same "price"
+everywhere. Hour-based weights are per hour.
 
-1. broken wishes
-2. distance from each person's hour-balance goal
-3. distance from daily hour targets
-4. small tie-breakers, such as preferring days off together
+1. **Wishes.** A broken day-off wish costs `wishOff × importance`, and an honoured work wish earns
+   `wishWork × importance`. Importance is nice to have ×0.5, normal ×1 or important ×2. Part-day wishes apply when a
+   shift overlaps their window.
+2. **Hour balance.** `|carry-in + planned − target|` costs `hourBalance` per hour. That is scaled by how much of
+   the balancing period has passed by the end of this month, so the steering gets stronger toward the end of the
+   period. Every hour this month outside the ±tolerance costs `beyondTolerance` on top. With the defaults, someone
+   carrying +6 h is planned about 2 h under target this month, and the rest is evened out in later months.
+3. **Daily hour targets** (when soft) cost `dailyTarget` per hour outside the min/max.
+4. **Tie-breakers.** Small penalties for quick returns (less than 14 h between two working days) and for isolated
+   single days off.
 
-*(Until Phase 4 lands, the objective simply keeps everyone close to their monthly target.)*
+The search runs in two stages. The coarse stage optimises goals 1–3. The fine stage then polishes the tie-breakers,
+but only accepts plans that are at least as good on goals 1–3. Tie-breakers never cost a wish or an hour.
 
 **If the rules can't all be met**, you get both:
 
@@ -194,7 +203,7 @@ rules are impossible.
 | Breaks | Unpaid breaks are deducted from worked hours. Break *timing* isn't planned, so coverage counts the whole shift |
 | Rest | Measured between shifts on different days, including the last shift of the previous month if you enter it. Split shifts on the same day aren't subject to the rest rule |
 | Weeks across a month edge | Only the days inside this month count, against the full weekly limit, because the neighbouring month's shifts are unknown |
-| Daily hour targets | The min/max per day type are hard limits |
+| Daily hour targets | Soft by default (a penalty per hour outside the range). *Daily hours are hard limits* on the Store step makes them strict, which can make a month impossible |
 | Hours | Monthly targets, balances and weekly limits use *worked* (paid) hours. Shift length and the daily maximum use time at work |
 
 ### Your data
@@ -269,7 +278,7 @@ production-like stack.
 1. ✅ Schema: project model, generated TS types, save/open, autosave, demo project
 2. ✅ Setup UI: Store, Employees, Availability & wishes, Advanced settings
 3. ✅ Solver core: hard constraints, coverage, `/api/solve`
-4. Objective: wishes, hour-balance steering, daily targets
+4. ✅ Objective: wishes, hour-balance steering, daily targets, plus a first *Generate* step
 5. Diagnostics and best-effort plans with violation reporting
 6. Plan grid: editing, live validation, undo/redo, pin & re-generate
 7. Export: PDF/print, ODS/XLSX

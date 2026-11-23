@@ -17,13 +17,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AdvancedScreen } from '@/features/advanced/advanced-screen'
 import { AvailabilityScreen } from '@/features/availability/availability-screen'
 import { EmployeesScreen } from '@/features/employees/employees-screen'
+import { GenerateScreen } from '@/features/generate/generate-screen'
 import { StoreScreen } from '@/features/store/store-screen'
 
 const STEPS = [
   { id: 'store', icon: Store, screen: StoreScreen },
   { id: 'employees', icon: Users, screen: EmployeesScreen },
   { id: 'availability', icon: CalendarDays, screen: AvailabilityScreen },
-  { id: 'generate', icon: Sparkles, screen: null },
+  { id: 'generate', icon: Sparkles, screen: GenerateScreen },
   { id: 'plan', icon: Table2, screen: null },
   { id: 'export', icon: Download, screen: null },
   { id: 'advanced', icon: SlidersHorizontal, screen: AdvancedScreen },

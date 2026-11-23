@@ -118,6 +118,13 @@ export function StaffingSection({ className }: { className?: string }) {
         <p className="mt-2 text-xs text-muted-foreground">{t('store.dailyHelp')}</p>
       </div>
 
+      <SwitchField
+        label={t('store.dailyHard')}
+        help={t('store.dailyHardHelp')}
+        checked={store.dailyHoursHard}
+        onCheckedChange={(v) => update((p) => void (p.store.dailyHoursHard = v))}
+      />
+
       <div className="grid gap-3">
         <div className="flex items-start justify-between gap-4">
           <div className="grid gap-1">

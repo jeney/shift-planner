@@ -307,9 +307,11 @@ class Checker:
             report("busy_period_understaffed", required, (max(a, window.start), min(b, window.end)))
 
         total = sum(self.worked(s) for s in shifts)
+        daily: Severity = "error" if self.project.store.daily_hours_hard else "warning"
         if info.daily_min is not None and total < info.daily_min:
             self.add(
                 "daily_hours_below_min",
+                severity=daily,
                 day=info.date,
                 amount=hours(info.daily_min - total),
                 min=hours(info.daily_min),
@@ -318,6 +320,7 @@ class Checker:
         if info.daily_max is not None and total > info.daily_max:
             self.add(
                 "daily_hours_above_max",
+                severity=daily,
                 day=info.date,
                 amount=hours(total - info.daily_max),
                 max=hours(info.daily_max),

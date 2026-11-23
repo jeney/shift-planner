@@ -11,7 +11,7 @@ const staffing = () => ({
 /** A complete project with backend defaults. Typed, so schema changes break it at compile time. */
 export function makeProject(overrides: Partial<Project> = {}): Project {
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     id: 'project-1',
     name: 'Test plan',
     month: '2027-02',
@@ -37,6 +37,7 @@ export function makeProject(overrides: Partial<Project> = {}): Project {
         sunday: staffing(),
         holiday: staffing(),
       },
+      dailyHoursHard: false,
       timeRangeMinimums: [],
     },
     employees: [],

@@ -172,7 +172,9 @@
     "people": "Mindste antal personer",
     "peopleUnit": "personer",
     "rangeInvalid": "Vælg mindst én dagtype og et sluttidspunkt efter starttidspunktet.",
-    "removeRange": "Fjern travl periode"
+    "removeRange": "Fjern travl periode",
+    "dailyHard": "Timer pr. dag er faste grænser",
+    "dailyHardHelp": "Fra: planlæggeren sigter efter timerne pr. dag, men må gå uden for dem, hvis det er nødvendigt. Til: der planlægges aldrig uden for dem, hvilket kan gøre en måned umulig at planlægge."
   },
   "rules": {
     "minShiftHours": {
@@ -487,5 +489,64 @@
       "label": "Tidsgrænse",
       "help": "Planlæggeren returnerer den bedste plan, den har fundet inden for tiden. 20 sekunder er som regel rigeligt."
     }
+  },
+  "generate": {
+    "title": "Planlæg {{month}}",
+    "people_one": "{{count}} person",
+    "people_other": "{{count}} personer",
+    "wishes_one": "{{count}} ønske",
+    "wishes_other": "{{count}} ønsker",
+    "timeLimit": "Op til {{seconds}} s",
+    "generate": "Generér plan",
+    "regenerate": "Generér igen",
+    "searching": "Finder den bedste plan…",
+    "elapsed": "{{elapsed}} af {{seconds}} s",
+    "searchingHelp": "Planlæggeren forbedrer planen, indtil tidsgrænsen er nået. Du kan ændre grænsen under Avancerede indstillinger.",
+    "failed": "Planen kunne ikke genereres",
+    "status": {
+      "optimal": "Den bedst mulige plan er fundet",
+      "feasible": "En god plan er fundet",
+      "infeasible": "Ingen plan overholder alle regler",
+      "timeout": "Ingen plan fundet i tide"
+    },
+    "summary": "{{shifts}} vagter · {{honoured}} af {{wishes}} ønskedage opfyldt · {{seconds}} s",
+    "infeasibleHelp": "Nogle faste regler kan ikke overholdes på samme tid denne måned. Tjek utilgængelighed, bemanding og grænser. Detaljerede forklaringer kommer i en senere version.",
+    "timeoutHelp": "Planlæggeren kunne ikke finde en plan inden for {{seconds}} s. Prøv en længere tidsgrænse under Avancerede indstillinger.",
+    "issuesTitle": "Ting at tjekke",
+    "issuesDescription": "Regler, planen bryder (rød), og advarsler (gul).",
+    "hoursTitle": "Timer pr. person",
+    "columns": {
+      "shifts": "Vagter",
+      "planned": "Planlagt",
+      "target": "Mål",
+      "deviation": "Forskel",
+      "carryIn": "Overført",
+      "newBalance": "Ny saldo",
+      "wishes": "Ønsker"
+    }
+  },
+  "violation": {
+    "inactive_employee": "{{name}} er inaktiv, men har en vagt {{date}}.",
+    "store_closed": "{{name}} har en vagt {{date}}, men butikken er lukket.",
+    "outside_opening_hours": "{{name}}s vagt {{date}} ({{start}}–{{end}}) ligger uden for de bemandede timer ({{windowStart}}–{{windowEnd}}).",
+    "overlapping_shifts": "{{name}} har overlappende vagter {{date}}.",
+    "shift_too_short": "{{name}}s vagt {{date}} er kortere end {{min}} t.",
+    "shift_too_long": "{{name}}s vagt {{date}} er længere end {{max}} t.",
+    "too_many_shifts": "{{name}} har mere end én vagt {{date}}.",
+    "day_too_long": "{{name}} arbejder mere end {{max}} t {{date}}.",
+    "rest_too_short": "{{name}} hviler kun {{rest}} t før vagten {{date}} (mindst {{min}} t).",
+    "too_many_days_in_a_row": "{{name}} arbejder mere end {{max}} dage i træk, {{date}}.",
+    "weekly_hours_exceeded": "{{name}} arbejder {{planned}} t i ugen fra {{date}} (højst {{max}} t).",
+    "weekly_above_contract": "{{name}} arbejder {{planned}} t i ugen fra {{date}}, over kontraktens {{contract}} t.",
+    "unavailable": "{{name}} er utilgængelig {{date}} {{start}}–{{end}}, men har en vagt.",
+    "understaffed": "{{date}} {{start}}–{{end}}: {{required}} personer kræves, {{missing}} mangler.",
+    "opening_understaffed": "{{date}}: {{required}} personer kræves kl. {{start}}, {{missing}} mangler.",
+    "closing_understaffed": "{{date}}: {{required}} personer kræves indtil {{end}}, {{missing}} mangler.",
+    "busy_period_understaffed": "{{date}} {{start}}–{{end}}: den travle periode kræver {{required}} personer, {{missing}} mangler.",
+    "daily_hours_below_min": "{{date}}: {{planned}} t planlagt, under dagens mål på {{min}} t.",
+    "daily_hours_above_max": "{{date}}: {{planned}} t planlagt, over dagens mål på {{max}} t.",
+    "no_ride_early": "{{name}} starter kl. {{start}} {{date}}, før første bus ({{cutoff}}), uden chauffør.",
+    "no_ride_late": "{{name}} slutter kl. {{end}} {{date}}, efter sidste bus ({{cutoff}}), uden chauffør.",
+    "monthly_limit_exceeded": "{{name}} er {{deviation}} t fra månedsmålet (grænse ±{{limit}} t)."
   }
 }

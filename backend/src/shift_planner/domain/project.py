@@ -14,7 +14,7 @@ from pydantic import Field, model_validator
 from shift_planner.domain.base import ApiModel, HexColor, Id, TimeOfDay, YearMonth, to_minutes
 from shift_planner.domain.calendar import DayType, month_dates
 
-CURRENT_SCHEMA_VERSION: Literal[2] = 2
+CURRENT_SCHEMA_VERSION: Literal[3] = 3
 
 Hours = Annotated[float, Field(ge=0, le=24)]
 WeeklyHours = Annotated[float, Field(ge=0, le=168)]
@@ -143,6 +143,8 @@ class StoreSettings(ApiModel):
     allow_working_alone: bool = False
     """If false, at least 2 people must be present whenever the store is staffed."""
     staffing: StaffingByDayType = Field(default_factory=StaffingByDayType)
+    daily_hours_hard: bool = False
+    """If on, the daily hour min/max are hard limits; otherwise soft targets."""
     time_range_minimums: list[TimeRangeMinimum] = Field(default_factory=list)
 
     @model_validator(mode="after")
@@ -426,7 +428,7 @@ class Plan(ApiModel):
 
 
 class Project(ApiModel):
-    schema_version: Literal[2] = CURRENT_SCHEMA_VERSION
+    schema_version: Literal[3] = CURRENT_SCHEMA_VERSION
     id: Id
     name: str = Field("Shift plan", max_length=100)
     month: YearMonth

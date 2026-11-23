@@ -24,4 +24,4 @@ def test_solve_reports_a_proven_infeasible_project(client: TestClient) -> None:
 
 
 def test_solve_rejects_an_invalid_project(client: TestClient) -> None:
-    assert client.post("/api/solve", json={"schemaVersion": 2, "id": "p"}).status_code == 422
+    assert client.post("/api/solve", json={"schemaVersion": 3, "id": "p"}).status_code == 422

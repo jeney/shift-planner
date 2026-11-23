@@ -54,7 +54,7 @@ test('a saved project can be opened in another browser', async ({ page, browser 
   const download = await downloadPromise
   expect(download.suggestedFilename()).toMatch(/^demo-plan-\d{4}-\d{2}\.shiftplan\.json$/)
   const saved = JSON.parse(await readFile(await download.path(), 'utf8'))
-  expect(saved.schemaVersion).toBe(2)
+  expect(saved.schemaVersion).toBe(3)
   expect(saved.employees).toHaveLength(9)
 
   // A fresh browser context has no autosave, like opening the file on another computer.
@@ -109,4 +109,17 @@ test('setup screens edit the project and changes persist', async ({ page }) => {
   await expect(page.getByRole('banner').getByText('Corner Shop')).toBeVisible()
   await page.getByRole('tab', { name: /Advanced settings/ }).click()
   await expect(page.getByRole('radio', { name: '15 min' })).toHaveAttribute('aria-checked', 'true')
+})
+
+test('generates a plan for the demo team', async ({ page }) => {
+  needsBackend()
+  test.setTimeout(90_000)
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Load demo project' }).click()
+
+  await page.getByRole('tab', { name: /Generate/ }).click()
+  await page.getByRole('button', { name: 'Generate plan' }).click()
+  await expect(page.getByText(/^(Best possible|Good) plan found$/)).toBeVisible({ timeout: 60_000 })
+  await expect(page.getByRole('table', { name: 'Hours per person' })).toContainText('Anna Holm')
+  await expect(page.getByRole('button', { name: 'Generate again' })).toBeVisible()
 })
