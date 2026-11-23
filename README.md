@@ -233,7 +233,7 @@ production-like stack.
 
 0. ✅ Scaffold: repo, Docker, CI, health endpoint, app shell with language switcher
 1. ✅ Schema: project model, generated TS types, save/open, autosave, demo project
-2. Setup UI: Store, Employees, Availability & wishes, Advanced settings
+2. ✅ Setup UI: Store, Employees, Availability & wishes, Advanced settings
 3. Solver core: hard constraints, coverage, `/api/solve`
 4. Objective: wishes, hour-balance steering, daily targets
 5. Diagnostics and best-effort plans with violation reporting
