@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from shift_planner import __version__
-from shift_planner.api import calendar, health, project
+from shift_planner.api import calendar, health, project, solve
 from shift_planner.api.errors import ApiErrorResponse
 from shift_planner.config import settings
 
@@ -30,6 +30,7 @@ def create_app() -> FastAPI:
     app.include_router(health.router, prefix="/api")
     app.include_router(calendar.router, prefix="/api")
     app.include_router(project.router, prefix="/api")
+    app.include_router(solve.router, prefix="/api")
     return app
 
 

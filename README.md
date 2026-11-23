@@ -150,19 +150,52 @@ Every rule above is configurable, and most limits can also be overridden per emp
 
 ### The solver
 
-The backend is stateless: each request carries the whole project. It models the month as time slots with
-[Google OR-Tools CP-SAT](https://developers.google.com/optimization/cp/cp_solver). Its objective minimises, in
-rough priority order:
+The backend is stateless: each request carries the whole project. It uses
+[Google OR-Tools CP-SAT](https://developers.google.com/optimization/cp/cp_solver).
+
+**How it searches.** For each person and open day, the solver lists every shift they could work:
+
+- start and end on the time grid, inside the staffed day
+- the right length for that person
+- not overlapping their hard unavailability
+
+It then picks at most one per day. Every hard rule becomes a simple linear constraint on those choices, and
+the solver searches in two stages:
+
+1. A 60-minute grid, which is small and finds good plans fast.
+2. The configured grid, starting from that plan.
+
+An independent **rule checker** re-checks every plan the solver returns. The same checker will validate hand-edited
+plans, and the tests use it to verify that every rule is respected.
+
+**Objective**, in rough priority order:
 
 1. broken wishes
 2. distance from each person's hour-balance goal
 3. distance from daily hour targets
 4. small tie-breakers, such as preferring days off together
 
-If the rules can't all be met, you get both:
+*(Until Phase 4 lands, the objective simply keeps everyone close to their monthly target.)*
+
+**If the rules can't all be met**, you get both:
 
 - **Diagnostics:** plain-language explanations, e.g. "Sat 14 Feb: opening needs 2 people but only 1 is available".
 - **A best-effort plan:** every broken rule is listed and highlighted in red in the grid.
+
+If the time limit runs out before any plan is found, the result says so (`solver.timeout`) rather than claiming the
+rules are impossible.
+
+#### Assumptions in the rules
+
+| Topic | How it works |
+|---|---|
+| "At opening" / "at closing" | The first and last moments staff are present, i.e. opening time minus the minutes before opening, and closing time plus the minutes after closing |
+| Working alone | With *Allow someone to work alone* off, at least 2 people are present at every moment of the staffed day |
+| Breaks | Unpaid breaks are deducted from worked hours. Break *timing* isn't planned, so coverage counts the whole shift |
+| Rest | Measured between shifts on different days, including the last shift of the previous month if you enter it. Split shifts on the same day aren't subject to the rest rule |
+| Weeks across a month edge | Only the days inside this month count, against the full weekly limit, because the neighbouring month's shifts are unknown |
+| Daily hour targets | The min/max per day type are hard limits |
+| Hours | Monthly targets, balances and weekly limits use *worked* (paid) hours. Shift length and the daily maximum use time at work |
 
 ### Your data
 
@@ -190,6 +223,7 @@ compose.dev.yaml   Development overrides with hot reload
 | `GET /api/project/new?month=YYYY-MM` | An empty project with every default |
 | `GET /api/project/demo?month=YYYY-MM` | The fictional demo team |
 | `POST /api/project/migrate` | Upgrade a saved project file to the current schema version and validate it |
+| `POST /api/solve` | Generate a plan: status, shifts, rule violations, diagnostics and hours per person |
 
 Interactive docs: `/api/docs`. Errors come back as `{ code, params, details }`, and the frontend translates `code`.
 
@@ -234,7 +268,7 @@ production-like stack.
 0. ✅ Scaffold: repo, Docker, CI, health endpoint, app shell with language switcher
 1. ✅ Schema: project model, generated TS types, save/open, autosave, demo project
 2. ✅ Setup UI: Store, Employees, Availability & wishes, Advanced settings
-3. Solver core: hard constraints, coverage, `/api/solve`
+3. ✅ Solver core: hard constraints, coverage, `/api/solve`
 4. Objective: wishes, hour-balance steering, daily targets
 5. Diagnostics and best-effort plans with violation reporting
 6. Plan grid: editing, live validation, undo/redo, pin & re-generate

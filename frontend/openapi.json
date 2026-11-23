@@ -102,7 +102,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Project"
+                  "$ref": "#/components/schemas/Project-Output"
                 }
               }
             }
@@ -149,7 +149,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Project"
+                  "$ref": "#/components/schemas/Project-Output"
                 }
               }
             }
@@ -193,7 +193,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Project"
+                  "$ref": "#/components/schemas/Project-Output"
                 }
               }
             }
@@ -204,6 +204,48 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/solve": {
+      "post": {
+        "tags": [
+          "solver"
+        ],
+        "summary": "Post Solve",
+        "description": "Generate a plan for the project's month. Blocks for up to the configured time limit.",
+        "operationId": "solve",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project-Input"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolveResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -243,7 +285,7 @@
         "title": "ApiError",
         "description": "Error with a translatable message key; the frontend renders `code` with `params`."
       },
-      "AvailabilityEntry": {
+      "AvailabilityEntry-Input": {
         "properties": {
           "id": {
             "type": "string",
@@ -269,22 +311,91 @@
           "pattern": {
             "oneOf": [
               {
-                "$ref": "#/components/schemas/WeeklyPattern"
+                "$ref": "#/components/schemas/WeeklyPattern-Input"
               },
               {
-                "$ref": "#/components/schemas/SingleDatePattern"
+                "$ref": "#/components/schemas/SingleDatePattern-Input"
               },
               {
-                "$ref": "#/components/schemas/DateRangePattern"
+                "$ref": "#/components/schemas/DateRangePattern-Input"
               }
             ],
             "title": "Pattern",
             "discriminator": {
               "propertyName": "type",
               "mapping": {
-                "date": "#/components/schemas/SingleDatePattern",
-                "range": "#/components/schemas/DateRangePattern",
-                "weekly": "#/components/schemas/WeeklyPattern"
+                "date": "#/components/schemas/SingleDatePattern-Input",
+                "range": "#/components/schemas/DateRangePattern-Input",
+                "weekly": "#/components/schemas/WeeklyPattern-Input"
+              }
+            }
+          },
+          "weight": {
+            "type": "number",
+            "maximum": 10.0,
+            "minimum": 0.0,
+            "title": "Weight",
+            "default": 1.0
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 200,
+            "title": "Note",
+            "default": ""
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "employeeId",
+          "kind",
+          "pattern"
+        ],
+        "title": "AvailabilityEntry"
+      },
+      "AvailabilityEntry-Output": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Id"
+          },
+          "employeeId": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Employeeid"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "unavailable",
+              "wish_off",
+              "wish_work"
+            ],
+            "title": "Kind"
+          },
+          "pattern": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/WeeklyPattern-Output"
+              },
+              {
+                "$ref": "#/components/schemas/SingleDatePattern-Output"
+              },
+              {
+                "$ref": "#/components/schemas/DateRangePattern-Output"
+              }
+            ],
+            "title": "Pattern",
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "date": "#/components/schemas/SingleDatePattern-Output",
+                "range": "#/components/schemas/DateRangePattern-Output",
+                "weekly": "#/components/schemas/WeeklyPattern-Output"
               }
             }
           },
@@ -338,7 +449,31 @@
         "title": "BreakRule",
         "description": "A shift longer than `after_hours` includes a break of `minutes`."
       },
-      "BreakSettings": {
+      "BreakSettings-Input": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": false
+          },
+          "paid": {
+            "type": "boolean",
+            "title": "Paid",
+            "default": false
+          },
+          "rules": {
+            "items": {
+              "$ref": "#/components/schemas/BreakRule"
+            },
+            "type": "array",
+            "title": "Rules"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "BreakSettings"
+      },
+      "BreakSettings-Output": {
         "properties": {
           "enabled": {
             "type": "boolean",
@@ -367,7 +502,31 @@
         ],
         "title": "BreakSettings"
       },
-      "BusRule": {
+      "BusRule-Input": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": true
+          },
+          "earlyCutoff": {
+            "$ref": "#/components/schemas/CutoffsByDayType"
+          },
+          "lateEnabled": {
+            "type": "boolean",
+            "title": "Lateenabled",
+            "default": false
+          },
+          "lateCutoff": {
+            "$ref": "#/components/schemas/CutoffsByDayType"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "BusRule",
+        "description": "People who need a ride must start (or end) at exactly the same time as a driver."
+      },
+      "BusRule-Output": {
         "properties": {
           "enabled": {
             "type": "boolean",
@@ -508,7 +667,35 @@
         ],
         "title": "CutoffsByDayType"
       },
-      "DateRangePattern": {
+      "DateRangePattern-Input": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "range",
+            "title": "Type",
+            "default": "range"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "title": "Startdate"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date",
+            "title": "Enddate"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "startDate",
+          "endDate"
+        ],
+        "title": "DateRangePattern",
+        "description": "Whole days from `start_date` to `end_date`, inclusive (e.g. vacation)."
+      },
+      "DateRangePattern-Output": {
         "properties": {
           "type": {
             "type": "string",
@@ -537,7 +724,32 @@
         "title": "DateRangePattern",
         "description": "Whole days from `start_date` to `end_date`, inclusive (e.g. vacation)."
       },
-      "DayHours": {
+      "DayHours-Input": {
+        "properties": {
+          "closed": {
+            "type": "boolean",
+            "title": "Closed",
+            "default": false
+          },
+          "opens": {
+            "type": "string",
+            "pattern": "^(?:(?:[01]\\d|2[0-3]):[0-5]\\d|24:00)$",
+            "title": "Opens",
+            "default": "07:00"
+          },
+          "closes": {
+            "type": "string",
+            "pattern": "^(?:(?:[01]\\d|2[0-3]):[0-5]\\d|24:00)$",
+            "title": "Closes",
+            "default": "18:00"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "DayHours",
+        "description": "Opening hours for one day. Times are when the store is open to customers."
+      },
+      "DayHours-Output": {
         "properties": {
           "closed": {
             "type": "boolean",
@@ -567,7 +779,54 @@
         "title": "DayHours",
         "description": "Opening hours for one day. Times are when the store is open to customers."
       },
-      "DayTypeStaffing": {
+      "DayTypeStaffing-Input": {
+        "properties": {
+          "minAtOpening": {
+            "type": "integer",
+            "maximum": 50.0,
+            "minimum": 0.0,
+            "title": "Minatopening",
+            "default": 1
+          },
+          "minAtClosing": {
+            "type": "integer",
+            "maximum": 50.0,
+            "minimum": 0.0,
+            "title": "Minatclosing",
+            "default": 1
+          },
+          "dailyHoursMin": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 168.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dailyhoursmin"
+          },
+          "dailyHoursMax": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 168.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dailyhoursmax"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "DayTypeStaffing"
+      },
+      "DayTypeStaffing-Output": {
         "properties": {
           "minAtOpening": {
             "type": "integer",
@@ -620,7 +879,73 @@
         ],
         "title": "DayTypeStaffing"
       },
-      "Employee": {
+      "Diagnostic": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "error",
+              "warning"
+            ],
+            "title": "Severity",
+            "default": "error"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "employeeIds": {
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            },
+            "type": "array",
+            "title": "Employeeids"
+          },
+          "params": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Params"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "code",
+          "severity",
+          "date",
+          "employeeIds",
+          "params"
+        ],
+        "title": "Diagnostic",
+        "description": "A pre-check finding, explained in plain language (translated by the frontend)."
+      },
+      "Employee-Input": {
         "properties": {
           "id": {
             "type": "string",
@@ -682,10 +1007,88 @@
             "title": "Alloweddriverids"
           },
           "overrides": {
-            "$ref": "#/components/schemas/EmployeeRuleOverrides"
+            "$ref": "#/components/schemas/EmployeeRuleOverrides-Input"
           },
           "balance": {
-            "$ref": "#/components/schemas/HourBalance"
+            "$ref": "#/components/schemas/HourBalance-Input"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "color",
+          "contractHoursPerWeek"
+        ],
+        "title": "Employee"
+      },
+      "Employee-Output": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$",
+            "title": "Color"
+          },
+          "active": {
+            "type": "boolean",
+            "title": "Active",
+            "default": true
+          },
+          "contractHoursPerWeek": {
+            "type": "number",
+            "maximum": 168.0,
+            "minimum": 0.0,
+            "title": "Contracthoursperweek"
+          },
+          "hasCar": {
+            "type": "boolean",
+            "title": "Hascar",
+            "default": false
+          },
+          "needsRideEarly": {
+            "type": "boolean",
+            "title": "Needsrideearly",
+            "default": false
+          },
+          "needsRideLate": {
+            "type": "boolean",
+            "title": "Needsridelate",
+            "default": false
+          },
+          "allowedDriverIds": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alloweddriverids"
+          },
+          "overrides": {
+            "$ref": "#/components/schemas/EmployeeRuleOverrides-Output"
+          },
+          "balance": {
+            "$ref": "#/components/schemas/HourBalance-Output"
           }
         },
         "additionalProperties": false,
@@ -705,7 +1108,93 @@
         ],
         "title": "Employee"
       },
-      "EmployeeRuleOverrides": {
+      "EmployeeRuleOverrides-Input": {
+        "properties": {
+          "minShiftHours": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 24.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minshifthours"
+          },
+          "maxShiftHours": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 24.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maxshifthours"
+          },
+          "maxHoursPerDay": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 24.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maxhoursperday"
+          },
+          "minRestHours": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 24.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minresthours"
+          },
+          "maxConsecutiveDays": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 31.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maxconsecutivedays"
+          },
+          "maxWeeklyHours": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 168.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maxweeklyhours"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "EmployeeRuleOverrides",
+        "description": "Per-employee replacements for global limits. `None` means \"use the global rule\"."
+      },
+      "EmployeeRuleOverrides-Output": {
         "properties": {
           "minShiftHours": {
             "anyOf": [
@@ -799,6 +1288,52 @@
         "title": "EmployeeRuleOverrides",
         "description": "Per-employee replacements for global limits. `None` means \"use the global rule\"."
       },
+      "EmployeeStats": {
+        "properties": {
+          "employeeId": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Employeeid"
+          },
+          "shifts": {
+            "type": "integer",
+            "title": "Shifts"
+          },
+          "plannedHours": {
+            "type": "number",
+            "title": "Plannedhours"
+          },
+          "targetHours": {
+            "type": "number",
+            "title": "Targethours"
+          },
+          "deviationHours": {
+            "type": "number",
+            "title": "Deviationhours"
+          },
+          "carryInHours": {
+            "type": "number",
+            "title": "Carryinhours"
+          },
+          "newBalanceHours": {
+            "type": "number",
+            "title": "Newbalancehours"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "employeeId",
+          "shifts",
+          "plannedHours",
+          "targetHours",
+          "deviationHours",
+          "carryInHours",
+          "newBalanceHours"
+        ],
+        "title": "EmployeeStats"
+      },
       "ErrorDetail": {
         "properties": {
           "loc": {
@@ -828,7 +1363,53 @@
         ],
         "title": "ErrorDetail"
       },
-      "GuestDemand": {
+      "GuestDemand-Input": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": false
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "linear",
+              "steps"
+            ],
+            "title": "Mode",
+            "default": "linear"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/GuestPoint"
+            },
+            "type": "array",
+            "title": "Points"
+          },
+          "toleranceHours": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Tolerancehours",
+            "default": 2
+          },
+          "guestsByDate": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "propertyNames": {
+              "format": "date"
+            },
+            "type": "object",
+            "title": "Guestsbydate"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "GuestDemand",
+        "description": "Optional: derive each day's required total staff hours from expected guests."
+      },
+      "GuestDemand-Output": {
         "properties": {
           "enabled": {
             "type": "boolean",
@@ -935,7 +1516,48 @@
         ],
         "title": "HealthResponse"
       },
-      "HourBalance": {
+      "HourBalance-Input": {
+        "properties": {
+          "carryInHours": {
+            "type": "number",
+            "maximum": 500.0,
+            "minimum": -500.0,
+            "title": "Carryinhours",
+            "default": 0
+          },
+          "periodWeek": {
+            "type": "integer",
+            "maximum": 104.0,
+            "minimum": 1.0,
+            "title": "Periodweek",
+            "default": 1
+          },
+          "lastShiftEndedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastshiftendedat"
+          },
+          "consecutiveDaysAtStart": {
+            "type": "integer",
+            "maximum": 31.0,
+            "minimum": 0.0,
+            "title": "Consecutivedaysatstart",
+            "default": 0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "HourBalance",
+        "description": "Hours carried in from earlier months. The app doesn't remember past months."
+      },
+      "HourBalance-Output": {
         "properties": {
           "carryInHours": {
             "type": "number",
@@ -1005,7 +1627,64 @@
         ],
         "title": "MonthCalendar"
       },
-      "ObjectiveWeights": {
+      "ObjectiveWeights-Input": {
+        "properties": {
+          "wishOff": {
+            "type": "number",
+            "maximum": 1000.0,
+            "minimum": 0.0,
+            "title": "Wishoff",
+            "default": 10
+          },
+          "wishWork": {
+            "type": "number",
+            "maximum": 1000.0,
+            "minimum": 0.0,
+            "title": "Wishwork",
+            "default": 4
+          },
+          "hourBalance": {
+            "type": "number",
+            "maximum": 1000.0,
+            "minimum": 0.0,
+            "title": "Hourbalance",
+            "default": 5
+          },
+          "beyondTolerance": {
+            "type": "number",
+            "maximum": 1000.0,
+            "minimum": 0.0,
+            "title": "Beyondtolerance",
+            "default": 50
+          },
+          "dailyTarget": {
+            "type": "number",
+            "maximum": 1000.0,
+            "minimum": 0.0,
+            "title": "Dailytarget",
+            "default": 3
+          },
+          "shortGap": {
+            "type": "number",
+            "maximum": 1000.0,
+            "minimum": 0.0,
+            "title": "Shortgap",
+            "default": 0.5
+          },
+          "contiguousDaysOff": {
+            "type": "number",
+            "maximum": 1000.0,
+            "minimum": 0.0,
+            "title": "Contiguousdaysoff",
+            "default": 0.5
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ObjectiveWeights",
+        "description": "Relative importance of the soft goals. Higher = matters more."
+      },
+      "ObjectiveWeights-Output": {
         "properties": {
           "wishOff": {
             "type": "number",
@@ -1071,11 +1750,25 @@
         "title": "ObjectiveWeights",
         "description": "Relative importance of the soft goals. Higher = matters more."
       },
-      "Plan": {
+      "Plan-Input": {
         "properties": {
           "shifts": {
             "items": {
-              "$ref": "#/components/schemas/Shift"
+              "$ref": "#/components/schemas/Shift-Input"
+            },
+            "type": "array",
+            "title": "Shifts"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Plan"
+      },
+      "Plan-Output": {
+        "properties": {
+          "shifts": {
+            "items": {
+              "$ref": "#/components/schemas/Shift-Output"
             },
             "type": "array",
             "title": "Shifts"
@@ -1088,7 +1781,7 @@
         ],
         "title": "Plan"
       },
-      "Project": {
+      "Project-Input": {
         "properties": {
           "schemaVersion": {
             "type": "integer",
@@ -1114,38 +1807,111 @@
             "title": "Month"
           },
           "store": {
-            "$ref": "#/components/schemas/StoreSettings"
+            "$ref": "#/components/schemas/StoreSettings-Input"
           },
           "employees": {
             "items": {
-              "$ref": "#/components/schemas/Employee"
+              "$ref": "#/components/schemas/Employee-Input"
             },
             "type": "array",
             "title": "Employees"
           },
           "availability": {
             "items": {
-              "$ref": "#/components/schemas/AvailabilityEntry"
+              "$ref": "#/components/schemas/AvailabilityEntry-Input"
             },
             "type": "array",
             "title": "Availability"
           },
           "rules": {
-            "$ref": "#/components/schemas/Rules"
+            "$ref": "#/components/schemas/Rules-Input"
           },
           "weights": {
-            "$ref": "#/components/schemas/ObjectiveWeights"
+            "$ref": "#/components/schemas/ObjectiveWeights-Input"
           },
           "guestDemand": {
-            "$ref": "#/components/schemas/GuestDemand"
+            "$ref": "#/components/schemas/GuestDemand-Input"
           },
           "solver": {
-            "$ref": "#/components/schemas/SolverSettings"
+            "$ref": "#/components/schemas/SolverSettings-Input"
           },
           "plan": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Plan"
+                "$ref": "#/components/schemas/Plan-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "month"
+        ],
+        "title": "Project"
+      },
+      "Project-Output": {
+        "properties": {
+          "schemaVersion": {
+            "type": "integer",
+            "const": 2,
+            "title": "Schemaversion",
+            "default": 2
+          },
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "title": "Name",
+            "default": "Shift plan"
+          },
+          "month": {
+            "type": "string",
+            "pattern": "^\\d{4}-(?:0[1-9]|1[0-2])$",
+            "title": "Month"
+          },
+          "store": {
+            "$ref": "#/components/schemas/StoreSettings-Output"
+          },
+          "employees": {
+            "items": {
+              "$ref": "#/components/schemas/Employee-Output"
+            },
+            "type": "array",
+            "title": "Employees"
+          },
+          "availability": {
+            "items": {
+              "$ref": "#/components/schemas/AvailabilityEntry-Output"
+            },
+            "type": "array",
+            "title": "Availability"
+          },
+          "rules": {
+            "$ref": "#/components/schemas/Rules-Output"
+          },
+          "weights": {
+            "$ref": "#/components/schemas/ObjectiveWeights-Output"
+          },
+          "guestDemand": {
+            "$ref": "#/components/schemas/GuestDemand-Output"
+          },
+          "solver": {
+            "$ref": "#/components/schemas/SolverSettings-Output"
+          },
+          "plan": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Plan-Output"
               },
               {
                 "type": "null"
@@ -1171,7 +1937,7 @@
         ],
         "title": "Project"
       },
-      "Rules": {
+      "Rules-Input": {
         "properties": {
           "granularityMin": {
             "type": "integer",
@@ -1298,10 +2064,147 @@
             "default": 0
           },
           "breaks": {
-            "$ref": "#/components/schemas/BreakSettings"
+            "$ref": "#/components/schemas/BreakSettings-Input"
           },
           "busRule": {
-            "$ref": "#/components/schemas/BusRule"
+            "$ref": "#/components/schemas/BusRule-Input"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Rules"
+      },
+      "Rules-Output": {
+        "properties": {
+          "granularityMin": {
+            "type": "integer",
+            "enum": [
+              15,
+              30,
+              60
+            ],
+            "title": "Granularitymin",
+            "default": 30
+          },
+          "minShiftHours": {
+            "type": "number",
+            "maximum": 24.0,
+            "minimum": 0.0,
+            "title": "Minshifthours",
+            "default": 3
+          },
+          "maxShiftHours": {
+            "type": "number",
+            "maximum": 24.0,
+            "minimum": 0.0,
+            "title": "Maxshifthours",
+            "default": 8
+          },
+          "maxHoursPerDay": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 24.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maxhoursperday"
+          },
+          "oneShiftPerDay": {
+            "type": "boolean",
+            "title": "Oneshiftperday",
+            "default": true
+          },
+          "minRestHours": {
+            "type": "number",
+            "maximum": 24.0,
+            "minimum": 0.0,
+            "title": "Minresthours",
+            "default": 11
+          },
+          "maxConsecutiveDays": {
+            "type": "integer",
+            "maximum": 31.0,
+            "minimum": 1.0,
+            "title": "Maxconsecutivedays",
+            "default": 6
+          },
+          "maxWeeklyHours": {
+            "type": "number",
+            "maximum": 168.0,
+            "minimum": 0.0,
+            "title": "Maxweeklyhours",
+            "default": 48
+          },
+          "fullTimeThresholdHours": {
+            "type": "number",
+            "maximum": 168.0,
+            "minimum": 0.0,
+            "title": "Fulltimethresholdhours",
+            "default": 37
+          },
+          "fullTimeContractWarning": {
+            "type": "boolean",
+            "title": "Fulltimecontractwarning",
+            "default": true
+          },
+          "monthlyToleranceHours": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Monthlytolerancehours",
+            "default": 2
+          },
+          "monthlyHardLimitHours": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 200.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Monthlyhardlimithours"
+          },
+          "balancingPeriodWeeks": {
+            "type": "integer",
+            "maximum": 104.0,
+            "minimum": 1.0,
+            "title": "Balancingperiodweeks",
+            "default": 16
+          },
+          "monthlyTargetMode": {
+            "type": "string",
+            "enum": [
+              "weeks_per_month",
+              "fixed_4_4",
+              "actual_weekdays"
+            ],
+            "title": "Monthlytargetmode",
+            "default": "weeks_per_month"
+          },
+          "holidaysReduceTarget": {
+            "type": "boolean",
+            "title": "Holidaysreducetarget",
+            "default": false
+          },
+          "teamAdjustmentHours": {
+            "type": "number",
+            "maximum": 1000.0,
+            "minimum": -1000.0,
+            "title": "Teamadjustmenthours",
+            "default": 0
+          },
+          "breaks": {
+            "$ref": "#/components/schemas/BreakSettings-Output"
+          },
+          "busRule": {
+            "$ref": "#/components/schemas/BusRule-Output"
           }
         },
         "additionalProperties": false,
@@ -1328,7 +2231,53 @@
         ],
         "title": "Rules"
       },
-      "Shift": {
+      "Shift-Input": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Id"
+          },
+          "employeeId": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Employeeid"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "start": {
+            "type": "string",
+            "pattern": "^(?:(?:[01]\\d|2[0-3]):[0-5]\\d|24:00)$",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "pattern": "^(?:(?:[01]\\d|2[0-3]):[0-5]\\d|24:00)$",
+            "title": "End"
+          },
+          "pinned": {
+            "type": "boolean",
+            "title": "Pinned",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "employeeId",
+          "date",
+          "start",
+          "end"
+        ],
+        "title": "Shift"
+      },
+      "Shift-Output": {
         "properties": {
           "id": {
             "type": "string",
@@ -1375,7 +2324,52 @@
         ],
         "title": "Shift"
       },
-      "SingleDatePattern": {
+      "SingleDatePattern-Input": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "date",
+            "title": "Type",
+            "default": "date"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "start": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?:(?:[01]\\d|2[0-3]):[0-5]\\d|24:00)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start"
+          },
+          "end": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?:(?:[01]\\d|2[0-3]):[0-5]\\d|24:00)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "date"
+        ],
+        "title": "SingleDatePattern"
+      },
+      "SingleDatePattern-Output": {
         "properties": {
           "type": {
             "type": "string",
@@ -1423,7 +2417,81 @@
         ],
         "title": "SingleDatePattern"
       },
-      "SolverSettings": {
+      "SolveResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "optimal",
+              "feasible",
+              "best_effort",
+              "infeasible"
+            ],
+            "title": "Status"
+          },
+          "plan": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Plan-Output"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "violations": {
+            "items": {
+              "$ref": "#/components/schemas/Violation"
+            },
+            "type": "array",
+            "title": "Violations"
+          },
+          "diagnostics": {
+            "items": {
+              "$ref": "#/components/schemas/Diagnostic"
+            },
+            "type": "array",
+            "title": "Diagnostics"
+          },
+          "stats": {
+            "items": {
+              "$ref": "#/components/schemas/EmployeeStats"
+            },
+            "type": "array",
+            "title": "Stats"
+          },
+          "solveTimeMs": {
+            "type": "integer",
+            "title": "Solvetimems"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "plan",
+          "violations",
+          "diagnostics",
+          "stats",
+          "solveTimeMs"
+        ],
+        "title": "SolveResponse"
+      },
+      "SolverSettings-Input": {
+        "properties": {
+          "timeLimitSeconds": {
+            "type": "integer",
+            "maximum": 600.0,
+            "minimum": 1.0,
+            "title": "Timelimitseconds",
+            "default": 20
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "SolverSettings"
+      },
+      "SolverSettings-Output": {
         "properties": {
           "timeLimitSeconds": {
             "type": "integer",
@@ -1440,7 +2508,51 @@
         ],
         "title": "SolverSettings"
       },
-      "SpecialDate": {
+      "SpecialDate-Input": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": false
+          },
+          "closed": {
+            "type": "boolean",
+            "title": "Closed",
+            "default": false
+          },
+          "opens": {
+            "type": "string",
+            "pattern": "^(?:(?:[01]\\d|2[0-3]):[0-5]\\d|24:00)$",
+            "title": "Opens",
+            "default": "07:00"
+          },
+          "closes": {
+            "type": "string",
+            "pattern": "^(?:(?:[01]\\d|2[0-3]):[0-5]\\d|24:00)$",
+            "title": "Closes",
+            "default": "17:00"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 200,
+            "title": "Note",
+            "default": ""
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "date"
+        ],
+        "title": "SpecialDate",
+        "description": "Custom opening hours (or closed) for one date. Only applies while `enabled`."
+      },
+      "SpecialDate-Output": {
         "properties": {
           "date": {
             "type": "string",
@@ -1489,19 +2601,38 @@
         "title": "SpecialDate",
         "description": "Custom opening hours (or closed) for one date. Only applies while `enabled`."
       },
-      "StaffingByDayType": {
+      "StaffingByDayType-Input": {
         "properties": {
           "weekday": {
-            "$ref": "#/components/schemas/DayTypeStaffing"
+            "$ref": "#/components/schemas/DayTypeStaffing-Input"
           },
           "saturday": {
-            "$ref": "#/components/schemas/DayTypeStaffing"
+            "$ref": "#/components/schemas/DayTypeStaffing-Input"
           },
           "sunday": {
-            "$ref": "#/components/schemas/DayTypeStaffing"
+            "$ref": "#/components/schemas/DayTypeStaffing-Input"
           },
           "holiday": {
-            "$ref": "#/components/schemas/DayTypeStaffing"
+            "$ref": "#/components/schemas/DayTypeStaffing-Input"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "StaffingByDayType"
+      },
+      "StaffingByDayType-Output": {
+        "properties": {
+          "weekday": {
+            "$ref": "#/components/schemas/DayTypeStaffing-Output"
+          },
+          "saturday": {
+            "$ref": "#/components/schemas/DayTypeStaffing-Output"
+          },
+          "sunday": {
+            "$ref": "#/components/schemas/DayTypeStaffing-Output"
+          },
+          "holiday": {
+            "$ref": "#/components/schemas/DayTypeStaffing-Output"
           }
         },
         "additionalProperties": false,
@@ -1514,7 +2645,7 @@
         ],
         "title": "StaffingByDayType"
       },
-      "StoreSettings": {
+      "StoreSettings-Input": {
         "properties": {
           "name": {
             "type": "string",
@@ -1523,14 +2654,14 @@
             "default": "My store"
           },
           "openingHours": {
-            "$ref": "#/components/schemas/WeeklyOpeningHours"
+            "$ref": "#/components/schemas/WeeklyOpeningHours-Input"
           },
           "publicHolidayHours": {
-            "$ref": "#/components/schemas/DayHours"
+            "$ref": "#/components/schemas/DayHours-Input"
           },
           "specialDates": {
             "items": {
-              "$ref": "#/components/schemas/SpecialDate"
+              "$ref": "#/components/schemas/SpecialDate-Input"
             },
             "type": "array",
             "title": "Specialdates"
@@ -1555,7 +2686,62 @@
             "default": false
           },
           "staffing": {
-            "$ref": "#/components/schemas/StaffingByDayType"
+            "$ref": "#/components/schemas/StaffingByDayType-Input"
+          },
+          "timeRangeMinimums": {
+            "items": {
+              "$ref": "#/components/schemas/TimeRangeMinimum"
+            },
+            "type": "array",
+            "title": "Timerangeminimums"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "StoreSettings"
+      },
+      "StoreSettings-Output": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "title": "Name",
+            "default": "My store"
+          },
+          "openingHours": {
+            "$ref": "#/components/schemas/WeeklyOpeningHours-Output"
+          },
+          "publicHolidayHours": {
+            "$ref": "#/components/schemas/DayHours-Output"
+          },
+          "specialDates": {
+            "items": {
+              "$ref": "#/components/schemas/SpecialDate-Output"
+            },
+            "type": "array",
+            "title": "Specialdates"
+          },
+          "staffBeforeOpeningMin": {
+            "type": "integer",
+            "maximum": 240.0,
+            "minimum": 0.0,
+            "title": "Staffbeforeopeningmin",
+            "default": 60
+          },
+          "staffAfterClosingMin": {
+            "type": "integer",
+            "maximum": 240.0,
+            "minimum": 0.0,
+            "title": "Staffafterclosingmin",
+            "default": 30
+          },
+          "allowWorkingAlone": {
+            "type": "boolean",
+            "title": "Allowworkingalone",
+            "default": false
+          },
+          "staffing": {
+            "$ref": "#/components/schemas/StaffingByDayType-Output"
           },
           "timeRangeMinimums": {
             "items": {
@@ -1671,28 +2857,188 @@
         ],
         "title": "ValidationError"
       },
-      "WeeklyOpeningHours": {
+      "Violation": {
+        "properties": {
+          "rule": {
+            "type": "string",
+            "enum": [
+              "inactive_employee",
+              "store_closed",
+              "outside_opening_hours",
+              "overlapping_shifts",
+              "shift_too_short",
+              "shift_too_long",
+              "too_many_shifts",
+              "day_too_long",
+              "rest_too_short",
+              "too_many_days_in_a_row",
+              "weekly_hours_exceeded",
+              "weekly_above_contract",
+              "unavailable",
+              "understaffed",
+              "opening_understaffed",
+              "closing_understaffed",
+              "busy_period_understaffed",
+              "daily_hours_below_min",
+              "daily_hours_above_max",
+              "no_ride_early",
+              "no_ride_late",
+              "monthly_limit_exceeded"
+            ],
+            "title": "Rule"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "error",
+              "warning"
+            ],
+            "title": "Severity",
+            "default": "error"
+          },
+          "employeeId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Employeeid"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "start": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?:(?:[01]\\d|2[0-3]):[0-5]\\d|24:00)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start"
+          },
+          "end": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?:(?:[01]\\d|2[0-3]):[0-5]\\d|24:00)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End"
+          },
+          "amount": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount"
+          },
+          "params": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Params"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "rule",
+          "severity",
+          "employeeId",
+          "date",
+          "start",
+          "end",
+          "amount",
+          "params"
+        ],
+        "title": "Violation",
+        "description": "A broken rule. The frontend translates `violation.<rule>` with `params`."
+      },
+      "WeeklyOpeningHours-Input": {
         "properties": {
           "monday": {
-            "$ref": "#/components/schemas/DayHours"
+            "$ref": "#/components/schemas/DayHours-Input"
           },
           "tuesday": {
-            "$ref": "#/components/schemas/DayHours"
+            "$ref": "#/components/schemas/DayHours-Input"
           },
           "wednesday": {
-            "$ref": "#/components/schemas/DayHours"
+            "$ref": "#/components/schemas/DayHours-Input"
           },
           "thursday": {
-            "$ref": "#/components/schemas/DayHours"
+            "$ref": "#/components/schemas/DayHours-Input"
           },
           "friday": {
-            "$ref": "#/components/schemas/DayHours"
+            "$ref": "#/components/schemas/DayHours-Input"
           },
           "saturday": {
-            "$ref": "#/components/schemas/DayHours"
+            "$ref": "#/components/schemas/DayHours-Input"
           },
           "sunday": {
-            "$ref": "#/components/schemas/DayHours"
+            "$ref": "#/components/schemas/DayHours-Input"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "WeeklyOpeningHours"
+      },
+      "WeeklyOpeningHours-Output": {
+        "properties": {
+          "monday": {
+            "$ref": "#/components/schemas/DayHours-Output"
+          },
+          "tuesday": {
+            "$ref": "#/components/schemas/DayHours-Output"
+          },
+          "wednesday": {
+            "$ref": "#/components/schemas/DayHours-Output"
+          },
+          "thursday": {
+            "$ref": "#/components/schemas/DayHours-Output"
+          },
+          "friday": {
+            "$ref": "#/components/schemas/DayHours-Output"
+          },
+          "saturday": {
+            "$ref": "#/components/schemas/DayHours-Output"
+          },
+          "sunday": {
+            "$ref": "#/components/schemas/DayHours-Output"
           }
         },
         "additionalProperties": false,
@@ -1708,7 +3054,54 @@
         ],
         "title": "WeeklyOpeningHours"
       },
-      "WeeklyPattern": {
+      "WeeklyPattern-Input": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "weekly",
+            "title": "Type",
+            "default": "weekly"
+          },
+          "weekday": {
+            "type": "integer",
+            "maximum": 6.0,
+            "minimum": 0.0,
+            "title": "Weekday"
+          },
+          "start": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?:(?:[01]\\d|2[0-3]):[0-5]\\d|24:00)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start"
+          },
+          "end": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?:(?:[01]\\d|2[0-3]):[0-5]\\d|24:00)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "weekday"
+        ],
+        "title": "WeeklyPattern",
+        "description": "Every week on `weekday`, optionally only within a time window."
+      },
+      "WeeklyPattern-Output": {
         "properties": {
           "type": {
             "type": "string",
