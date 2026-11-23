@@ -31,8 +31,17 @@ def _v1_to_v2(raw: RawProject) -> RawProject:
     return data
 
 
+def _v2_to_v3(raw: RawProject) -> RawProject:
+    """Daily hour targets became soft by default, with a toggle to make them hard."""
+    data = dict(raw)
+    store = data.get("store")
+    if isinstance(store, dict) and "dailyHoursHard" not in store:
+        data["store"] = {**store, "dailyHoursHard": False}
+    return data
+
+
 # from_version -> migration to from_version + 1
-MIGRATIONS: dict[int, Migration] = {1: _v1_to_v2}
+MIGRATIONS: dict[int, Migration] = {1: _v1_to_v2, 2: _v2_to_v3}
 
 
 class MigrationError(Exception):
