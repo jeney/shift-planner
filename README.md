@@ -395,6 +395,21 @@ dark) and a translation check that walks every screen in Danish and Hungarian lo
 - **Backend:** one stateless container (`backend/Dockerfile`, target `prod`). It listens on `$PORT` (default 8000)
   and allows the frontend's origin through `SP_CORS_ORIGINS`, e.g. `["https://jeney.github.io"]`.
 
+**Backend on Google Cloud Run (recommended).** Typical free container tiers (0.1 vCPU, 512 MB) can't run the solver
+(see the table below). Cloud Run's free tier (180,000 vCPU-seconds a month with request-based billing) covers about
+1,800 solves on 4 vCPU, and the service scales to zero when idle. `.github/workflows/deploy-backend.yml` deploys
+it on every push to `main` once configured:
+
+1. Create a Google Cloud project with billing enabled. Usage stays within the free tier; a budget alert is a good idea.
+2. Open [Cloud Shell](https://shell.cloud.google.com), upload `deploy/gcp-setup.sh` and run
+   `bash gcp-setup.sh <project-id>`. It sets up a Docker repository, a deploy service account and *keyless*
+   GitHub → Google authentication limited to this repository. No keys are created.
+3. Set the five GitHub repository variables the script prints. One of them is `API_BASE_URL`, for the frontend.
+4. Run **Deploy backend to Cloud Run**, then **Deploy frontend to GitHub Pages**, from the Actions tab.
+
+The service runs with 4 vCPU and 2 GiB, at most one instance, and allows only the GitHub Pages origin. The first
+request after a quiet period takes a few extra seconds while it starts.
+
 **How much CPU the solver needs** (demo team, 31-day month, 20 s limit, measured with Docker CPU limits):
 
 | CPU / RAM | Result |
