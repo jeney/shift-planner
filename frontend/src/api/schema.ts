@@ -101,6 +101,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/solve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Post Solve
+         * @description Generate a plan for the project's month. Blocks for up to the configured time limit.
+         */
+        post: operations["solve"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -120,7 +140,7 @@ export interface components {
             details: components["schemas"]["ErrorDetail"][];
         };
         /** AvailabilityEntry */
-        AvailabilityEntry: {
+        "AvailabilityEntry-Input": {
             /** Id */
             id: string;
             /** Employeeid */
@@ -131,7 +151,31 @@ export interface components {
              */
             kind: "unavailable" | "wish_off" | "wish_work";
             /** Pattern */
-            pattern: components["schemas"]["WeeklyPattern"] | components["schemas"]["SingleDatePattern"] | components["schemas"]["DateRangePattern"];
+            pattern: components["schemas"]["WeeklyPattern-Input"] | components["schemas"]["SingleDatePattern-Input"] | components["schemas"]["DateRangePattern-Input"];
+            /**
+             * Weight
+             * @default 1
+             */
+            weight: number;
+            /**
+             * Note
+             * @default
+             */
+            note: string;
+        };
+        /** AvailabilityEntry */
+        "AvailabilityEntry-Output": {
+            /** Id */
+            id: string;
+            /** Employeeid */
+            employeeId: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "unavailable" | "wish_off" | "wish_work";
+            /** Pattern */
+            pattern: components["schemas"]["WeeklyPattern-Output"] | components["schemas"]["SingleDatePattern-Output"] | components["schemas"]["DateRangePattern-Output"];
             /**
              * Weight
              * @default 1
@@ -154,7 +198,22 @@ export interface components {
             minutes: number;
         };
         /** BreakSettings */
-        BreakSettings: {
+        "BreakSettings-Input": {
+            /**
+             * Enabled
+             * @default false
+             */
+            enabled: boolean;
+            /**
+             * Paid
+             * @default false
+             */
+            paid: boolean;
+            /** Rules */
+            rules?: components["schemas"]["BreakRule"][];
+        };
+        /** BreakSettings */
+        "BreakSettings-Output": {
             /**
              * Enabled
              * @default false
@@ -172,7 +231,25 @@ export interface components {
          * BusRule
          * @description People who need a ride must start (or end) at exactly the same time as a driver.
          */
-        BusRule: {
+        "BusRule-Input": {
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+            earlyCutoff?: components["schemas"]["CutoffsByDayType"];
+            /**
+             * Lateenabled
+             * @default false
+             */
+            lateEnabled: boolean;
+            lateCutoff?: components["schemas"]["CutoffsByDayType"];
+        };
+        /**
+         * BusRule
+         * @description People who need a ride must start (or end) at exactly the same time as a driver.
+         */
+        "BusRule-Output": {
             /**
              * Enabled
              * @default true
@@ -222,7 +299,28 @@ export interface components {
          * DateRangePattern
          * @description Whole days from `start_date` to `end_date`, inclusive (e.g. vacation).
          */
-        DateRangePattern: {
+        "DateRangePattern-Input": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "range";
+            /**
+             * Startdate
+             * Format: date
+             */
+            startDate: string;
+            /**
+             * Enddate
+             * Format: date
+             */
+            endDate: string;
+        };
+        /**
+         * DateRangePattern
+         * @description Whole days from `start_date` to `end_date`, inclusive (e.g. vacation).
+         */
+        "DateRangePattern-Output": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
@@ -243,7 +341,28 @@ export interface components {
          * DayHours
          * @description Opening hours for one day. Times are when the store is open to customers.
          */
-        DayHours: {
+        "DayHours-Input": {
+            /**
+             * Closed
+             * @default false
+             */
+            closed: boolean;
+            /**
+             * Opens
+             * @default 07:00
+             */
+            opens: string;
+            /**
+             * Closes
+             * @default 18:00
+             */
+            closes: string;
+        };
+        /**
+         * DayHours
+         * @description Opening hours for one day. Times are when the store is open to customers.
+         */
+        "DayHours-Output": {
             /**
              * Closed
              * @default false
@@ -261,7 +380,24 @@ export interface components {
             closes: string;
         };
         /** DayTypeStaffing */
-        DayTypeStaffing: {
+        "DayTypeStaffing-Input": {
+            /**
+             * Minatopening
+             * @default 1
+             */
+            minAtOpening: number;
+            /**
+             * Minatclosing
+             * @default 1
+             */
+            minAtClosing: number;
+            /** Dailyhoursmin */
+            dailyHoursMin?: number | null;
+            /** Dailyhoursmax */
+            dailyHoursMax?: number | null;
+        };
+        /** DayTypeStaffing */
+        "DayTypeStaffing-Output": {
             /**
              * Minatopening
              * @default 1
@@ -277,8 +413,65 @@ export interface components {
             /** Dailyhoursmax */
             dailyHoursMax: number | null;
         };
+        /**
+         * Diagnostic
+         * @description A pre-check finding, explained in plain language (translated by the frontend).
+         */
+        Diagnostic: {
+            /** Code */
+            code: string;
+            /**
+             * Severity
+             * @default error
+             * @enum {string}
+             */
+            severity: "error" | "warning";
+            /** Date */
+            date: string | null;
+            /** Employeeids */
+            employeeIds: string[];
+            /** Params */
+            params: {
+                [key: string]: string | number;
+            };
+        };
         /** Employee */
-        Employee: {
+        "Employee-Input": {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Color */
+            color: string;
+            /**
+             * Active
+             * @default true
+             */
+            active: boolean;
+            /** Contracthoursperweek */
+            contractHoursPerWeek: number;
+            /**
+             * Hascar
+             * @default false
+             */
+            hasCar: boolean;
+            /**
+             * Needsrideearly
+             * @default false
+             */
+            needsRideEarly: boolean;
+            /**
+             * Needsridelate
+             * @default false
+             */
+            needsRideLate: boolean;
+            /** Alloweddriverids */
+            allowedDriverIds?: string[] | null;
+            overrides?: components["schemas"]["EmployeeRuleOverrides-Input"];
+            balance?: components["schemas"]["HourBalance-Input"];
+        };
+        /** Employee */
+        "Employee-Output": {
             /** Id */
             id: string;
             /** Name */
@@ -309,14 +502,32 @@ export interface components {
             needsRideLate: boolean;
             /** Alloweddriverids */
             allowedDriverIds: string[] | null;
-            overrides: components["schemas"]["EmployeeRuleOverrides"];
-            balance: components["schemas"]["HourBalance"];
+            overrides: components["schemas"]["EmployeeRuleOverrides-Output"];
+            balance: components["schemas"]["HourBalance-Output"];
         };
         /**
          * EmployeeRuleOverrides
          * @description Per-employee replacements for global limits. `None` means "use the global rule".
          */
-        EmployeeRuleOverrides: {
+        "EmployeeRuleOverrides-Input": {
+            /** Minshifthours */
+            minShiftHours?: number | null;
+            /** Maxshifthours */
+            maxShiftHours?: number | null;
+            /** Maxhoursperday */
+            maxHoursPerDay?: number | null;
+            /** Minresthours */
+            minRestHours?: number | null;
+            /** Maxconsecutivedays */
+            maxConsecutiveDays?: number | null;
+            /** Maxweeklyhours */
+            maxWeeklyHours?: number | null;
+        };
+        /**
+         * EmployeeRuleOverrides
+         * @description Per-employee replacements for global limits. `None` means "use the global rule".
+         */
+        "EmployeeRuleOverrides-Output": {
             /** Minshifthours */
             minShiftHours: number | null;
             /** Maxshifthours */
@@ -330,6 +541,23 @@ export interface components {
             /** Maxweeklyhours */
             maxWeeklyHours: number | null;
         };
+        /** EmployeeStats */
+        EmployeeStats: {
+            /** Employeeid */
+            employeeId: string;
+            /** Shifts */
+            shifts: number;
+            /** Plannedhours */
+            plannedHours: number;
+            /** Targethours */
+            targetHours: number;
+            /** Deviationhours */
+            deviationHours: number;
+            /** Carryinhours */
+            carryInHours: number;
+            /** Newbalancehours */
+            newBalanceHours: number;
+        };
         /** ErrorDetail */
         ErrorDetail: {
             /** Loc */
@@ -341,7 +569,35 @@ export interface components {
          * GuestDemand
          * @description Optional: derive each day's required total staff hours from expected guests.
          */
-        GuestDemand: {
+        "GuestDemand-Input": {
+            /**
+             * Enabled
+             * @default false
+             */
+            enabled: boolean;
+            /**
+             * Mode
+             * @default linear
+             * @enum {string}
+             */
+            mode: "linear" | "steps";
+            /** Points */
+            points?: components["schemas"]["GuestPoint"][];
+            /**
+             * Tolerancehours
+             * @default 2
+             */
+            toleranceHours: number;
+            /** Guestsbydate */
+            guestsByDate?: {
+                [key: string]: number;
+            };
+        };
+        /**
+         * GuestDemand
+         * @description Optional: derive each day's required total staff hours from expected guests.
+         */
+        "GuestDemand-Output": {
             /**
              * Enabled
              * @default false
@@ -391,7 +647,30 @@ export interface components {
          * HourBalance
          * @description Hours carried in from earlier months. The app doesn't remember past months.
          */
-        HourBalance: {
+        "HourBalance-Input": {
+            /**
+             * Carryinhours
+             * @default 0
+             */
+            carryInHours: number;
+            /**
+             * Periodweek
+             * @default 1
+             */
+            periodWeek: number;
+            /** Lastshiftendedat */
+            lastShiftEndedAt?: string | null;
+            /**
+             * Consecutivedaysatstart
+             * @default 0
+             */
+            consecutiveDaysAtStart: number;
+        };
+        /**
+         * HourBalance
+         * @description Hours carried in from earlier months. The app doesn't remember past months.
+         */
+        "HourBalance-Output": {
             /**
              * Carryinhours
              * @default 0
@@ -421,7 +700,48 @@ export interface components {
          * ObjectiveWeights
          * @description Relative importance of the soft goals. Higher = matters more.
          */
-        ObjectiveWeights: {
+        "ObjectiveWeights-Input": {
+            /**
+             * Wishoff
+             * @default 10
+             */
+            wishOff: number;
+            /**
+             * Wishwork
+             * @default 4
+             */
+            wishWork: number;
+            /**
+             * Hourbalance
+             * @default 5
+             */
+            hourBalance: number;
+            /**
+             * Beyondtolerance
+             * @default 50
+             */
+            beyondTolerance: number;
+            /**
+             * Dailytarget
+             * @default 3
+             */
+            dailyTarget: number;
+            /**
+             * Shortgap
+             * @default 0.5
+             */
+            shortGap: number;
+            /**
+             * Contiguousdaysoff
+             * @default 0.5
+             */
+            contiguousDaysOff: number;
+        };
+        /**
+         * ObjectiveWeights
+         * @description Relative importance of the soft goals. Higher = matters more.
+         */
+        "ObjectiveWeights-Output": {
             /**
              * Wishoff
              * @default 10
@@ -459,12 +779,17 @@ export interface components {
             contiguousDaysOff: number;
         };
         /** Plan */
-        Plan: {
+        "Plan-Input": {
             /** Shifts */
-            shifts: components["schemas"]["Shift"][];
+            shifts?: components["schemas"]["Shift-Input"][];
+        };
+        /** Plan */
+        "Plan-Output": {
+            /** Shifts */
+            shifts: components["schemas"]["Shift-Output"][];
         };
         /** Project */
-        Project: {
+        "Project-Input": {
             /**
              * Schemaversion
              * @default 2
@@ -480,19 +805,128 @@ export interface components {
             name: string;
             /** Month */
             month: string;
-            store: components["schemas"]["StoreSettings"];
+            store?: components["schemas"]["StoreSettings-Input"];
             /** Employees */
-            employees: components["schemas"]["Employee"][];
+            employees?: components["schemas"]["Employee-Input"][];
             /** Availability */
-            availability: components["schemas"]["AvailabilityEntry"][];
-            rules: components["schemas"]["Rules"];
-            weights: components["schemas"]["ObjectiveWeights"];
-            guestDemand: components["schemas"]["GuestDemand"];
-            solver: components["schemas"]["SolverSettings"];
-            plan: components["schemas"]["Plan"] | null;
+            availability?: components["schemas"]["AvailabilityEntry-Input"][];
+            rules?: components["schemas"]["Rules-Input"];
+            weights?: components["schemas"]["ObjectiveWeights-Input"];
+            guestDemand?: components["schemas"]["GuestDemand-Input"];
+            solver?: components["schemas"]["SolverSettings-Input"];
+            plan?: components["schemas"]["Plan-Input"] | null;
+        };
+        /** Project */
+        "Project-Output": {
+            /**
+             * Schemaversion
+             * @default 2
+             * @constant
+             */
+            schemaVersion: 2;
+            /** Id */
+            id: string;
+            /**
+             * Name
+             * @default Shift plan
+             */
+            name: string;
+            /** Month */
+            month: string;
+            store: components["schemas"]["StoreSettings-Output"];
+            /** Employees */
+            employees: components["schemas"]["Employee-Output"][];
+            /** Availability */
+            availability: components["schemas"]["AvailabilityEntry-Output"][];
+            rules: components["schemas"]["Rules-Output"];
+            weights: components["schemas"]["ObjectiveWeights-Output"];
+            guestDemand: components["schemas"]["GuestDemand-Output"];
+            solver: components["schemas"]["SolverSettings-Output"];
+            plan: components["schemas"]["Plan-Output"] | null;
         };
         /** Rules */
-        Rules: {
+        "Rules-Input": {
+            /**
+             * Granularitymin
+             * @default 30
+             * @enum {integer}
+             */
+            granularityMin: 15 | 30 | 60;
+            /**
+             * Minshifthours
+             * @default 3
+             */
+            minShiftHours: number;
+            /**
+             * Maxshifthours
+             * @default 8
+             */
+            maxShiftHours: number;
+            /** Maxhoursperday */
+            maxHoursPerDay?: number | null;
+            /**
+             * Oneshiftperday
+             * @default true
+             */
+            oneShiftPerDay: boolean;
+            /**
+             * Minresthours
+             * @default 11
+             */
+            minRestHours: number;
+            /**
+             * Maxconsecutivedays
+             * @default 6
+             */
+            maxConsecutiveDays: number;
+            /**
+             * Maxweeklyhours
+             * @default 48
+             */
+            maxWeeklyHours: number;
+            /**
+             * Fulltimethresholdhours
+             * @default 37
+             */
+            fullTimeThresholdHours: number;
+            /**
+             * Fulltimecontractwarning
+             * @default true
+             */
+            fullTimeContractWarning: boolean;
+            /**
+             * Monthlytolerancehours
+             * @default 2
+             */
+            monthlyToleranceHours: number;
+            /** Monthlyhardlimithours */
+            monthlyHardLimitHours?: number | null;
+            /**
+             * Balancingperiodweeks
+             * @default 16
+             */
+            balancingPeriodWeeks: number;
+            /**
+             * Monthlytargetmode
+             * @default weeks_per_month
+             * @enum {string}
+             */
+            monthlyTargetMode: "weeks_per_month" | "fixed_4_4" | "actual_weekdays";
+            /**
+             * Holidaysreducetarget
+             * @default false
+             */
+            holidaysReduceTarget: boolean;
+            /**
+             * Teamadjustmenthours
+             * @default 0
+             */
+            teamAdjustmentHours: number;
+            breaks?: components["schemas"]["BreakSettings-Input"];
+            busRule?: components["schemas"]["BusRule-Input"];
+        };
+        /** Rules */
+        "Rules-Output": {
             /**
              * Granularitymin
              * @default 30
@@ -569,11 +1003,32 @@ export interface components {
              * @default 0
              */
             teamAdjustmentHours: number;
-            breaks: components["schemas"]["BreakSettings"];
-            busRule: components["schemas"]["BusRule"];
+            breaks: components["schemas"]["BreakSettings-Output"];
+            busRule: components["schemas"]["BusRule-Output"];
         };
         /** Shift */
-        Shift: {
+        "Shift-Input": {
+            /** Id */
+            id: string;
+            /** Employeeid */
+            employeeId: string;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Start */
+            start: string;
+            /** End */
+            end: string;
+            /**
+             * Pinned
+             * @default false
+             */
+            pinned: boolean;
+        };
+        /** Shift */
+        "Shift-Output": {
             /** Id */
             id: string;
             /** Employeeid */
@@ -594,7 +1049,24 @@ export interface components {
             pinned: boolean;
         };
         /** SingleDatePattern */
-        SingleDatePattern: {
+        "SingleDatePattern-Input": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "date";
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Start */
+            start?: string | null;
+            /** End */
+            end?: string | null;
+        };
+        /** SingleDatePattern */
+        "SingleDatePattern-Output": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
@@ -610,8 +1082,33 @@ export interface components {
             /** End */
             end: string | null;
         };
+        /** SolveResponse */
+        SolveResponse: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "optimal" | "feasible" | "best_effort" | "infeasible";
+            plan: components["schemas"]["Plan-Output"] | null;
+            /** Violations */
+            violations: components["schemas"]["Violation"][];
+            /** Diagnostics */
+            diagnostics: components["schemas"]["Diagnostic"][];
+            /** Stats */
+            stats: components["schemas"]["EmployeeStats"][];
+            /** Solvetimems */
+            solveTimeMs: number;
+        };
         /** SolverSettings */
-        SolverSettings: {
+        "SolverSettings-Input": {
+            /**
+             * Timelimitseconds
+             * @default 20
+             */
+            timeLimitSeconds: number;
+        };
+        /** SolverSettings */
+        "SolverSettings-Output": {
             /**
              * Timelimitseconds
              * @default 20
@@ -622,7 +1119,43 @@ export interface components {
          * SpecialDate
          * @description Custom opening hours (or closed) for one date. Only applies while `enabled`.
          */
-        SpecialDate: {
+        "SpecialDate-Input": {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /**
+             * Enabled
+             * @default false
+             */
+            enabled: boolean;
+            /**
+             * Closed
+             * @default false
+             */
+            closed: boolean;
+            /**
+             * Opens
+             * @default 07:00
+             */
+            opens: string;
+            /**
+             * Closes
+             * @default 17:00
+             */
+            closes: string;
+            /**
+             * Note
+             * @default
+             */
+            note: string;
+        };
+        /**
+         * SpecialDate
+         * @description Custom opening hours (or closed) for one date. Only applies while `enabled`.
+         */
+        "SpecialDate-Output": {
             /**
              * Date
              * Format: date
@@ -655,23 +1188,30 @@ export interface components {
             note: string;
         };
         /** StaffingByDayType */
-        StaffingByDayType: {
-            weekday: components["schemas"]["DayTypeStaffing"];
-            saturday: components["schemas"]["DayTypeStaffing"];
-            sunday: components["schemas"]["DayTypeStaffing"];
-            holiday: components["schemas"]["DayTypeStaffing"];
+        "StaffingByDayType-Input": {
+            weekday?: components["schemas"]["DayTypeStaffing-Input"];
+            saturday?: components["schemas"]["DayTypeStaffing-Input"];
+            sunday?: components["schemas"]["DayTypeStaffing-Input"];
+            holiday?: components["schemas"]["DayTypeStaffing-Input"];
+        };
+        /** StaffingByDayType */
+        "StaffingByDayType-Output": {
+            weekday: components["schemas"]["DayTypeStaffing-Output"];
+            saturday: components["schemas"]["DayTypeStaffing-Output"];
+            sunday: components["schemas"]["DayTypeStaffing-Output"];
+            holiday: components["schemas"]["DayTypeStaffing-Output"];
         };
         /** StoreSettings */
-        StoreSettings: {
+        "StoreSettings-Input": {
             /**
              * Name
              * @default My store
              */
             name: string;
-            openingHours: components["schemas"]["WeeklyOpeningHours"];
-            publicHolidayHours: components["schemas"]["DayHours"];
+            openingHours?: components["schemas"]["WeeklyOpeningHours-Input"];
+            publicHolidayHours?: components["schemas"]["DayHours-Input"];
             /** Specialdates */
-            specialDates: components["schemas"]["SpecialDate"][];
+            specialDates?: components["schemas"]["SpecialDate-Input"][];
             /**
              * Staffbeforeopeningmin
              * @default 60
@@ -687,7 +1227,37 @@ export interface components {
              * @default false
              */
             allowWorkingAlone: boolean;
-            staffing: components["schemas"]["StaffingByDayType"];
+            staffing?: components["schemas"]["StaffingByDayType-Input"];
+            /** Timerangeminimums */
+            timeRangeMinimums?: components["schemas"]["TimeRangeMinimum"][];
+        };
+        /** StoreSettings */
+        "StoreSettings-Output": {
+            /**
+             * Name
+             * @default My store
+             */
+            name: string;
+            openingHours: components["schemas"]["WeeklyOpeningHours-Output"];
+            publicHolidayHours: components["schemas"]["DayHours-Output"];
+            /** Specialdates */
+            specialDates: components["schemas"]["SpecialDate-Output"][];
+            /**
+             * Staffbeforeopeningmin
+             * @default 60
+             */
+            staffBeforeOpeningMin: number;
+            /**
+             * Staffafterclosingmin
+             * @default 30
+             */
+            staffAfterClosingMin: number;
+            /**
+             * Allowworkingalone
+             * @default false
+             */
+            allowWorkingAlone: boolean;
+            staffing: components["schemas"]["StaffingByDayType-Output"];
             /** Timerangeminimums */
             timeRangeMinimums: components["schemas"]["TimeRangeMinimum"][];
         };
@@ -720,21 +1290,79 @@ export interface components {
             /** Context */
             ctx?: Record<string, never>;
         };
+        /**
+         * Violation
+         * @description A broken rule. The frontend translates `violation.<rule>` with `params`.
+         */
+        Violation: {
+            /**
+             * Rule
+             * @enum {string}
+             */
+            rule: "inactive_employee" | "store_closed" | "outside_opening_hours" | "overlapping_shifts" | "shift_too_short" | "shift_too_long" | "too_many_shifts" | "day_too_long" | "rest_too_short" | "too_many_days_in_a_row" | "weekly_hours_exceeded" | "weekly_above_contract" | "unavailable" | "understaffed" | "opening_understaffed" | "closing_understaffed" | "busy_period_understaffed" | "daily_hours_below_min" | "daily_hours_above_max" | "no_ride_early" | "no_ride_late" | "monthly_limit_exceeded";
+            /**
+             * Severity
+             * @default error
+             * @enum {string}
+             */
+            severity: "error" | "warning";
+            /** Employeeid */
+            employeeId: string | null;
+            /** Date */
+            date: string | null;
+            /** Start */
+            start: string | null;
+            /** End */
+            end: string | null;
+            /** Amount */
+            amount: number | null;
+            /** Params */
+            params: {
+                [key: string]: string | number;
+            };
+        };
         /** WeeklyOpeningHours */
-        WeeklyOpeningHours: {
-            monday: components["schemas"]["DayHours"];
-            tuesday: components["schemas"]["DayHours"];
-            wednesday: components["schemas"]["DayHours"];
-            thursday: components["schemas"]["DayHours"];
-            friday: components["schemas"]["DayHours"];
-            saturday: components["schemas"]["DayHours"];
-            sunday: components["schemas"]["DayHours"];
+        "WeeklyOpeningHours-Input": {
+            monday?: components["schemas"]["DayHours-Input"];
+            tuesday?: components["schemas"]["DayHours-Input"];
+            wednesday?: components["schemas"]["DayHours-Input"];
+            thursday?: components["schemas"]["DayHours-Input"];
+            friday?: components["schemas"]["DayHours-Input"];
+            saturday?: components["schemas"]["DayHours-Input"];
+            sunday?: components["schemas"]["DayHours-Input"];
+        };
+        /** WeeklyOpeningHours */
+        "WeeklyOpeningHours-Output": {
+            monday: components["schemas"]["DayHours-Output"];
+            tuesday: components["schemas"]["DayHours-Output"];
+            wednesday: components["schemas"]["DayHours-Output"];
+            thursday: components["schemas"]["DayHours-Output"];
+            friday: components["schemas"]["DayHours-Output"];
+            saturday: components["schemas"]["DayHours-Output"];
+            sunday: components["schemas"]["DayHours-Output"];
         };
         /**
          * WeeklyPattern
          * @description Every week on `weekday`, optionally only within a time window.
          */
-        WeeklyPattern: {
+        "WeeklyPattern-Input": {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "weekly";
+            /** Weekday */
+            weekday: number;
+            /** Start */
+            start?: string | null;
+            /** End */
+            end?: string | null;
+        };
+        /**
+         * WeeklyPattern
+         * @description Every week on `weekday`, optionally only within a time window.
+         */
+        "WeeklyPattern-Output": {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
@@ -824,7 +1452,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Project"];
+                    "application/json": components["schemas"]["Project-Output"];
                 };
             };
             /** @description Validation Error */
@@ -855,7 +1483,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Project"];
+                    "application/json": components["schemas"]["Project-Output"];
                 };
             };
             /** @description Validation Error */
@@ -890,7 +1518,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Project"];
+                    "application/json": components["schemas"]["Project-Output"];
                 };
             };
             /** @description Not a valid project file */
@@ -900,6 +1528,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    solve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Project-Input"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SolveResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
