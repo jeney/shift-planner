@@ -61,6 +61,14 @@ class Diagnostic(ApiModel):
     params: dict[str, str | int | float] = Field(default_factory=dict)
 
 
+class WishOutcome(ApiModel):
+    entry_id: Id
+    employee_id: Id
+    date: dt.date
+    kind: Literal["wish_off", "wish_work"]
+    honoured: bool
+
+
 class EmployeeStats(ApiModel):
     employee_id: Id
     shifts: int
@@ -71,6 +79,8 @@ class EmployeeStats(ApiModel):
     carry_in_hours: float
     new_balance_hours: float
     """carry-in + deviation: where the balance stands after this month."""
+    wishes_honoured: int = 0
+    wishes_total: int = 0
 
 
 class SolveResponse(ApiModel):
@@ -79,4 +89,5 @@ class SolveResponse(ApiModel):
     violations: list[Violation] = Field(default_factory=list)
     diagnostics: list[Diagnostic] = Field(default_factory=list)
     stats: list[EmployeeStats] = Field(default_factory=list)
+    wishes: list[WishOutcome] = Field(default_factory=list)
     solve_time_ms: int
