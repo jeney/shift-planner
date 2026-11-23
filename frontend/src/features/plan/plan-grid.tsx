@@ -23,6 +23,8 @@ import { cellKey, shiftHours, worstSeverity, type ViolationIndex } from './index
 import { ShiftEditor } from './shift-editor'
 
 interface PlanGridProps {
+  /** Guest-based staff-hours target per date, if that feature is on. */
+  guestTargets: Map<string, number>
   days: CalendarDay[]
   employees: Employee[]
   shifts: Map<string, Shift[]>
@@ -34,6 +36,7 @@ interface PlanGridProps {
 }
 
 export function PlanGrid({
+  guestTargets,
   days,
   employees,
   shifts,
@@ -324,7 +327,16 @@ export function PlanGrid({
                   <div>
                     {t('plan.people', { count: new Set(dayShifts.map((x) => x.employeeId)).size })}
                   </div>
-                  <div className="text-muted-foreground">{format.hours(hours)}</div>
+                  <div className="text-muted-foreground">
+                    {format.hours(hours)}
+                    {guestTargets.has(day.date) && (
+                      <span className="block">
+                        {t('plan.guestTarget', {
+                          hours: format.hours(guestTargets.get(day.date)!),
+                        })}
+                      </span>
+                    )}
+                  </div>
                 </div>
               )
               return (

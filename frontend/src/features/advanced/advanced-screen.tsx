@@ -21,7 +21,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -419,16 +418,11 @@ export function AdvancedScreen() {
         </Section>
 
         {/* Guest-based demand */}
-        <Section
-          title={t('advanced.guestsTitle')}
-          description={t('advanced.guestsDescription')}
-          actions={<Badge variant="outline">{t('advanced.comingSoon')}</Badge>}
-        >
+        <Section title={t('advanced.guestsTitle')} description={t('advanced.guestsDescription')}>
           <SwitchField
             label={t('guestDemand.enabled.label')}
             help={t('guestDemand.enabled.help')}
             checked={guestDemand.enabled}
-            disabled
             onCheckedChange={(v) => update((p) => void (p.guestDemand.enabled = v))}
           />
           <div className="grid gap-2">

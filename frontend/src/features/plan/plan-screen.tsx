@@ -19,6 +19,7 @@ import { describeViolation } from '@/features/generate/describe-violation'
 import { useSolve } from '@/features/generate/use-solve'
 import { toAppError } from '@/lib/errors'
 import { useFormat } from '@/lib/format'
+import { guestHours } from '@/lib/guests'
 import { useProject } from '@/project/hooks'
 
 import { editPlan, redo, replacePlan, undo, useCanUndoRedo } from './history'
@@ -65,6 +66,16 @@ export function PlanScreen() {
   const employees = project.employees.filter(
     (e) => e.active || plan?.shifts.some((s) => s.employeeId === e.id),
   )
+  const guestTargets = useMemo(() => {
+    const demand = project.guestDemand
+    const targets = new Map<string, number>()
+    if (!demand.enabled) return targets
+    for (const [date, guests] of Object.entries(demand.guestsByDate)) {
+      const hours = guestHours(guests, demand)
+      if (hours !== null) targets.set(date, hours)
+    }
+    return targets
+  }, [project.guestDemand])
   const pinnedCount = plan?.shifts.filter((s) => s.pinned).length ?? 0
   const errors = result?.violations.filter((v) => v.severity === 'error') ?? []
   const warnings = result?.violations.filter((v) => v.severity === 'warning') ?? []
@@ -163,6 +174,7 @@ export function PlanScreen() {
       <p className="text-xs text-muted-foreground">{t('plan.keyboardHelp')}</p>
 
       <PlanGrid
+        guestTargets={guestTargets}
         days={calendar.data?.days ?? []}
         employees={employees}
         shifts={shifts}
