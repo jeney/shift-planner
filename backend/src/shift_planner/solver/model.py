@@ -28,7 +28,10 @@ import itertools
 import math
 import time
 import uuid
+from collections import defaultdict
+from collections.abc import Iterable
 from dataclasses import dataclass
+from datetime import date
 from typing import Literal
 
 from ortools.sat.python import cp_model
@@ -90,6 +93,8 @@ class Candidate:
     end: int
     paid: int
     var: cp_model.IntVar
+    pinned: Shift | None = None
+    """The hand-edited shift this candidate stands for (kept exactly as entered)."""
 
 
 @dataclass
@@ -119,14 +124,15 @@ class Outcome:
     """False when no plan was found but infeasibility wasn't proven (time ran out)."""
 
 
-def grid_points(info: DayInfo, granularity: int) -> list[int]:
-    """Candidate start/end times for one day."""
+def grid_points(info: DayInfo, granularity: int, extra: Iterable[int] = ()) -> list[int]:
+    """Candidate start/end times for one day (plus `extra` points, e.g. pinned shift edges)."""
     assert info.window is not None
     start, end = info.window.start, info.window.end
     points = {start, end}
     points.update(range(math.ceil(start / granularity) * granularity, end, granularity))
     for (a, b), _ in info.ranges:
         points.update(p for p in (a, b) if start < p < end)
+    points.update(p for p in extra if start < p < end)
     return sorted(points)
 
 
@@ -148,8 +154,12 @@ class ShiftModel:
         self.model = cp_model.CpModel()
         self.split = not ctx.project.rules.one_shift_per_day
         self.granularity = granularity or ctx.project.rules.granularity_min
+        self._collect_pinned()
         self.points: list[list[int] | None] = [
-            grid_points(info, self.granularity) if info.window else None for info in ctx.days
+            grid_points(info, self.granularity, self._pinned_edges(info.date))
+            if info.window
+            else None
+            for info in ctx.days
         ]
         self.vars: dict[str, list[EmployeeDay | None]] = {}
         self.day_totals: dict[int, cp_model.IntVar] = {}
@@ -171,10 +181,64 @@ class ShiftModel:
             self._rides(i)
         self._objective()
 
+    def _collect_pinned(self) -> None:
+        """Pinned (hand-edited) shifts are kept as entered. Those the model can't represent
+        (inactive people, closed days) are passed through to the result unchanged."""
+        plan = self.ctx.project.plan
+        pinned = [s for s in plan.shifts if s.pinned] if plan else []
+        active = {e.id for e in self.ctx.employees}
+        open_days = {info.date for info in self.ctx.days if info.window is not None}
+        self.pinned: dict[tuple[str, date], list[Shift]] = defaultdict(list)
+        self.passthrough: list[Shift] = []
+        for s in pinned:
+            if s.employee_id in active and s.date in open_days:
+                self.pinned[(s.employee_id, s.date)].append(s)
+            else:
+                self.passthrough.append(s)
+
+    def _pinned_edges(self, day: date) -> list[int]:
+        return [
+            to_minutes(t)
+            for (_, d), shifts in self.pinned.items()
+            if d == day
+            for s in shifts
+            for t in (s.start, s.end)
+        ]
+
+    def _fixed_day(self, shifts: list[Shift], points: list[int]) -> EmployeeDay:
+        """A day fixed by pinned shifts: everything about it is a constant."""
+        m = self.model
+        spans = [(to_minutes(s.start), to_minutes(s.end)) for s in shifts]
+        candidates = [
+            Candidate(
+                start=a,
+                end=b,
+                paid=(b - a) - self.ctx.break_minutes(b - a),
+                var=m.new_constant(1),
+                pinned=s,
+            )
+            for s, (a, b) in zip(shifts, spans, strict=True)
+        ]
+        present = [
+            m.new_constant(int(any(a <= points[k] < b for a, b in spans)))
+            for k in range(len(points) - 1)
+        ]
+        return EmployeeDay(
+            candidates=candidates,
+            present=present,
+            works=m.new_constant(1),
+            worked=m.new_constant(sum(c.paid for c in candidates)),
+            start=m.new_constant(max(0, min(a for a, _ in spans))),
+            end=m.new_constant(min(MINUTES_PER_DAY, max(b for _, b in spans))),
+        )
+
     def _employee_day(self, employee_id: str, i: int) -> EmployeeDay | None:
         info, points = self.ctx.days[i], self.points[i]
         if points is None:
             return None
+        pinned = self.pinned.get((employee_id, info.date))
+        if pinned:
+            return self._fixed_day(pinned, points)
         m, limits = self.model, self.ctx.limits[employee_id]
         blocked = self.ctx.blocked(employee_id, info.day)
         longest = min(limits.max_shift, limits.max_per_day)
@@ -488,8 +552,9 @@ class ShiftModel:
         for employee_id, days in self.vars.items():
             for info, day in zip(self.ctx.days, days, strict=True):
                 for c in day.candidates if day else []:
-                    key = (employee_id, info.date, c.start, c.end)
-                    self.model.add_hint(c.var, key in chosen)
+                    if c.pinned is None:
+                        key = (employee_id, info.date, c.start, c.end)
+                        self.model.add_hint(c.var, key in chosen)
 
     def solve(
         self,
@@ -524,7 +589,8 @@ class ShiftModel:
 
     def _extract(self, solver: cp_model.CpSolver) -> Plan:
         shifts = [
-            Shift(
+            c.pinned
+            or Shift(
                 id=str(uuid.uuid4()),
                 employee_id=employee_id,
                 date=info.date,
@@ -537,6 +603,7 @@ class ShiftModel:
             for c in day.candidates
             if solver.boolean_value(c.var)
         ]
+        shifts += self.passthrough
         shifts.sort(key=lambda s: (s.date, s.start, s.employee_id))
         return Plan(shifts=shifts)
 
