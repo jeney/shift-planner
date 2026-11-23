@@ -531,7 +531,9 @@
     "precheckRunning": "Checking the setup…",
     "diagnosticsTitle": "Why the rules can't all be met",
     "bestEffortSummary_one": "{{count}} rule is broken; see the list below. {{shifts}} shifts · {{seconds}} s",
-    "bestEffortSummary_other": "{{count}} rules are broken; see the list below. {{shifts}} shifts · {{seconds}} s"
+    "bestEffortSummary_other": "{{count}} rules are broken; see the list below. {{shifts}} shifts · {{seconds}} s",
+    "pinnedKept_one": "{{count}} pinned shift is kept",
+    "pinnedKept_other": "{{count}} pinned shifts are kept"
   },
   "violation": {
     "inactive_employee": "{{name}} is inactive but has a shift on {{date}}.",
@@ -575,5 +577,41 @@
     },
     "unknown": "The planner reported a problem with this month.",
     "unavailableList": "Unavailable: {{names}}."
+  },
+  "plan": {
+    "gridLabel": "Shift plan",
+    "summary": "Hours this month",
+    "plannedOf": "Planned / target",
+    "balance": "Diff. → balance",
+    "dayTotal": "Per day",
+    "people_one": "{{count}} person",
+    "people_other": "{{count}} people",
+    "noShift": "no shift",
+    "pinnedShort": "pinned",
+    "start": "Start",
+    "end": "End",
+    "invalidTimes": "The end must be after the start.",
+    "pinned": "Keep when re-generating",
+    "pinnedHelp": "Hand edits are pinned automatically. Turn this off to let the planner change this shift.",
+    "remove": "Remove shift",
+    "save": "Save",
+    "add": "Add shift",
+    "undo": "Undo",
+    "redo": "Redo",
+    "regenerate": "Re-generate",
+    "regenerateKeeping_one": "Re-generate, keeping {{count}} edit",
+    "regenerateKeeping_other": "Re-generate, keeping {{count}} edits",
+    "unpinAll": "Unpin all",
+    "checking": "Checking rules…",
+    "errors_one": "{{count}} rule broken",
+    "errors_other": "{{count}} rules broken",
+    "allGood": "All rules met",
+    "warnings_one": "{{count}} warning",
+    "warnings_other": "{{count}} warnings",
+    "keyboardHelp": "Click a cell or press Enter to edit. Arrow keys move, Delete clears a shift, Ctrl+Z / Ctrl+Y undo and redo. Edited shifts are pinned (📌) and kept when you re-generate.",
+    "issuesLabel": "Broken rules and warnings",
+    "emptyTitle": "No plan yet",
+    "emptyBody": "Generate a plan on the Generate step, or start with an empty plan and add shifts by hand.",
+    "planByHand": "Plan by hand"
   }
 }

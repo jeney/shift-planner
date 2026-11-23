@@ -146,3 +146,40 @@ test('an impossible month gets diagnostics and a best-effort plan', async ({ pag
     'too few people for the busy period',
   )
 })
+
+test('edit the plan by hand with live checks, undo, and keep edits when re-generating', async ({
+  page,
+}) => {
+  needsBackend()
+  test.setTimeout(120_000)
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Load demo project' }).click()
+  await page.getByRole('tab', { name: /Generate/ }).click()
+  await page.getByRole('button', { name: 'Generate plan' }).click()
+  await expect(page.getByText(/^(Best possible|Good) plan found$/)).toBeVisible({ timeout: 60_000 })
+
+  await page.getByRole('tab', { name: /Plan/ }).click()
+  const grid = page.getByRole('grid', { name: 'Shift plan' })
+  const cell = grid.getByRole('gridcell', { name: /^Anna Holm, \w+, Dec 3\./ })
+  await cell.click()
+  await page.getByLabel('Start').fill('06:00')
+  await page.getByLabel('End').fill('17:00') // 11 h: longer than the 8 h maximum
+  await page.getByRole('button', { name: /^(Save|Add shift)$/ }).click()
+
+  await expect(cell).toHaveAttribute('aria-invalid', 'true')
+  await expect(page.getByRole('status').filter({ hasText: /rules? broken/ })).toBeVisible()
+
+  await page.getByRole('button', { name: 'Undo' }).click()
+  await expect(cell).not.toHaveAttribute('aria-invalid', 'true')
+
+  // A valid pinned edit survives re-generation.
+  await cell.click()
+  await page.getByLabel('Start').fill('09:00')
+  await page.getByLabel('End').fill('13:00')
+  await page.getByRole('button', { name: /^(Save|Add shift)$/ }).click()
+  await page.getByRole('button', { name: 'Re-generate, keeping 1 edit' }).click()
+  await expect(page.getByRole('button', { name: 'Re-generate, keeping 1 edit' })).toBeEnabled({
+    timeout: 60_000,
+  })
+  await expect(cell).toContainText('09:00–13:00')
+})
