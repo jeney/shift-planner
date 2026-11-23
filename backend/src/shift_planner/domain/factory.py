@@ -42,7 +42,8 @@ def new_project(month: str) -> Project:
 
 
 def demo_project(month: str) -> Project:
-    """A realistic, fictional team: 2 full-timers, 4 part-timers and 3 student workers."""
+    """A fictional team: 3 full-timers (40 h), 2 part-timers (20 h) and 4 student workers
+    (10 h). Some have no car; Ioannis and Emilia need a ride to early shifts."""
     year, mon = parse_month(month)
     last_day = monthrange(year, mon)[1]
 
@@ -51,15 +52,15 @@ def demo_project(month: str) -> Project:
 
     # (name, weekly hours, has car, needs ride early, carry-in, week of balancing period)
     team = [
-        ("Anna Holm", 40, True, False, 3.5, 6),
-        ("Bence Kovács", 40, True, False, -2.0, 6),
-        ("Clara Jensen", 20, True, False, 1.0, 10),
-        ("David Nagy", 20, False, True, -4.5, 14),
-        ("Emma Larsen", 20, True, False, 0.0, 2),
-        ("Frederik Berg", 20, False, False, 6.0, 15),
-        ("Greta Møller", 10, False, True, -1.5, 6),
-        ("Hanna Tóth", 10, False, False, 2.0, 3),
-        ("Isak Lund", 10, True, False, 0.0, 1),
+        ("Sophie", 40, True, False, 3.5, 6),
+        ("Lykke", 40, True, False, -2.0, 6),
+        ("Oliver", 40, True, False, 1.0, 10),
+        ("Ioannis", 20, False, True, -4.5, 14),
+        ("Signe", 20, True, False, 0.0, 2),
+        ("Emilia", 10, False, True, -1.5, 6),
+        ("Örs", 10, False, False, 2.0, 3),
+        ("Jana", 10, True, False, 0.0, 1),
+        ("Miguel", 10, False, False, 1.5, 15),
     ]
     employees = [
         Employee(
@@ -73,7 +74,7 @@ def demo_project(month: str) -> Project:
         )
         for i, (name, hours, car, ride, carry, week) in enumerate(team)
     ]
-    by_name = {e.name.split()[0]: e.id for e in employees}
+    by_name = {e.name: e.id for e in employees}
 
     def entry(
         who: str, kind: AvailabilityKind, pattern: AvailabilityPattern, note: str = ""
@@ -83,21 +84,21 @@ def demo_project(month: str) -> Project:
         )
 
     availability = [
-        entry("Bence", "unavailable", SingleDatePattern.model_validate({"date": day(5)})),
+        entry("Lykke", "unavailable", SingleDatePattern.model_validate({"date": day(5)})),
         entry(
-            "Clara",
+            "Oliver",
             "unavailable",
             DateRangePattern.model_validate({"startDate": day(10), "endDate": day(16)}),
             "Vacation",
         ),
-        entry("Greta", "unavailable", WeeklyPattern(weekday=0, start="16:00"), "Evening class"),
-        entry("Hanna", "unavailable", WeeklyPattern(weekday=1), "University"),
-        entry("Hanna", "unavailable", WeeklyPattern(weekday=3), "University"),
-        entry("Isak", "unavailable", WeeklyPattern(weekday=2, start="08:00", end="15:00")),
-        entry("David", "wish_off", SingleDatePattern.model_validate({"date": day(20)})),
-        entry("Anna", "wish_off", SingleDatePattern.model_validate({"date": day(24)})),
-        entry("Frederik", "wish_off", WeeklyPattern(weekday=6)),
-        entry("Emma", "wish_work", WeeklyPattern(weekday=5)),
+        entry("Emilia", "unavailable", WeeklyPattern(weekday=0, start="16:00"), "Evening class"),
+        entry("Örs", "unavailable", WeeklyPattern(weekday=1), "University"),
+        entry("Örs", "unavailable", WeeklyPattern(weekday=3), "University"),
+        entry("Jana", "unavailable", WeeklyPattern(weekday=2, start="08:00", end="15:00")),
+        entry("Ioannis", "wish_off", SingleDatePattern.model_validate({"date": day(20)})),
+        entry("Sophie", "wish_off", SingleDatePattern.model_validate({"date": day(24)})),
+        entry("Miguel", "wish_off", WeeklyPattern(weekday=6)),
+        entry("Signe", "wish_work", WeeklyPattern(weekday=5)),
     ]
 
     store = StoreSettings(
