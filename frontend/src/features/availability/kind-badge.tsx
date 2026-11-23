@@ -22,7 +22,7 @@ export function KindChip({ kind, className }: { kind: Kind; className?: string }
     >
       <KindIcon kind={kind} className="text-current" />
       {t(`availability.kinds.${kind}`)}
-      <span className="opacity-70">
+      <span className="font-normal">
         · {t(KIND_STYLE[kind].hard ? 'availability.hard' : 'availability.wish')}
       </span>
     </span>

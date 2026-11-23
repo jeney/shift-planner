@@ -30,6 +30,68 @@ export function MonthCalendar({ days, employeeId, entries, mode }: MonthCalendar
   )
   const drag = useDragSelect(onCommit)
   const leading = days[0]?.weekday ?? 0
+  // Rows of 7 (leading blanks before the 1st, trailing blanks after the last day).
+  const cells: (CalendarDay | null)[] = [...Array<null>(leading).fill(null), ...days]
+  while (cells.length % 7) cells.push(null)
+  const weeks = Array.from({ length: cells.length / 7 }, (_, w) => cells.slice(w * 7, w * 7 + 7))
+
+  const renderDay = (day: CalendarDay) => {
+    const here = entriesOn(entries, employeeId, day)
+    const top = strongest(here)
+    const kinds = [...new Set(here.map((e) => e.kind))]
+    const weekend = day.weekday >= 5 || day.holiday !== null
+    const label = [
+      format.weekdayDate(day.date),
+      day.holiday ? t(`calendar.holidays.${day.holiday}`) : null,
+      ...here.map((e) => `${t(`availability.kinds.${e.kind}`)}: ${describeEntry(e, t, format)}`),
+    ]
+      .filter(Boolean)
+      .join('. ')
+    return (
+      <button
+        key={day.date}
+        type="button"
+        role="gridcell"
+        aria-label={label}
+        className={cn(
+          'relative flex aspect-[5/4] min-h-14 flex-col items-start justify-between rounded-lg border p-1.5 text-left transition-colors',
+          'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+          weekend ? 'bg-muted/60' : 'bg-card',
+          top && KIND_STYLE[top.kind].cell,
+          top && windowOf(top.pattern) && 'border-2',
+          drag.isSelected(employeeId, day.date) && 'ring-2 ring-primary',
+          'hover:border-foreground/40',
+        )}
+        {...drag.cellProps(employeeId, day.date)}
+        onClick={(event) => {
+          // Pointer clicks are handled by the drag hook; this is for Enter/Space.
+          if (event.detail === 0) toggleDate(employeeId, day.date, mode)
+        }}
+      >
+        <span className="flex w-full items-center justify-between">
+          <span className="text-sm font-medium tabular-nums">{Number(day.date.slice(8))}</span>
+          {day.holiday && (
+            <span
+              className="size-1.5 rounded-full bg-primary/70"
+              title={t(`calendar.holidays.${day.holiday}`)}
+            />
+          )}
+        </span>
+        <span className="flex flex-wrap items-center gap-1">
+          {kinds.map((kind) => (
+            <KindIcon key={kind} kind={kind} />
+          ))}
+          {top && windowOf(top.pattern) && (
+            <span
+              className={cn('text-[0.65rem] leading-none tabular-nums', KIND_STYLE[top.kind].text)}
+            >
+              {windowOf(top.pattern)!.start ?? ''}–{windowOf(top.pattern)!.end ?? ''}
+            </span>
+          )}
+        </span>
+      </button>
+    )
+  }
 
   return (
     <div className="grid gap-2 select-none">
@@ -40,78 +102,12 @@ export function MonthCalendar({ days, employeeId, entries, mode }: MonthCalendar
           </div>
         ))}
       </div>
-      <div
-        role="grid"
-        aria-label={t('availability.calendarLabel')}
-        className="grid grid-cols-7 gap-1.5"
-      >
-        {Array.from({ length: leading }, (_, i) => (
-          <div key={`blank-${i}`} aria-hidden />
+      <div role="grid" aria-label={t('availability.calendarLabel')} className="grid gap-1.5">
+        {weeks.map((week, w) => (
+          <div key={w} role="row" className="grid grid-cols-7 gap-1.5">
+            {week.map((day, i) => (day ? renderDay(day) : <div key={`blank-${i}`} aria-hidden />))}
+          </div>
         ))}
-        {days.map((day) => {
-          const here = entriesOn(entries, employeeId, day)
-          const top = strongest(here)
-          const kinds = [...new Set(here.map((e) => e.kind))]
-          const weekend = day.weekday >= 5 || day.holiday !== null
-          const label = [
-            format.weekdayDate(day.date),
-            day.holiday ? t(`calendar.holidays.${day.holiday}`) : null,
-            ...here.map(
-              (e) => `${t(`availability.kinds.${e.kind}`)}: ${describeEntry(e, t, format)}`,
-            ),
-          ]
-            .filter(Boolean)
-            .join('. ')
-          return (
-            <button
-              key={day.date}
-              type="button"
-              role="gridcell"
-              aria-label={label}
-              className={cn(
-                'relative flex aspect-[5/4] min-h-14 flex-col items-start justify-between rounded-lg border p-1.5 text-left transition-colors',
-                'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
-                weekend ? 'bg-muted/60' : 'bg-card',
-                top && KIND_STYLE[top.kind].cell,
-                top && windowOf(top.pattern) && 'border-2',
-                drag.isSelected(employeeId, day.date) && 'ring-2 ring-primary',
-                'hover:border-foreground/40',
-              )}
-              {...drag.cellProps(employeeId, day.date)}
-              onClick={(event) => {
-                // Pointer clicks are handled by the drag hook; this is for Enter/Space.
-                if (event.detail === 0) toggleDate(employeeId, day.date, mode)
-              }}
-            >
-              <span className="flex w-full items-center justify-between">
-                <span className="text-sm font-medium tabular-nums">
-                  {Number(day.date.slice(8))}
-                </span>
-                {day.holiday && (
-                  <span
-                    className="size-1.5 rounded-full bg-primary/70"
-                    title={t(`calendar.holidays.${day.holiday}`)}
-                  />
-                )}
-              </span>
-              <span className="flex flex-wrap items-center gap-1">
-                {kinds.map((kind) => (
-                  <KindIcon key={kind} kind={kind} />
-                ))}
-                {top && windowOf(top.pattern) && (
-                  <span
-                    className={cn(
-                      'text-[0.65rem] leading-none tabular-nums',
-                      KIND_STYLE[top.kind].text,
-                    )}
-                  >
-                    {windowOf(top.pattern)!.start ?? ''}–{windowOf(top.pattern)!.end ?? ''}
-                  </span>
-                )}
-              </span>
-            </button>
-          )
-        })}
       </div>
     </div>
   )

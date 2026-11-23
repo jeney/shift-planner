@@ -167,7 +167,7 @@ function Notice({
       />
       <div className="grid gap-1">
         <p className="font-medium">{title}</p>
-        {children && <div className="text-muted-foreground">{children}</div>}
+        {children && <div className="text-foreground">{children}</div>}
       </div>
     </div>
   )
