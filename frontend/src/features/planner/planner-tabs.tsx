@@ -1,6 +1,7 @@
 import {
   CalendarDays,
   Download,
+  Loader2,
   SlidersHorizontal,
   Sparkles,
   Store,
@@ -10,17 +11,35 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import type { ComponentType } from 'react'
+import { lazy, Suspense, type ComponentType } from 'react'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { AdvancedScreen } from '@/features/advanced/advanced-screen'
-import { AvailabilityScreen } from '@/features/availability/availability-screen'
-import { EmployeesScreen } from '@/features/employees/employees-screen'
-import { ExportScreen } from '@/features/export/export-screen'
-import { GenerateScreen } from '@/features/generate/generate-screen'
-import { PlanScreen } from '@/features/plan/plan-screen'
-import { StoreScreen } from '@/features/store/store-screen'
+
+// Each step is its own chunk, loaded when first opened.
+const AdvancedScreen = lazy(() =>
+  import('@/features/advanced/advanced-screen').then((m) => ({ default: m.AdvancedScreen })),
+)
+const AvailabilityScreen = lazy(() =>
+  import('@/features/availability/availability-screen').then((m) => ({
+    default: m.AvailabilityScreen,
+  })),
+)
+const EmployeesScreen = lazy(() =>
+  import('@/features/employees/employees-screen').then((m) => ({ default: m.EmployeesScreen })),
+)
+const ExportScreen = lazy(() =>
+  import('@/features/export/export-screen').then((m) => ({ default: m.ExportScreen })),
+)
+const GenerateScreen = lazy(() =>
+  import('@/features/generate/generate-screen').then((m) => ({ default: m.GenerateScreen })),
+)
+const PlanScreen = lazy(() =>
+  import('@/features/plan/plan-screen').then((m) => ({ default: m.PlanScreen })),
+)
+const StoreScreen = lazy(() =>
+  import('@/features/store/store-screen').then((m) => ({ default: m.StoreScreen })),
+)
 
 const STEPS = [
   { id: 'store', icon: Store, screen: StoreScreen },
@@ -37,17 +56,15 @@ export function PlannerTabs() {
 
   return (
     <Tabs defaultValue="store" className="gap-6">
-      <TabsList className="h-auto w-full flex-wrap justify-start">
+      <TabsList className="w-full [scrollbar-width:thin] justify-start overflow-x-auto overflow-y-hidden">
         {STEPS.map(({ id, icon: Icon }, index) => (
           <TabsTrigger
             key={id}
             value={id}
-            className={id === 'advanced' ? 'gap-2 lg:ml-auto lg:flex-none' : 'gap-2 lg:flex-none'}
+            className={id === 'advanced' ? 'flex-none gap-2 lg:ml-auto' : 'flex-none gap-2'}
           >
             <Icon aria-hidden className="size-4" />
-            {id !== 'advanced' && (
-              <span className="text-muted-foreground tabular-nums">{index + 1}.</span>
-            )}
+            {id !== 'advanced' && <span className="tabular-nums">{index + 1}.</span>}
             {t(`steps.${id}`)}
           </TabsTrigger>
         ))}
@@ -63,7 +80,16 @@ export function PlannerTabs() {
                 </h2>
                 <p className="text-sm text-muted-foreground">{t(`stepDescriptions.${id}`)}</p>
               </header>
-              <Screen />
+              <Suspense
+                fallback={
+                  <div className="flex items-center gap-2 py-10 text-sm text-muted-foreground">
+                    <Loader2 aria-hidden className="size-4 animate-spin" />
+                    {t('common.loading')}
+                  </div>
+                }
+              >
+                <Screen />
+              </Suspense>
             </>
           ) : (
             <Card>

@@ -98,7 +98,7 @@ export function PlanGrid({
       >
         <thead>
           <tr>
-            <th className="sticky left-0 z-20 min-w-40 border-b bg-card px-3 py-2 text-left text-sm font-medium">
+            <th className="sticky left-0 z-20 min-w-28 border-b bg-card px-3 py-2 text-left text-sm font-medium sm:min-w-40">
               {t('employees.name')}
             </th>
             {days.map((day) => {
@@ -114,7 +114,7 @@ export function PlanGrid({
                   )}
                   title={day.holiday ? t(`calendar.holidays.${day.holiday}`) : undefined}
                 >
-                  <div className="text-muted-foreground capitalize">{short[day.weekday]}</div>
+                  <div className="capitalize">{short[day.weekday]}</div>
                   <div
                     className={cn(
                       'text-sm font-medium tabular-nums',
@@ -134,7 +134,7 @@ export function PlanGrid({
                 </th>
               )
             })}
-            <th className="sticky right-0 z-20 min-w-56 border-b border-l bg-card px-3 py-2 text-right text-sm font-medium">
+            <th className="z-20 min-w-56 border-b border-l bg-card px-3 py-2 text-right text-sm font-medium lg:sticky lg:right-0">
               {t('plan.summary')}
             </th>
           </tr>
@@ -274,7 +274,7 @@ export function PlanGrid({
                 })}
                 <td
                   className={cn(
-                    'sticky right-0 z-10 border-b border-l bg-card px-3 py-1 text-right text-xs tabular-nums',
+                    'z-10 border-b border-l bg-card px-3 py-1 text-right text-xs tabular-nums lg:sticky lg:right-0',
                     monthIssues?.length && 'text-destructive',
                   )}
                   title={describe(monthIssues).join('\n') || undefined}
@@ -358,7 +358,7 @@ export function PlanGrid({
                 </td>
               )
             })}
-            <td className="sticky right-0 z-10 border-l bg-card" />
+            <td className="z-10 border-l bg-card lg:sticky lg:right-0" />
           </tr>
         </tfoot>
       </table>
