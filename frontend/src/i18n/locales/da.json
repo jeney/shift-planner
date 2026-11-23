@@ -255,5 +255,68 @@
     "delete": "Slet medarbejder",
     "deleteTitle": "Slet {{name}}?",
     "deleteDescription": "Personens tilgængelighed, ønsker og vagter i projektet bliver også fjernet."
+  },
+  "availability": {
+    "kinds": {
+      "unavailable": "Utilgængelig",
+      "wish_off": "Ønsker fri",
+      "wish_work": "Vil gerne arbejde"
+    },
+    "modes": {
+      "unavailable": "Utilgængelig",
+      "wish_off": "Ønsker fri",
+      "wish_work": "Vil arbejde"
+    },
+    "hard": "Fast",
+    "wish": "Ønske",
+    "view": "Visning",
+    "personView": "Person",
+    "teamView": "Team",
+    "person": "Person",
+    "mode": "Hvad et klik tilføjer",
+    "clickAdds": "Et klik tilføjer:",
+    "hint": "Klik på en dag for at tilføje eller fjerne; træk hen over dage for en periode, fx ferie.",
+    "hardExplained": "Utilgængelig er en fast regel: planlæggeren planlægger aldrig hen over den.",
+    "wishExplained": "Ønsker er bløde: planlæggeren forsøger at opfylde dem, og der er ingen grænse for, hvor mange der kan være.",
+    "calendarLabel": "Kalender for tilgængelighed",
+    "teamLabel": "Teamets tilgængelighed",
+    "rulesFor": "Tilgængelighed og ønsker for {{name}}",
+    "add": "Tilføj",
+    "listLabel": "Tilgængelighed og ønsker",
+    "emptyList": "Intet endnu. Klik på dage i kalenderen, eller tilføj en fast regel som \"mandage efter kl. 16\".",
+    "remove": "Fjern: {{what}}",
+    "noEmployeesTitle": "Ingen at planlægge for endnu",
+    "noEmployeesBody": "Tilføj først personer under Medarbejdere.",
+    "addTitle": "Tilføj tilgængelighed eller et ønske",
+    "addDescription": "Brug dette til faste ugedage og dele af dagen. Hele dage er hurtigere at klikke i kalenderen.",
+    "when": "Hvornår",
+    "shapes": {
+      "weekly": "Hver uge",
+      "date": "Én dato",
+      "range": "Periode"
+    },
+    "weekday": "Ugedag",
+    "date": "Dato",
+    "firstDay": "Første dag",
+    "lastDay": "Sidste dag",
+    "partOfDay": "Kun en del af dagen",
+    "partOfDayHelp": "Lad et af tidspunkterne stå tomt for \"fra kl. 16\" eller \"indtil kl. 12\".",
+    "fromTime": "Fra",
+    "untilTime": "Til",
+    "windowInvalid": "Angiv mindst ét tidspunkt og en sluttid efter starttiden.",
+    "importance": "Hvor vigtigt?",
+    "weights": {
+      "low": "Kun hvis muligt",
+      "normal": "Normalt",
+      "high": "Vigtigt"
+    },
+    "notePlaceholder": "Fx skole, lægetid",
+    "save": "Tilføj",
+    "describe": {
+      "weekly": "hver {{weekday}}, {{window}}",
+      "allDay": "hele dagen",
+      "from": "fra {{time}}",
+      "until": "indtil {{time}}"
+    }
   }
 }

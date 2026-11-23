@@ -14,13 +14,14 @@ import type { ComponentType } from 'react'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { AvailabilityScreen } from '@/features/availability/availability-screen'
 import { EmployeesScreen } from '@/features/employees/employees-screen'
 import { StoreScreen } from '@/features/store/store-screen'
 
 const STEPS = [
   { id: 'store', icon: Store, screen: StoreScreen },
   { id: 'employees', icon: Users, screen: EmployeesScreen },
-  { id: 'availability', icon: CalendarDays, screen: null },
+  { id: 'availability', icon: CalendarDays, screen: AvailabilityScreen },
   { id: 'generate', icon: Sparkles, screen: null },
   { id: 'plan', icon: Table2, screen: null },
   { id: 'export', icon: Download, screen: null },

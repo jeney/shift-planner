@@ -255,5 +255,68 @@
     "delete": "Munkatárs törlése",
     "deleteTitle": "Törlöd: {{name}}?",
     "deleteDescription": "Az elérhetősége, a kérései és a műszakjai is törlődnek a projektből."
+  },
+  "availability": {
+    "kinds": {
+      "unavailable": "Nem elérhető",
+      "wish_off": "Szabadnapot kér",
+      "wish_work": "Dolgozna"
+    },
+    "modes": {
+      "unavailable": "Nem elérhető",
+      "wish_off": "Szabadnap",
+      "wish_work": "Dolgozna"
+    },
+    "hard": "Kötelező",
+    "wish": "Kérés",
+    "view": "Nézet",
+    "personView": "Személy",
+    "teamView": "Csapat",
+    "person": "Személy",
+    "mode": "Mit ad hozzá a kattintás",
+    "clickAdds": "Kattintás:",
+    "hint": "Kattints egy napra a hozzáadáshoz vagy törléshez; húzd végig több napon egy időszakhoz, például szabadsághoz.",
+    "hardExplained": "A „nem elérhető” kötelező szabály: a tervező soha nem oszt be ilyenkor.",
+    "wishExplained": "A kérések rugalmasak: a tervező igyekszik teljesíteni őket, és bármennyi lehet belőlük.",
+    "calendarLabel": "Elérhetőségi naptár",
+    "teamLabel": "A csapat elérhetősége",
+    "rulesFor": "{{name}} elérhetősége és kérései",
+    "add": "Hozzáadás",
+    "listLabel": "Elérhetőség és kérések",
+    "emptyList": "Még nincs semmi. Kattints a naptár napjaira, vagy adj hozzá ismétlődő szabályt, pl. „hétfőnként 16:00 után”.",
+    "remove": "Törlés: {{what}}",
+    "noEmployeesTitle": "Még nincs kit beosztani",
+    "noEmployeesBody": "Először adj hozzá munkatársakat a Munkatársak lépésben.",
+    "addTitle": "Elérhetőség vagy kérés hozzáadása",
+    "addDescription": "Ismétlődő hétköznapokhoz és napszakokhoz. Egész napokat gyorsabb a naptárban kijelölni.",
+    "when": "Mikor",
+    "shapes": {
+      "weekly": "Minden héten",
+      "date": "Egy nap",
+      "range": "Időszak"
+    },
+    "weekday": "A hét napja",
+    "date": "Dátum",
+    "firstDay": "Első nap",
+    "lastDay": "Utolsó nap",
+    "partOfDay": "Csak a nap egy részében",
+    "partOfDayHelp": "Hagyd üresen az egyik időpontot a „16:00-tól” vagy „12:00-ig” formához.",
+    "fromTime": "Ettől",
+    "untilTime": "Eddig",
+    "windowInvalid": "Adj meg legalább egy időpontot, és a kezdésnél későbbi befejezést.",
+    "importance": "Mennyire fontos?",
+    "weights": {
+      "low": "Ha lehet",
+      "normal": "Normál",
+      "high": "Fontos"
+    },
+    "notePlaceholder": "Pl. iskola, orvosi időpont",
+    "save": "Hozzáadás",
+    "describe": {
+      "weekly": "minden {{weekday}}, {{window}}",
+      "allDay": "egész nap",
+      "from": "{{time}}-tól",
+      "until": "{{time}}-ig"
+    }
   }
 }
