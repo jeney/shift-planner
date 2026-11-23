@@ -8,6 +8,8 @@ const apiTarget = process.env.VITE_API_PROXY_TARGET ?? 'http://localhost:8000'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // GitHub Pages serves the app under /<repo>/; everywhere else it's the site root.
+  base: process.env.VITE_BASE ?? '/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: { '@': path.resolve(import.meta.dirname, './src') },
