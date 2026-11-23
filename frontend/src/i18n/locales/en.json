@@ -255,5 +255,68 @@
     "delete": "Delete employee",
     "deleteTitle": "Delete {{name}}?",
     "deleteDescription": "Their availability, wishes and shifts in this project are removed too."
+  },
+  "availability": {
+    "kinds": {
+      "unavailable": "Unavailable",
+      "wish_off": "Prefers a day off",
+      "wish_work": "Wants to work"
+    },
+    "modes": {
+      "unavailable": "Unavailable",
+      "wish_off": "Prefers off",
+      "wish_work": "Wants to work"
+    },
+    "hard": "Hard",
+    "wish": "Wish",
+    "view": "View",
+    "personView": "Person",
+    "teamView": "Team",
+    "person": "Person",
+    "mode": "What clicking adds",
+    "clickAdds": "Clicking adds:",
+    "hint": "Click a day to add or remove; drag across days for a range, like a vacation.",
+    "hardExplained": "Unavailable is a hard rule: the planner never schedules over it.",
+    "wishExplained": "Wishes are soft: the planner tries to honour them, and there's no limit on how many.",
+    "calendarLabel": "Availability calendar",
+    "teamLabel": "Team availability",
+    "rulesFor": "Availability and wishes for {{name}}",
+    "add": "Add",
+    "listLabel": "Availability and wishes",
+    "emptyList": "Nothing yet. Click days in the calendar, or add a recurring rule like \"Mondays after 16:00\".",
+    "remove": "Remove: {{what}}",
+    "noEmployeesTitle": "No one to plan yet",
+    "noEmployeesBody": "Add people in the Employees step first.",
+    "addTitle": "Add availability or a wish",
+    "addDescription": "Use this for recurring weekdays and part-day times. Whole days are quicker to click in the calendar.",
+    "when": "When",
+    "shapes": {
+      "weekly": "Every week",
+      "date": "One date",
+      "range": "Date range"
+    },
+    "weekday": "Weekday",
+    "date": "Date",
+    "firstDay": "First day",
+    "lastDay": "Last day",
+    "partOfDay": "Only part of the day",
+    "partOfDayHelp": "Leave one time empty for \"from 16:00\" or \"until 12:00\".",
+    "fromTime": "From",
+    "untilTime": "Until",
+    "windowInvalid": "Enter at least one time, and an end after the start.",
+    "importance": "How important?",
+    "weights": {
+      "low": "Nice to have",
+      "normal": "Normal",
+      "high": "Important"
+    },
+    "notePlaceholder": "E.g. school, doctor's appointment",
+    "save": "Add",
+    "describe": {
+      "weekly": "every {{weekday}}, {{window}}",
+      "allDay": "all day",
+      "from": "from {{time}}",
+      "until": "until {{time}}"
+    }
   }
 }
