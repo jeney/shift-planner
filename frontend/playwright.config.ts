@@ -5,6 +5,9 @@ const baseURL = process.env.E2E_BASE_URL ?? 'http://localhost:4173'
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
+  // Several tests run the real solver (20 s, multi-threaded); more parallel workers only make
+  // them compete for CPU. Two matches what CI runners get anyway.
+  workers: 2,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
