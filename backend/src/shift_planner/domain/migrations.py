@@ -14,8 +14,25 @@ from shift_planner.domain.project import CURRENT_SCHEMA_VERSION, Project
 RawProject = dict[str, Any]
 Migration = Callable[[RawProject], RawProject]
 
+
+def _v1_to_v2(raw: RawProject) -> RawProject:
+    """The fixed weekly warning threshold (37 h) became "warn above the person's own contract
+    hours" for full-timers. A disabled threshold (null) keeps the warning off."""
+    data = dict(raw)
+    rules = data.get("rules")
+    if isinstance(rules, dict):
+        rules = dict(rules)
+        old: Any = 37
+        for key in ("fullTimeWeeklyWarningHours", "full_time_weekly_warning_hours"):
+            if key in rules:
+                old = rules.pop(key)
+        rules["fullTimeContractWarning"] = old is not None
+        data["rules"] = rules
+    return data
+
+
 # from_version -> migration to from_version + 1
-MIGRATIONS: dict[int, Migration] = {}
+MIGRATIONS: dict[int, Migration] = {1: _v1_to_v2}
 
 
 class MigrationError(Exception):

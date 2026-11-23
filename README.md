@@ -131,7 +131,7 @@ Each entry is either:
 | Max one shift per day | on | hard |
 | Minimum rest between shifts | 11 h | hard |
 | Max consecutive working days | 6 (Danish law: ≤ 6 days between days off) | hard |
-| Max weekly hours | 48 (warning above 37 for full-timers) | hard / warning |
+| Max weekly hours | 48. Full-timers (contract ≥ 37 h) also get a warning in any week planned above their own contract hours | hard / warning |
 | Monthly hours vs target | ± 2 h per employee | soft (an optional hard outer limit) |
 | Breaks | off. When on: rules like "shift > X h ⇒ Y min break" and a **paid** toggle. Unpaid breaks don't count as worked hours | — |
 | Bus/car rule | on | hard |

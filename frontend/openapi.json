@@ -1092,9 +1092,9 @@
         "properties": {
           "schemaVersion": {
             "type": "integer",
-            "const": 1,
+            "const": 2,
             "title": "Schemaversion",
-            "default": 1
+            "default": 2
           },
           "id": {
             "type": "string",
@@ -1243,19 +1243,10 @@
             "title": "Fulltimethresholdhours",
             "default": 37
           },
-          "fullTimeWeeklyWarningHours": {
-            "anyOf": [
-              {
-                "type": "number",
-                "maximum": 168.0,
-                "minimum": 0.0
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Fulltimeweeklywarninghours",
-            "default": 37
+          "fullTimeContractWarning": {
+            "type": "boolean",
+            "title": "Fulltimecontractwarning",
+            "default": true
           },
           "monthlyToleranceHours": {
             "type": "number",
@@ -1325,7 +1316,7 @@
           "maxConsecutiveDays",
           "maxWeeklyHours",
           "fullTimeThresholdHours",
-          "fullTimeWeeklyWarningHours",
+          "fullTimeContractWarning",
           "monthlyToleranceHours",
           "monthlyHardLimitHours",
           "balancingPeriodWeeks",
