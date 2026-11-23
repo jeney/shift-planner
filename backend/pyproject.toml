@@ -34,6 +34,8 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF", "N"]
+# Typographic characters are intentional in docs and user-facing text.
+allowed-confusables = ["–", "−", "×", "’"]
 
 [tool.mypy]
 python_version = "3.12"
