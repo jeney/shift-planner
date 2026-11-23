@@ -4,6 +4,7 @@ import { create } from 'zustand'
 import { api } from '@/api/client'
 import type { SolveResponse } from '@/api/types'
 import { AppError, fromApiError, isApiError } from '@/lib/errors'
+import { replacePlan } from '@/features/plan/history'
 import { useProjectStore } from '@/project/store'
 
 interface SolveState {
@@ -26,19 +27,18 @@ export function useSolve() {
     mutationFn: async () => {
       const project = useProjectStore.getState().project
       if (!project) throw new AppError('errors.unknown')
-      // Generating replaces the plan; send the inputs only.
-      const { data, error } = await api.POST('/api/solve', { body: { ...project, plan: null } })
+      // Pinned (hand-edited) shifts are kept as they are; everything else is planned anew.
+      const pinned = project.plan?.shifts.filter((s) => s.pinned) ?? []
+      const { data, error } = await api.POST('/api/solve', {
+        body: { ...project, plan: { shifts: pinned } },
+      })
       if (data === undefined)
         throw isApiError(error) ? fromApiError(error) : new AppError('errors.unknown')
       return { data, projectId: project.id }
     },
     onSuccess: ({ data, projectId }) => {
       setResult(data, projectId)
-      if (data.plan) {
-        useProjectStore.getState().updateProject((p) => {
-          p.plan = data.plan
-        })
-      }
+      if (data.plan) replacePlan(data.plan)
     },
   })
 }
