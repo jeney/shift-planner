@@ -24,7 +24,21 @@ def test_demo_project_is_valid_for_any_month(month: str) -> None:
 def test_demo_team_composition() -> None:
     project = demo_project("2027-02")
     hours = Counter(e.contract_hours_per_week for e in project.employees)
-    assert hours == {40: 2, 20: 4, 10: 3}
+    assert hours == {40: 3, 20: 2, 10: 4}
+    names = [e.name for e in project.employees]
+    assert names == [
+        "Sophie",
+        "Lykke",
+        "Oliver",
+        "Ioannis",
+        "Signe",
+        "Emilia",
+        "Örs",
+        "Jana",
+        "Miguel",
+    ]
+    riders = {e.name for e in project.employees if e.needs_ride_early}
+    assert riders == {"Ioannis", "Emilia"}
     assert any(not e.has_car for e in project.employees)
     assert any(e.needs_ride_early for e in project.employees)
     kinds = {a.kind for a in project.availability}

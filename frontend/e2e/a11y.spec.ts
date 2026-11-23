@@ -39,7 +39,7 @@ for (const scheme of ['light', 'dark'] as const) {
 
     // Richer states: dialogs, a generated plan and its grid.
     await page.getByRole('tab', { name: /Employees/ }).click()
-    await page.getByRole('button', { name: 'Edit Anna Holm' }).click()
+    await page.getByRole('button', { name: 'Edit Sophie' }).click()
     await page.getByRole('dialog').waitFor()
     await audit(page, 'employee drawer')
     await page.keyboard.press('Escape')

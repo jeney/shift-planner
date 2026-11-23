@@ -25,7 +25,8 @@ cd shift-planner
 docker compose up --build
 ```
 
-Open <http://localhost:8080> and click **Load demo project** to try it with a fictional team of nine. To use another
+Open <http://localhost:8080> and click **Load demo project** to try it with a fictional team of nine: three full-timers
+(Sophie, Lykke, Oliver), two part-timers (Ioannis, Signe) and four students (Emilia, Örs, Jana, Miguel). To use another
 port, set it first: `FRONTEND_PORT=9000 docker compose up`.
 
 ## Using Shift Planner
@@ -215,7 +216,7 @@ but only accepts plans that are at least as good on goals 1–3. Tie-breakers ne
 **If the rules can't all be met**, you get both:
 
 - **Diagnostics:** fast pre-checks, shown on the Generate step before you generate. For example: *"Sat 14 Feb:
-  too few people available at opening, 06:00 (available: 1, needed: 2). Unavailable: Bence."* **Errors** are certain
+  too few people available at opening, 06:00 (available: 1, needed: 2). Unavailable: Lykke."* **Errors** are certain
   impossibilities, and **warnings** are likely trouble. The checks cover:
   - people available at opening, at closing, in busy periods and at every moment
   - head count for long days
