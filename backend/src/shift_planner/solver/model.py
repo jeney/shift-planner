@@ -372,7 +372,7 @@ class ShiftModel:
             if required > 0:
                 short = self._slack("coverage", required, minutes=points[k + 1] - points[k])
                 self.model.add(sum(d.present[k] for d in days) + short >= required)
-        if info.daily_min is None and info.daily_max is None:
+        if info.daily_min is None and info.daily_max is None and info.guest_target is None:
             return
         total = self.model.new_int_var(0, 100 * MINUTES_PER_DAY, f"day_total_{i}")
         self.model.add(total == sum(d.worked for d in days))
@@ -501,11 +501,24 @@ class ShiftModel:
         return terms
 
     def _daily_target_terms(self, coef: int) -> list[tuple[int, cp_model.LinearExprT]]:
-        if self.ctx.project.store.daily_hours_hard or coef == 0:
+        """Soft daily hours: min/max per day type (unless they're hard limits) and the
+        guest-based target ± tolerance (always soft: guest counts are estimates)."""
+        if coef == 0:
             return []
+        soft_limits = not self.ctx.project.store.daily_hours_hard
         terms: list[tuple[int, cp_model.LinearExprT]] = []
         for i, total in self.day_totals.items():
             info = self.ctx.days[i]
+            if info.guest_target is not None:
+                low = max(0, info.guest_target - info.guest_tolerance)
+                high = info.guest_target + info.guest_tolerance
+                short = self.model.new_int_var(0, low, f"guest_under_{i}")
+                self.model.add(short >= low - total)
+                extra = self.model.new_int_var(0, 100 * MINUTES_PER_DAY, f"guest_over_{i}")
+                self.model.add(extra >= total - high)
+                terms += [(coef, short), (coef, extra)]
+            if not soft_limits:
+                continue
             if info.daily_min is not None:
                 under = self.model.new_int_var(0, info.daily_min, f"under_{i}")
                 self.model.add(under >= info.daily_min - total)
