@@ -21,10 +21,362 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/calendar/{month}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Month Calendar
+         * @description Days of the month with day types, Danish public holidays and notable days.
+         */
+        get: operations["getMonthCalendar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/project/new": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get New Project
+         * @description An empty project for `month`, with every setting at its default.
+         */
+        get: operations["newProject"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/project/demo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Demo Project
+         * @description A fictional demo team (9 people) with some availability and wishes.
+         */
+        get: operations["demoProject"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/project/migrate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Post Migrate Project
+         * @description Upgrade a saved project (any schema version) to the current version and validate it.
+         */
+        post: operations["migrateProject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * ApiError
+         * @description Error with a translatable message key; the frontend renders `code` with `params`.
+         */
+        ApiError: {
+            /** Code */
+            code: string;
+            /** Params */
+            params: {
+                [key: string]: unknown;
+            };
+            /** Details */
+            details: components["schemas"]["ErrorDetail"][];
+        };
+        /** AvailabilityEntry */
+        AvailabilityEntry: {
+            /** Id */
+            id: string;
+            /** Employeeid */
+            employeeId: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "unavailable" | "wish_off" | "wish_work";
+            /** Pattern */
+            pattern: components["schemas"]["WeeklyPattern"] | components["schemas"]["SingleDatePattern"] | components["schemas"]["DateRangePattern"];
+            /**
+             * Weight
+             * @default 1
+             */
+            weight: number;
+            /**
+             * Note
+             * @default
+             */
+            note: string;
+        };
+        /**
+         * BreakRule
+         * @description A shift longer than `after_hours` includes a break of `minutes`.
+         */
+        BreakRule: {
+            /** Afterhours */
+            afterHours: number;
+            /** Minutes */
+            minutes: number;
+        };
+        /** BreakSettings */
+        BreakSettings: {
+            /**
+             * Enabled
+             * @default false
+             */
+            enabled: boolean;
+            /**
+             * Paid
+             * @default false
+             */
+            paid: boolean;
+            /** Rules */
+            rules: components["schemas"]["BreakRule"][];
+        };
+        /**
+         * BusRule
+         * @description People who need a ride must start (or end) at exactly the same time as a driver.
+         */
+        BusRule: {
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+            earlyCutoff: components["schemas"]["CutoffsByDayType"];
+            /**
+             * Lateenabled
+             * @default false
+             */
+            lateEnabled: boolean;
+            lateCutoff: components["schemas"]["CutoffsByDayType"];
+        };
+        /** CalendarDay */
+        CalendarDay: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Weekday */
+            weekday: number;
+            /** Isoweek */
+            isoWeek: number;
+            /**
+             * Daytype
+             * @enum {string}
+             */
+            dayType: "weekday" | "saturday" | "sunday" | "holiday";
+            /** Holiday */
+            holiday: ("new_years_day" | "maundy_thursday" | "good_friday" | "easter_sunday" | "easter_monday" | "great_prayer_day" | "ascension_day" | "whit_sunday" | "whit_monday" | "christmas_day" | "boxing_day") | null;
+            /** Notable */
+            notable: ("constitution_day" | "christmas_eve" | "new_years_eve") | null;
+        };
+        /** CutoffsByDayType */
+        CutoffsByDayType: {
+            /** Weekday */
+            weekday: string;
+            /** Saturday */
+            saturday: string;
+            /** Sunday */
+            sunday: string;
+            /** Holiday */
+            holiday: string;
+        };
+        /**
+         * DateRangePattern
+         * @description Whole days from `start_date` to `end_date`, inclusive (e.g. vacation).
+         */
+        DateRangePattern: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "range";
+            /**
+             * Startdate
+             * Format: date
+             */
+            startDate: string;
+            /**
+             * Enddate
+             * Format: date
+             */
+            endDate: string;
+        };
+        /**
+         * DayHours
+         * @description Opening hours for one day. Times are when the store is open to customers.
+         */
+        DayHours: {
+            /**
+             * Closed
+             * @default false
+             */
+            closed: boolean;
+            /**
+             * Opens
+             * @default 07:00
+             */
+            opens: string;
+            /**
+             * Closes
+             * @default 18:00
+             */
+            closes: string;
+        };
+        /** DayTypeStaffing */
+        DayTypeStaffing: {
+            /**
+             * Minatopening
+             * @default 1
+             */
+            minAtOpening: number;
+            /**
+             * Minatclosing
+             * @default 1
+             */
+            minAtClosing: number;
+            /** Dailyhoursmin */
+            dailyHoursMin: number | null;
+            /** Dailyhoursmax */
+            dailyHoursMax: number | null;
+        };
+        /** Employee */
+        Employee: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Color */
+            color: string;
+            /**
+             * Active
+             * @default true
+             */
+            active: boolean;
+            /** Contracthoursperweek */
+            contractHoursPerWeek: number;
+            /**
+             * Hascar
+             * @default false
+             */
+            hasCar: boolean;
+            /**
+             * Needsrideearly
+             * @default false
+             */
+            needsRideEarly: boolean;
+            /**
+             * Needsridelate
+             * @default false
+             */
+            needsRideLate: boolean;
+            /** Alloweddriverids */
+            allowedDriverIds: string[] | null;
+            overrides: components["schemas"]["EmployeeRuleOverrides"];
+            balance: components["schemas"]["HourBalance"];
+        };
+        /**
+         * EmployeeRuleOverrides
+         * @description Per-employee replacements for global limits. `None` means "use the global rule".
+         */
+        EmployeeRuleOverrides: {
+            /** Minshifthours */
+            minShiftHours: number | null;
+            /** Maxshifthours */
+            maxShiftHours: number | null;
+            /** Maxhoursperday */
+            maxHoursPerDay: number | null;
+            /** Minresthours */
+            minRestHours: number | null;
+            /** Maxconsecutivedays */
+            maxConsecutiveDays: number | null;
+            /** Maxweeklyhours */
+            maxWeeklyHours: number | null;
+        };
+        /** ErrorDetail */
+        ErrorDetail: {
+            /** Loc */
+            loc: (string | number)[];
+            /** Message */
+            message: string;
+        };
+        /**
+         * GuestDemand
+         * @description Optional: derive each day's required total staff hours from expected guests.
+         */
+        GuestDemand: {
+            /**
+             * Enabled
+             * @default false
+             */
+            enabled: boolean;
+            /**
+             * Mode
+             * @default linear
+             * @enum {string}
+             */
+            mode: "linear" | "steps";
+            /** Points */
+            points: components["schemas"]["GuestPoint"][];
+            /**
+             * Tolerancehours
+             * @default 2
+             */
+            toleranceHours: number;
+            /** Guestsbydate */
+            guestsByDate: {
+                [key: string]: number;
+            };
+        };
+        /** GuestPoint */
+        GuestPoint: {
+            /** Guests */
+            guests: number;
+            /** Hours */
+            hours: number;
+        };
+        /** HTTPValidationError */
+        HTTPValidationError: {
+            /** Detail */
+            detail?: components["schemas"]["ValidationError"][];
+        };
         /** HealthResponse */
         HealthResponse: {
             /**
@@ -34,6 +386,366 @@ export interface components {
             status: "ok";
             /** Version */
             version: string;
+        };
+        /**
+         * HourBalance
+         * @description Hours carried in from earlier months. The app doesn't remember past months.
+         */
+        HourBalance: {
+            /**
+             * Carryinhours
+             * @default 0
+             */
+            carryInHours: number;
+            /**
+             * Periodweek
+             * @default 1
+             */
+            periodWeek: number;
+            /** Lastshiftendedat */
+            lastShiftEndedAt: string | null;
+            /**
+             * Consecutivedaysatstart
+             * @default 0
+             */
+            consecutiveDaysAtStart: number;
+        };
+        /** MonthCalendar */
+        MonthCalendar: {
+            /** Month */
+            month: string;
+            /** Days */
+            days: components["schemas"]["CalendarDay"][];
+        };
+        /**
+         * ObjectiveWeights
+         * @description Relative importance of the soft goals. Higher = matters more.
+         */
+        ObjectiveWeights: {
+            /**
+             * Wishoff
+             * @default 10
+             */
+            wishOff: number;
+            /**
+             * Wishwork
+             * @default 4
+             */
+            wishWork: number;
+            /**
+             * Hourbalance
+             * @default 5
+             */
+            hourBalance: number;
+            /**
+             * Beyondtolerance
+             * @default 50
+             */
+            beyondTolerance: number;
+            /**
+             * Dailytarget
+             * @default 3
+             */
+            dailyTarget: number;
+            /**
+             * Shortgap
+             * @default 0.5
+             */
+            shortGap: number;
+            /**
+             * Contiguousdaysoff
+             * @default 0.5
+             */
+            contiguousDaysOff: number;
+        };
+        /** Plan */
+        Plan: {
+            /** Shifts */
+            shifts: components["schemas"]["Shift"][];
+        };
+        /** Project */
+        Project: {
+            /**
+             * Schemaversion
+             * @default 1
+             * @constant
+             */
+            schemaVersion: 1;
+            /** Id */
+            id: string;
+            /**
+             * Name
+             * @default Shift plan
+             */
+            name: string;
+            /** Month */
+            month: string;
+            store: components["schemas"]["StoreSettings"];
+            /** Employees */
+            employees: components["schemas"]["Employee"][];
+            /** Availability */
+            availability: components["schemas"]["AvailabilityEntry"][];
+            rules: components["schemas"]["Rules"];
+            weights: components["schemas"]["ObjectiveWeights"];
+            guestDemand: components["schemas"]["GuestDemand"];
+            solver: components["schemas"]["SolverSettings"];
+            plan: components["schemas"]["Plan"] | null;
+        };
+        /** Rules */
+        Rules: {
+            /**
+             * Granularitymin
+             * @default 30
+             * @enum {integer}
+             */
+            granularityMin: 15 | 30 | 60;
+            /**
+             * Minshifthours
+             * @default 3
+             */
+            minShiftHours: number;
+            /**
+             * Maxshifthours
+             * @default 8
+             */
+            maxShiftHours: number;
+            /** Maxhoursperday */
+            maxHoursPerDay: number | null;
+            /**
+             * Oneshiftperday
+             * @default true
+             */
+            oneShiftPerDay: boolean;
+            /**
+             * Minresthours
+             * @default 11
+             */
+            minRestHours: number;
+            /**
+             * Maxconsecutivedays
+             * @default 6
+             */
+            maxConsecutiveDays: number;
+            /**
+             * Maxweeklyhours
+             * @default 48
+             */
+            maxWeeklyHours: number;
+            /**
+             * Fulltimethresholdhours
+             * @default 37
+             */
+            fullTimeThresholdHours: number;
+            /**
+             * Fulltimeweeklywarninghours
+             * @default 37
+             */
+            fullTimeWeeklyWarningHours: number | null;
+            /**
+             * Monthlytolerancehours
+             * @default 2
+             */
+            monthlyToleranceHours: number;
+            /** Monthlyhardlimithours */
+            monthlyHardLimitHours: number | null;
+            /**
+             * Balancingperiodweeks
+             * @default 16
+             */
+            balancingPeriodWeeks: number;
+            /**
+             * Monthlytargetmode
+             * @default weeks_per_month
+             * @enum {string}
+             */
+            monthlyTargetMode: "weeks_per_month" | "fixed_4_4" | "actual_weekdays";
+            /**
+             * Holidaysreducetarget
+             * @default false
+             */
+            holidaysReduceTarget: boolean;
+            /**
+             * Teamadjustmenthours
+             * @default 0
+             */
+            teamAdjustmentHours: number;
+            breaks: components["schemas"]["BreakSettings"];
+            busRule: components["schemas"]["BusRule"];
+        };
+        /** Shift */
+        Shift: {
+            /** Id */
+            id: string;
+            /** Employeeid */
+            employeeId: string;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Start */
+            start: string;
+            /** End */
+            end: string;
+            /**
+             * Pinned
+             * @default false
+             */
+            pinned: boolean;
+        };
+        /** SingleDatePattern */
+        SingleDatePattern: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "date";
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Start */
+            start: string | null;
+            /** End */
+            end: string | null;
+        };
+        /** SolverSettings */
+        SolverSettings: {
+            /**
+             * Timelimitseconds
+             * @default 20
+             */
+            timeLimitSeconds: number;
+        };
+        /**
+         * SpecialDate
+         * @description Custom opening hours (or closed) for one date. Only applies while `enabled`.
+         */
+        SpecialDate: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /**
+             * Enabled
+             * @default false
+             */
+            enabled: boolean;
+            /**
+             * Closed
+             * @default false
+             */
+            closed: boolean;
+            /**
+             * Opens
+             * @default 07:00
+             */
+            opens: string;
+            /**
+             * Closes
+             * @default 17:00
+             */
+            closes: string;
+            /**
+             * Note
+             * @default
+             */
+            note: string;
+        };
+        /** StaffingByDayType */
+        StaffingByDayType: {
+            weekday: components["schemas"]["DayTypeStaffing"];
+            saturday: components["schemas"]["DayTypeStaffing"];
+            sunday: components["schemas"]["DayTypeStaffing"];
+            holiday: components["schemas"]["DayTypeStaffing"];
+        };
+        /** StoreSettings */
+        StoreSettings: {
+            /**
+             * Name
+             * @default My store
+             */
+            name: string;
+            openingHours: components["schemas"]["WeeklyOpeningHours"];
+            publicHolidayHours: components["schemas"]["DayHours"];
+            /** Specialdates */
+            specialDates: components["schemas"]["SpecialDate"][];
+            /**
+             * Staffbeforeopeningmin
+             * @default 60
+             */
+            staffBeforeOpeningMin: number;
+            /**
+             * Staffafterclosingmin
+             * @default 30
+             */
+            staffAfterClosingMin: number;
+            /**
+             * Allowworkingalone
+             * @default false
+             */
+            allowWorkingAlone: boolean;
+            staffing: components["schemas"]["StaffingByDayType"];
+            /** Timerangeminimums */
+            timeRangeMinimums: components["schemas"]["TimeRangeMinimum"][];
+        };
+        /**
+         * TimeRangeMinimum
+         * @description E.g. "at least 2 people 11:00–14:00 on Saturdays".
+         */
+        TimeRangeMinimum: {
+            /** Id */
+            id: string;
+            /** Daytypes */
+            dayTypes: ("weekday" | "saturday" | "sunday" | "holiday")[];
+            /** Start */
+            start: string;
+            /** End */
+            end: string;
+            /** Minpeople */
+            minPeople: number;
+        };
+        /** ValidationError */
+        ValidationError: {
+            /** Location */
+            loc: (string | number)[];
+            /** Message */
+            msg: string;
+            /** Error Type */
+            type: string;
+            /** Input */
+            input?: unknown;
+            /** Context */
+            ctx?: Record<string, never>;
+        };
+        /** WeeklyOpeningHours */
+        WeeklyOpeningHours: {
+            monday: components["schemas"]["DayHours"];
+            tuesday: components["schemas"]["DayHours"];
+            wednesday: components["schemas"]["DayHours"];
+            thursday: components["schemas"]["DayHours"];
+            friday: components["schemas"]["DayHours"];
+            saturday: components["schemas"]["DayHours"];
+            sunday: components["schemas"]["DayHours"];
+        };
+        /**
+         * WeeklyPattern
+         * @description Every week on `weekday`, optionally only within a time window.
+         */
+        WeeklyPattern: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "weekly";
+            /** Weekday */
+            weekday: number;
+            /** Start */
+            start: string | null;
+            /** End */
+            end: string | null;
         };
     };
     responses: never;
@@ -60,6 +772,134 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HealthResponse"];
+                };
+            };
+        };
+    };
+    getMonthCalendar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                month: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MonthCalendar"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    newProject: {
+        parameters: {
+            query: {
+                month: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Project"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    demoProject: {
+        parameters: {
+            query: {
+                month: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Project"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    migrateProject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Project"];
+                };
+            };
+            /** @description Not a valid project file */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
                 };
             };
         };
