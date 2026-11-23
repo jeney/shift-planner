@@ -85,5 +85,91 @@
       "invalid_one": "Projektfilen har {{count}} fejl og kan ikke åbnes.",
       "invalid_other": "Projektfilen har {{count}} fejl og kan ikke åbnes."
     }
+  },
+  "units": {
+    "hours": "{{value}} t",
+    "h": "t",
+    "min": "min"
+  },
+  "dayTypes": {
+    "weekday": "Hverdage",
+    "saturday": "Lørdage",
+    "sunday": "Søndage",
+    "holiday": "Helligdage"
+  },
+  "dayTypesShort": {
+    "weekday": "Hverdage",
+    "saturday": "Lør",
+    "sunday": "Søn",
+    "holiday": "Helligdage"
+  },
+  "calendar": {
+    "holidays": {
+      "new_years_day": "Nytårsdag",
+      "maundy_thursday": "Skærtorsdag",
+      "good_friday": "Langfredag",
+      "easter_sunday": "Påskedag",
+      "easter_monday": "2. påskedag",
+      "great_prayer_day": "Store bededag",
+      "ascension_day": "Kristi himmelfartsdag",
+      "whit_sunday": "Pinsedag",
+      "whit_monday": "2. pinsedag",
+      "christmas_day": "Juledag",
+      "boxing_day": "2. juledag"
+    },
+    "notable": {
+      "constitution_day": "Grundlovsdag",
+      "christmas_eve": "Juleaften",
+      "new_years_eve": "Nytårsaften"
+    }
+  },
+  "store": {
+    "name": "Butikkens navn",
+    "hoursTitle": "Åbningstider",
+    "hoursDescription": "Hvornår kunderne kan handle. Personalet planlægges fra før åbning til efter lukning.",
+    "publicHolidays": "Helligdage",
+    "closed": "Lukket",
+    "openOn": "Åben: {{day}}",
+    "opensOn": "{{day}}: åbner",
+    "closesOn": "{{day}}: lukker",
+    "staffedRange": "Personale {{start}}–{{end}}",
+    "closesBeforeOpens": "Lukketiden skal ligge efter åbningstiden.",
+    "before": "Personale før åbning",
+    "beforeHelp": "Minutters arbejde før dørene åbner.",
+    "after": "Personale efter lukning",
+    "afterHelp": "Minutters arbejde efter dørene lukker.",
+    "specialTitle": "Særlige datoer",
+    "specialDescription": "Helligdage bruger helligdagsåbningstiderne. Slå særlige åbningstider til for at lukke tidligt, åbne senere eller holde lukket hele dagen.",
+    "noSpecialDates": "Ingen helligdage i denne måned. Tilføj en dato nedenfor for at give den særlige åbningstider.",
+    "publicHoliday": "Helligdag",
+    "notableDay": "Mærkedag",
+    "customDate": "Særlig dato",
+    "specialHours": "Særlige åbningstider",
+    "closedAllDay": "Lukket hele dagen",
+    "note": "Note",
+    "notePlaceholder": "Note (valgfri)",
+    "removeDate": "Fjern dato",
+    "addDateLabel": "En anden dato",
+    "addDate": "Tilføj dato",
+    "staffingTitle": "Bemanding",
+    "staffingDescription": "Mindste antal personer ved dagens start og slut. Planlæggeren klarer resten.",
+    "allowAlone": "Tillad at én person arbejder alene",
+    "allowAloneHelp": "Når den er slået fra, er der mindst 2 personer til stede, så længe butikken er bemandet.",
+    "dayType": "Dagtype",
+    "atOpening": "Ved åbning",
+    "atClosing": "Ved lukning",
+    "dailyMin": "Timer pr. dag, min.",
+    "dailyMax": "Timer pr. dag, maks.",
+    "dailyHelp": "Åbning og lukning regnes fra, når personalet møder ind og går hjem. Timer pr. dag er valgfrit; lad felterne stå tomme, hvis der ikke er et mål.",
+    "rangesTitle": "Travle perioder",
+    "rangesDescription": "Ekstra minimum for en del af dagen, fx mindst 2 personer kl. 11–14 om lørdagen.",
+    "addRange": "Tilføj travl periode",
+    "noRanges": "Ingen travle perioder.",
+    "from": "Fra",
+    "to": "Til",
+    "people": "Mindste antal personer",
+    "peopleUnit": "personer",
+    "rangeInvalid": "Vælg mindst én dagtype og et sluttidspunkt efter starttidspunktet.",
+    "removeRange": "Fjern travl periode"
   }
 }

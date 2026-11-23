@@ -85,5 +85,91 @@
       "invalid_one": "This project file has {{count}} problem and can't be opened.",
       "invalid_other": "This project file has {{count}} problems and can't be opened."
     }
+  },
+  "units": {
+    "hours": "{{value}} h",
+    "h": "h",
+    "min": "min"
+  },
+  "dayTypes": {
+    "weekday": "Weekdays",
+    "saturday": "Saturdays",
+    "sunday": "Sundays",
+    "holiday": "Public holidays"
+  },
+  "dayTypesShort": {
+    "weekday": "Weekdays",
+    "saturday": "Sat",
+    "sunday": "Sun",
+    "holiday": "Holidays"
+  },
+  "calendar": {
+    "holidays": {
+      "new_years_day": "New Year's Day",
+      "maundy_thursday": "Maundy Thursday",
+      "good_friday": "Good Friday",
+      "easter_sunday": "Easter Sunday",
+      "easter_monday": "Easter Monday",
+      "great_prayer_day": "Great Prayer Day",
+      "ascension_day": "Ascension Day",
+      "whit_sunday": "Whit Sunday",
+      "whit_monday": "Whit Monday",
+      "christmas_day": "Christmas Day",
+      "boxing_day": "Boxing Day"
+    },
+    "notable": {
+      "constitution_day": "Constitution Day",
+      "christmas_eve": "Christmas Eve",
+      "new_years_eve": "New Year's Eve"
+    }
+  },
+  "store": {
+    "name": "Store name",
+    "hoursTitle": "Opening hours",
+    "hoursDescription": "When customers can shop. Staff are planned from before opening until after closing.",
+    "publicHolidays": "Public holidays",
+    "closed": "Closed",
+    "openOn": "Open on {{day}}",
+    "opensOn": "{{day}}: opens",
+    "closesOn": "{{day}}: closes",
+    "staffedRange": "Staff {{start}}–{{end}}",
+    "closesBeforeOpens": "Closing time must be after opening time.",
+    "before": "Staff before opening",
+    "beforeHelp": "Minutes of work before the doors open.",
+    "after": "Staff after closing",
+    "afterHelp": "Minutes of work after the doors close.",
+    "specialTitle": "Special dates",
+    "specialDescription": "Public holidays use the holiday hours. Turn on special hours to close early, open late, or close for the day.",
+    "noSpecialDates": "No public holidays this month. Add a date below to give it special hours.",
+    "publicHoliday": "Public holiday",
+    "notableDay": "Notable day",
+    "customDate": "Special date",
+    "specialHours": "Special hours",
+    "closedAllDay": "Closed all day",
+    "note": "Note",
+    "notePlaceholder": "Note (optional)",
+    "removeDate": "Remove date",
+    "addDateLabel": "Another date",
+    "addDate": "Add date",
+    "staffingTitle": "Staffing needs",
+    "staffingDescription": "The minimum number of people at the start and end of each day. The planner takes care of the rest.",
+    "allowAlone": "Allow someone to work alone",
+    "allowAloneHelp": "When off, at least 2 people are present whenever the store is staffed.",
+    "dayType": "Day type",
+    "atOpening": "At opening",
+    "atClosing": "At closing",
+    "dailyMin": "Daily hours, min",
+    "dailyMax": "Daily hours, max",
+    "dailyHelp": "Opening and closing count from when staff arrive and leave. Daily hours are optional; leave them empty for no target.",
+    "rangesTitle": "Busy periods",
+    "rangesDescription": "Extra minimums for part of the day, e.g. at least 2 people 11:00–14:00 on Saturdays.",
+    "addRange": "Add busy period",
+    "noRanges": "No busy periods.",
+    "from": "From",
+    "to": "To",
+    "people": "Minimum people",
+    "peopleUnit": "people",
+    "rangeInvalid": "Pick at least one day type, and an end time after the start time.",
+    "removeRange": "Remove busy period"
   }
 }

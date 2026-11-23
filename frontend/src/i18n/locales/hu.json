@@ -85,5 +85,91 @@
       "invalid_one": "A projektfájlban {{count}} hiba van, ezért nem nyitható meg.",
       "invalid_other": "A projektfájlban {{count}} hiba van, ezért nem nyitható meg."
     }
+  },
+  "units": {
+    "hours": "{{value}} ó",
+    "h": "ó",
+    "min": "perc"
+  },
+  "dayTypes": {
+    "weekday": "Hétköznapok",
+    "saturday": "Szombatok",
+    "sunday": "Vasárnapok",
+    "holiday": "Ünnepnapok"
+  },
+  "dayTypesShort": {
+    "weekday": "Hétköznap",
+    "saturday": "Szo",
+    "sunday": "Vas",
+    "holiday": "Ünnep"
+  },
+  "calendar": {
+    "holidays": {
+      "new_years_day": "Újév",
+      "maundy_thursday": "Nagycsütörtök",
+      "good_friday": "Nagypéntek",
+      "easter_sunday": "Húsvétvasárnap",
+      "easter_monday": "Húsvéthétfő",
+      "great_prayer_day": "Nagy imanap",
+      "ascension_day": "Áldozócsütörtök",
+      "whit_sunday": "Pünkösdvasárnap",
+      "whit_monday": "Pünkösdhétfő",
+      "christmas_day": "Karácsony",
+      "boxing_day": "Karácsony másnapja"
+    },
+    "notable": {
+      "constitution_day": "Az alkotmány napja",
+      "christmas_eve": "Szenteste",
+      "new_years_eve": "Szilveszter"
+    }
+  },
+  "store": {
+    "name": "Az üzlet neve",
+    "hoursTitle": "Nyitvatartás",
+    "hoursDescription": "Mikor vásárolhatnak a vevők. A munkatársak nyitás előtt kezdenek és zárás után végeznek.",
+    "publicHolidays": "Ünnepnapok",
+    "closed": "Zárva",
+    "openOn": "Nyitva: {{day}}",
+    "opensOn": "{{day}}: nyit",
+    "closesOn": "{{day}}: zár",
+    "staffedRange": "Munkatársak: {{start}}–{{end}}",
+    "closesBeforeOpens": "A zárásnak a nyitás után kell lennie.",
+    "before": "Munka nyitás előtt",
+    "beforeHelp": "Hány perccel nyitás előtt kezdenek a munkatársak.",
+    "after": "Munka zárás után",
+    "afterHelp": "Hány percig dolgoznak zárás után.",
+    "specialTitle": "Különleges napok",
+    "specialDescription": "Ünnepnapokon az ünnepnapi nyitvatartás érvényes. Kapcsold be a különleges nyitvatartást, ha korábban zártok, később nyittok vagy egész nap zárva vagytok.",
+    "noSpecialDates": "Ebben a hónapban nincs ünnepnap. Lent hozzáadhatsz egy napot különleges nyitvatartással.",
+    "publicHoliday": "Ünnepnap",
+    "notableDay": "Jeles nap",
+    "customDate": "Különleges nap",
+    "specialHours": "Különleges nyitvatartás",
+    "closedAllDay": "Egész nap zárva",
+    "note": "Megjegyzés",
+    "notePlaceholder": "Megjegyzés (nem kötelező)",
+    "removeDate": "Nap törlése",
+    "addDateLabel": "Másik nap",
+    "addDate": "Nap hozzáadása",
+    "staffingTitle": "Létszámigény",
+    "staffingDescription": "A minimális létszám a nap elején és végén. A többit a tervező intézi.",
+    "allowAlone": "Egyedül is dolgozhat valaki",
+    "allowAloneHelp": "Ha ki van kapcsolva, mindig legalább 2 ember van bent, amíg az üzletben dolgoznak.",
+    "dayType": "Naptípus",
+    "atOpening": "Nyitáskor",
+    "atClosing": "Záráskor",
+    "dailyMin": "Napi órák, min.",
+    "dailyMax": "Napi órák, max.",
+    "dailyHelp": "A nyitás és a zárás a munkatársak érkezésétől és távozásától számít. A napi órák megadása nem kötelező; hagyd üresen, ha nincs cél.",
+    "rangesTitle": "Forgalmas időszakok",
+    "rangesDescription": "Külön minimum a nap egy részére, pl. szombaton 11:00–14:00 között legalább 2 ember.",
+    "addRange": "Forgalmas időszak hozzáadása",
+    "noRanges": "Nincs forgalmas időszak.",
+    "from": "Ettől",
+    "to": "Eddig",
+    "people": "Minimális létszám",
+    "peopleUnit": "fő",
+    "rangeInvalid": "Válassz legalább egy naptípust, és a kezdésnél későbbi befejezést.",
+    "removeRange": "Forgalmas időszak törlése"
   }
 }
