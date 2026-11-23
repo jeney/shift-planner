@@ -89,7 +89,8 @@
   "units": {
     "hours": "{{value}} t",
     "h": "t",
-    "min": "min"
+    "min": "min",
+    "hPerWeek": "t/uge"
   },
   "dayTypes": {
     "weekday": "Hverdage",
@@ -171,5 +172,88 @@
     "peopleUnit": "personer",
     "rangeInvalid": "Vælg mindst én dagtype og et sluttidspunkt efter starttidspunktet.",
     "removeRange": "Fjern travl periode"
+  },
+  "rules": {
+    "minShiftHours": {
+      "label": "Korteste vagt",
+      "help": "Kortere vagter planlægges aldrig."
+    },
+    "maxShiftHours": {
+      "label": "Længste vagt",
+      "help": "Længere vagter planlægges aldrig."
+    },
+    "maxHoursPerDay": {
+      "label": "Maks. timer pr. dag",
+      "help": "Summen af alle vagter på én dag. Tom = samme som længste vagt."
+    },
+    "minRestHours": {
+      "label": "Mindste hviletid mellem vagter",
+      "help": "Fri mellem slutningen af én vagt og starten af den næste (dansk lov: 11 t)."
+    },
+    "maxConsecutiveDays": {
+      "label": "Maks. dage i træk",
+      "help": "Arbejdsdage i træk før en fridag (dansk lov: højst 6)."
+    },
+    "maxWeeklyHours": {
+      "label": "Maks. timer pr. uge",
+      "help": "Fast grænse for enhver kalenderuge."
+    }
+  },
+  "employees": {
+    "add": "Tilføj medarbejder",
+    "newName": "Medarbejder {{n}}",
+    "unnamed": "Uden navn",
+    "summary_one": "{{count}} aktiv person",
+    "summary_other": "{{count}} aktive personer",
+    "emptyTitle": "Ingen medarbejdere endnu",
+    "emptyBody": "Tilføj de personer, du planlægger for. Du angiver deres kontrakttimer, transport og timesaldo.",
+    "name": "Navn",
+    "color": "Farve",
+    "active": "Aktiv",
+    "activeHelp": "Inaktive personer bliver i projektet, men planlægges ikke denne måned.",
+    "inactive": "Inaktiv",
+    "edit": "Redigér {{name}}",
+    "sheetDescription": "Ændringer gemmes automatisk.",
+    "contract": "Kontrakt",
+    "hoursPerWeek": "Timer pr. uge",
+    "presets": "Almindelige kontrakter",
+    "monthlyTarget": "Mål denne måned",
+    "targetCalculation": "{{weekly}}/uge × {{factor}} → {{target}} denne måned",
+    "includesTeamAdjustment": "(inkl. teamjustering)",
+    "weekdaysFactor_one": "{{count}} hverdag ÷ 5",
+    "weekdaysFactor_other": "{{count}} hverdage ÷ 5",
+    "transport": "Transport",
+    "hasCar": "Har bil",
+    "hasCarHelp": "Kan køre kolleger til tidlige eller sene vagter.",
+    "needsRide": "Skal have lift",
+    "needsRideEarly": "Skal have lift til tidlige vagter",
+    "needsRideEarlyHelp": "Før den første bus skal personen starte præcis samtidig med en chauffør.",
+    "needsRideLate": "Skal have lift hjem fra sene vagter",
+    "needsRideLateHelp": "Efter den sidste bus skal personen slutte præcis samtidig med en chauffør.",
+    "needsRideLateOff": "Bruges kun, hvis reglen om lift om aftenen er slået til under Avancerede indstillinger.",
+    "whoCanDrive": "Hvem kan køre personen?",
+    "anyDriver": "Alle med bil",
+    "someDrivers": "Kun disse personer",
+    "noDrivers": "Ingen andre har bil endnu.",
+    "balance": "Timesaldo",
+    "balanceHelp": "Appen husker ikke tidligere måneder, så angiv, hvor personen står i dag.",
+    "carryIn": "Overført saldo",
+    "carryInHelp": "Timer over (+) eller under (−) målet indtil nu i udligningsperioden.",
+    "periodWeek": "Uge i udligningsperioden",
+    "periodWeekShort": "Periodeuge",
+    "periodWeekHelp": "Hvilken af de {{weeks}} uger måneden starter i. Planlæggeren udligner saldoen mere, jo tættere perioden er på slutningen.",
+    "ofWeeks": "af {{weeks}}",
+    "weekOf": "{{week}} af {{weeks}}",
+    "lastShiftEnded": "Sidste vagt sluttede",
+    "lastShiftEndedHelp": "Valgfrit. Sikrer nok hvile før personens første vagt i måneden.",
+    "daysInARow": "Dage i træk ved månedens start",
+    "daysInARowHelp": "Valgfrit. Tæller med i grænsen for dage i træk i starten af måneden.",
+    "limits": "Personlige grænser",
+    "limitsHelp": "Tilsidesæt butikkens regler for denne person. Lad feltet stå tomt for at bruge butikkens værdi.",
+    "globalValue": "Butikkens værdi: {{value}}",
+    "total": "I alt (aktive)",
+    "delete": "Slet medarbejder",
+    "deleteTitle": "Slet {{name}}?",
+    "deleteDescription": "Personens tilgængelighed, ønsker og vagter i projektet bliver også fjernet."
   }
 }
