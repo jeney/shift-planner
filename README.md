@@ -227,6 +227,20 @@ rules are impossible.
 | Daily hour targets | Soft by default (a penalty per hour outside the range). *Daily hours are hard limits* on the Store step makes them strict, which can make a month impossible |
 | Hours | Monthly targets, balances and weekly limits use *worked* (paid) hours. Shift length and the daily maximum use time at work |
 
+### Editing the plan
+
+The **Plan** step shows people × days, with weekends and holidays shaded.
+
+- **Editing:** click a cell, or press Enter, to add, change or remove a shift. Hand edits can use any minute.
+  Arrow keys move between cells, Delete clears a shift, and Ctrl+Z / Ctrl+Y undo and redo.
+- **Live checking:** every edit is re-checked with the same rule checker the solver uses. Broken rules turn the
+  cell red, with the explanation in a tooltip and in the list below the grid. Day-level problems, such as
+  understaffing, show in the *Per day* row.
+- **Summaries:** each row shows planned vs target hours and the resulting balance.
+- **Pinning:** hand-edited shifts are **pinned** (📌) automatically. *Re-generate* keeps pinned shifts exactly as
+  they are and plans everything else around them. Turn pinning off for a shift in its editor, or use *Unpin all*.
+  If a pinned shift breaks a rule, the planner keeps it and reports the rule rather than dropping your edit.
+
 ### Your data
 
 - No accounts and no server-side storage.
@@ -303,7 +317,7 @@ production-like stack.
 3. ✅ Solver core: hard constraints, coverage, `/api/solve`
 4. ✅ Objective: wishes, hour-balance steering, daily targets, plus a first *Generate* step
 5. ✅ Diagnostics and best-effort plans with violation reporting
-6. Plan grid: editing, live validation, undo/redo, pin & re-generate
+6. ✅ Plan grid: editing, live validation, undo/redo, pin & re-generate
 7. Export: PDF/print, ODS/XLSX
 8. Guest-based demand (optional feature)
 9. Polish: design pass, translations review, e2e tests, docs

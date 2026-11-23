@@ -18,6 +18,7 @@ import { AdvancedScreen } from '@/features/advanced/advanced-screen'
 import { AvailabilityScreen } from '@/features/availability/availability-screen'
 import { EmployeesScreen } from '@/features/employees/employees-screen'
 import { GenerateScreen } from '@/features/generate/generate-screen'
+import { PlanScreen } from '@/features/plan/plan-screen'
 import { StoreScreen } from '@/features/store/store-screen'
 
 const STEPS = [
@@ -25,7 +26,7 @@ const STEPS = [
   { id: 'employees', icon: Users, screen: EmployeesScreen },
   { id: 'availability', icon: CalendarDays, screen: AvailabilityScreen },
   { id: 'generate', icon: Sparkles, screen: GenerateScreen },
-  { id: 'plan', icon: Table2, screen: null },
+  { id: 'plan', icon: Table2, screen: PlanScreen },
   { id: 'export', icon: Download, screen: null },
   { id: 'advanced', icon: SlidersHorizontal, screen: AdvancedScreen },
 ] as const satisfies readonly { id: string; icon: LucideIcon; screen: ComponentType | null }[]

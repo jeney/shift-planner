@@ -81,10 +81,10 @@ describe('GenerateScreen', () => {
     expect(screen.getByText('1 shifts · 2 of 2 wish days honoured · 18.2 s')).toBeInTheDocument()
     expect(useProjectStore.getState().project?.plan?.shifts).toHaveLength(1)
 
-    // The request carries the inputs, not an old plan.
+    // The request carries only pinned shifts from an old plan (none here).
     const solveCall = fetchMock.mock.calls.find(([r]) => (r as Request).url.endsWith('/api/solve'))
     const body = await (solveCall![0] as Request).json()
-    expect(body.plan).toBeNull()
+    expect(body.plan).toEqual({ shifts: [] })
 
     const issues = screen.getByRole('list', { name: 'Things to check' })
     expect(issues).toHaveTextContent(

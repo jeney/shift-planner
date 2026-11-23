@@ -5,6 +5,7 @@ import {
   Clock,
   Heart,
   Loader2,
+  Pin,
   Sparkles,
   Users,
 } from 'lucide-react'
@@ -44,6 +45,7 @@ export function GenerateScreen() {
   const active = project.employees.filter((e) => e.active)
   const wishes = project.availability.filter((a) => a.kind !== 'unavailable').length
   const limit = project.solver.timeLimitSeconds
+  const pinned = project.plan?.shifts.filter((s) => s.pinned).length ?? 0
 
   return (
     <div className="grid gap-6">
@@ -65,6 +67,12 @@ export function GenerateScreen() {
               <Clock aria-hidden className="size-4" />
               {t('generate.timeLimit', { seconds: limit })}
             </li>
+            {pinned > 0 && (
+              <li className="flex items-center gap-1.5">
+                <Pin aria-hidden className="size-4" />
+                {t('generate.pinnedKept', { count: pinned })}
+              </li>
+            )}
           </ul>
         </div>
         <Button

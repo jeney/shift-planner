@@ -531,7 +531,9 @@
     "precheckRunning": "Tjekker opsætningen…",
     "diagnosticsTitle": "Hvorfor reglerne ikke alle kan overholdes",
     "bestEffortSummary_one": "{{count}} regel er brudt; se listen nedenfor. {{shifts}} vagter · {{seconds}} s",
-    "bestEffortSummary_other": "{{count}} regler er brudt; se listen nedenfor. {{shifts}} vagter · {{seconds}} s"
+    "bestEffortSummary_other": "{{count}} regler er brudt; se listen nedenfor. {{shifts}} vagter · {{seconds}} s",
+    "pinnedKept_one": "{{count}} fastlåst vagt beholdes",
+    "pinnedKept_other": "{{count}} fastlåste vagter beholdes"
   },
   "violation": {
     "inactive_employee": "{{name}} er inaktiv, men har en vagt {{date}}.",
@@ -575,5 +577,41 @@
     },
     "unknown": "Planlæggeren rapporterede et problem med denne måned.",
     "unavailableList": "Utilgængelige: {{names}}."
+  },
+  "plan": {
+    "gridLabel": "Vagtplan",
+    "summary": "Timer denne måned",
+    "plannedOf": "Planlagt / mål",
+    "balance": "Forskel → saldo",
+    "dayTotal": "Pr. dag",
+    "people_one": "{{count}} person",
+    "people_other": "{{count}} personer",
+    "noShift": "ingen vagt",
+    "pinnedShort": "fastlåst",
+    "start": "Start",
+    "end": "Slut",
+    "invalidTimes": "Sluttidspunktet skal ligge efter starttidspunktet.",
+    "pinned": "Behold ved ny generering",
+    "pinnedHelp": "Manuelle ændringer fastlåses automatisk. Slå fra for at lade planlæggeren ændre vagten.",
+    "remove": "Fjern vagt",
+    "save": "Gem",
+    "add": "Tilføj vagt",
+    "undo": "Fortryd",
+    "redo": "Gentag",
+    "regenerate": "Generér igen",
+    "regenerateKeeping_one": "Generér igen, behold {{count}} ændring",
+    "regenerateKeeping_other": "Generér igen, behold {{count}} ændringer",
+    "unpinAll": "Frigør alle",
+    "checking": "Tjekker regler…",
+    "errors_one": "{{count}} regel brudt",
+    "errors_other": "{{count}} regler brudt",
+    "allGood": "Alle regler overholdt",
+    "warnings_one": "{{count}} advarsel",
+    "warnings_other": "{{count}} advarsler",
+    "keyboardHelp": "Klik på en celle eller tryk Enter for at redigere. Piletasterne flytter, Delete sletter en vagt, Ctrl+Z / Ctrl+Y fortryder og gentager. Redigerede vagter fastlåses (📌) og beholdes, når du genererer igen.",
+    "issuesLabel": "Brudte regler og advarsler",
+    "emptyTitle": "Ingen plan endnu",
+    "emptyBody": "Generér en plan under Generér, eller start med en tom plan og tilføj vagter manuelt.",
+    "planByHand": "Planlæg manuelt"
   }
 }

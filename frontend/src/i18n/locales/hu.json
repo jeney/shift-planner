@@ -531,7 +531,9 @@
     "precheckRunning": "A beállítások ellenőrzése…",
     "diagnosticsTitle": "Miért nem teljesíthető minden szabály",
     "bestEffortSummary_one": "{{count}} szabály sérül, lásd lent. {{shifts}} műszak · {{seconds}} mp",
-    "bestEffortSummary_other": "{{count}} szabály sérül, lásd lent. {{shifts}} műszak · {{seconds}} mp"
+    "bestEffortSummary_other": "{{count}} szabály sérül, lásd lent. {{shifts}} műszak · {{seconds}} mp",
+    "pinnedKept_one": "{{count}} rögzített műszak megmarad",
+    "pinnedKept_other": "{{count}} rögzített műszak megmarad"
   },
   "violation": {
     "inactive_employee": "{{name}} inaktív, mégis van műszakja: {{date}}.",
@@ -575,5 +577,41 @@
     },
     "unknown": "A tervező problémát jelzett ezzel a hónappal.",
     "unavailableList": "Nem elérhető: {{names}}."
+  },
+  "plan": {
+    "gridLabel": "Beosztás",
+    "summary": "Órák ebben a hónapban",
+    "plannedOf": "Tervezett / cél",
+    "balance": "Eltérés → egyenleg",
+    "dayTotal": "Naponta",
+    "people_one": "{{count}} fő",
+    "people_other": "{{count}} fő",
+    "noShift": "nincs műszak",
+    "pinnedShort": "rögzítve",
+    "start": "Kezdés",
+    "end": "Befejezés",
+    "invalidTimes": "A befejezésnek a kezdés után kell lennie.",
+    "pinned": "Megtartás újrageneráláskor",
+    "pinnedHelp": "A kézi módosítások automatikusan rögzülnek. Kapcsold ki, ha a tervező módosíthatja ezt a műszakot.",
+    "remove": "Műszak törlése",
+    "save": "Mentés",
+    "add": "Műszak hozzáadása",
+    "undo": "Visszavonás",
+    "redo": "Ismét",
+    "regenerate": "Újragenerálás",
+    "regenerateKeeping_one": "Újragenerálás, {{count}} módosítás megtartásával",
+    "regenerateKeeping_other": "Újragenerálás, {{count}} módosítás megtartásával",
+    "unpinAll": "Összes rögzítés feloldása",
+    "checking": "Szabályok ellenőrzése…",
+    "errors_one": "{{count}} szabály sérül",
+    "errors_other": "{{count}} szabály sérül",
+    "allGood": "Minden szabály teljesül",
+    "warnings_one": "{{count}} figyelmeztetés",
+    "warnings_other": "{{count}} figyelmeztetés",
+    "keyboardHelp": "Kattints egy cellára vagy nyomj Entert a szerkesztéshez. A nyilak mozgatnak, a Delete törli a műszakot, Ctrl+Z / Ctrl+Y visszavon és ismétel. A szerkesztett műszakok rögzülnek (📌), és újrageneráláskor megmaradnak.",
+    "issuesLabel": "Megszegett szabályok és figyelmeztetések",
+    "emptyTitle": "Még nincs beosztás",
+    "emptyBody": "Készíts beosztást a Generálás lépésben, vagy kezdj üres beosztással, és add hozzá kézzel a műszakokat.",
+    "planByHand": "Kézi tervezés"
   }
 }
