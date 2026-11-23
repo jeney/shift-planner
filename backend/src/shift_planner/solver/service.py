@@ -1,5 +1,6 @@
 import time
 
+from shift_planner.config import solver_workers
 from shift_planner.domain.base import to_minutes
 from shift_planner.domain.project import Plan, Project
 from shift_planner.domain.solve import (
@@ -56,10 +57,11 @@ def plan_stats(
     return stats
 
 
-def solve_project(project: Project, *, workers: int = 8) -> SolveResponse:
+def solve_project(project: Project, *, workers: int | None = None) -> SolveResponse:
     """Pre-check, solve strictly, and fall back to a best-effort plan if no plan follows
     every rule (or none was found in time)."""
     started = time.perf_counter()
+    workers = workers or solver_workers()
     limit = project.solver.time_limit_seconds
     ctx = build_context(project)
     diagnostics = precheck(ctx)
