@@ -22,4 +22,4 @@ export type Diagnostic = Schemas['Diagnostic']
 export type EmployeeStats = Schemas['EmployeeStats']
 
 /** Must match the backend. Fails to compile if the generated schema moves to a new version. */
-export const CURRENT_SCHEMA_VERSION: Project['schemaVersion'] = 2
+export const CURRENT_SCHEMA_VERSION: Project['schemaVersion'] = 3

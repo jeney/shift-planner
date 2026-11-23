@@ -1319,6 +1319,16 @@
           "newBalanceHours": {
             "type": "number",
             "title": "Newbalancehours"
+          },
+          "wishesHonoured": {
+            "type": "integer",
+            "title": "Wisheshonoured",
+            "default": 0
+          },
+          "wishesTotal": {
+            "type": "integer",
+            "title": "Wishestotal",
+            "default": 0
           }
         },
         "additionalProperties": false,
@@ -1330,7 +1340,9 @@
           "targetHours",
           "deviationHours",
           "carryInHours",
-          "newBalanceHours"
+          "newBalanceHours",
+          "wishesHonoured",
+          "wishesTotal"
         ],
         "title": "EmployeeStats"
       },
@@ -1785,9 +1797,9 @@
         "properties": {
           "schemaVersion": {
             "type": "integer",
-            "const": 2,
+            "const": 3,
             "title": "Schemaversion",
-            "default": 2
+            "default": 3
           },
           "id": {
             "type": "string",
@@ -1858,9 +1870,9 @@
         "properties": {
           "schemaVersion": {
             "type": "integer",
-            "const": 2,
+            "const": 3,
             "title": "Schemaversion",
-            "default": 2
+            "default": 3
           },
           "id": {
             "type": "string",
@@ -2460,6 +2472,13 @@
             "type": "array",
             "title": "Stats"
           },
+          "wishes": {
+            "items": {
+              "$ref": "#/components/schemas/WishOutcome"
+            },
+            "type": "array",
+            "title": "Wishes"
+          },
           "solveTimeMs": {
             "type": "integer",
             "title": "Solvetimems"
@@ -2473,6 +2492,7 @@
           "violations",
           "diagnostics",
           "stats",
+          "wishes",
           "solveTimeMs"
         ],
         "title": "SolveResponse"
@@ -2688,6 +2708,11 @@
           "staffing": {
             "$ref": "#/components/schemas/StaffingByDayType-Input"
           },
+          "dailyHoursHard": {
+            "type": "boolean",
+            "title": "Dailyhourshard",
+            "default": false
+          },
           "timeRangeMinimums": {
             "items": {
               "$ref": "#/components/schemas/TimeRangeMinimum"
@@ -2743,6 +2768,11 @@
           "staffing": {
             "$ref": "#/components/schemas/StaffingByDayType-Output"
           },
+          "dailyHoursHard": {
+            "type": "boolean",
+            "title": "Dailyhourshard",
+            "default": false
+          },
           "timeRangeMinimums": {
             "items": {
               "$ref": "#/components/schemas/TimeRangeMinimum"
@@ -2762,6 +2792,7 @@
           "staffAfterClosingMin",
           "allowWorkingAlone",
           "staffing",
+          "dailyHoursHard",
           "timeRangeMinimums"
         ],
         "title": "StoreSettings"
@@ -3150,6 +3181,49 @@
         ],
         "title": "WeeklyPattern",
         "description": "Every week on `weekday`, optionally only within a time window."
+      },
+      "WishOutcome": {
+        "properties": {
+          "entryId": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Entryid"
+          },
+          "employeeId": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Employeeid"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "wish_off",
+              "wish_work"
+            ],
+            "title": "Kind"
+          },
+          "honoured": {
+            "type": "boolean",
+            "title": "Honoured"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "entryId",
+          "employeeId",
+          "date",
+          "kind",
+          "honoured"
+        ],
+        "title": "WishOutcome"
       }
     }
   }
