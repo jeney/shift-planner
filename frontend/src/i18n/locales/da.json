@@ -38,5 +38,52 @@
   "empty": {
     "comingSoon": "Kommer snart",
     "comingSoonBody": "Dette trin kommer i en kommende version."
+  },
+  "common": {
+    "cancel": "Annullér"
+  },
+  "project": {
+    "menu": "Projekt",
+    "new": "Ny plan…",
+    "open": "Åbn…",
+    "save": "Gem",
+    "demo": "Indlæs demoprojekt",
+    "newTitle": "Start en ny plan",
+    "newDescription": "Vælg den måned, du vil planlægge.",
+    "month": "Måned",
+    "year": "År",
+    "create": "Opret plan",
+    "replaceTitle": "Erstat den nuværende plan?",
+    "replaceDescription": "Din nuværende plan bliver erstattet. Gem den først, hvis du vil beholde en kopi.",
+    "replace": "Erstat",
+    "created": "Ny plan for {{month}} oprettet",
+    "demoLoaded": "Demoprojektet er indlæst",
+    "opened": "Projektet er åbnet",
+    "saved": "Gemt som {{file}}"
+  },
+  "welcome": {
+    "title": "Planlæg næste måneds vagter",
+    "subtitle": "Indtast åbningstider, dit team og deres ønsker. Vagtplanlæggeren finder en plan, der overholder reglerne, og du kan finjustere den manuelt.",
+    "newTitle": "Start en ny plan",
+    "newDescription": "Start med fornuftige standardindstillinger for den valgte måned.",
+    "demoTitle": "Prøv demoen",
+    "demoDescription": "Et fiktivt team på 9 personer med tilgængelighed og ønsker, klar til planlægning.",
+    "openTitle": "Åbn en gemt plan",
+    "openDescription": "Fortsæt fra en .json-fil, du har gemt tidligere.",
+    "chooseFile": "Vælg fil…",
+    "privacy": "Dine data bliver i denne browser. Serveren bruger dem kun til at beregne planen og gemmer intet."
+  },
+  "errors": {
+    "offline": "Kan ikke få forbindelse til planlægningstjenesten. Tjek, at den kører, og prøv igen.",
+    "unknown": "Noget gik galt. Prøv igen.",
+    "fileNotJson": "Denne fil er ikke et Vagtplanlægger-projekt.",
+    "restoreFailed": "Din automatisk gemte plan kunne ikke gendannes. En sikkerhedskopi er gemt i denne browser.",
+    "project": {
+      "missingSchemaVersion": "Denne fil er ikke et Vagtplanlægger-projekt (ingen formatversion fundet).",
+      "newerSchemaVersion": "Denne fil er gemt med en nyere version af Vagtplanlægger (format {{version}}; denne app understøtter op til {{supported}}).",
+      "noMigration": "Denne fil bruger format {{version}}, som ikke kan opgraderes automatisk.",
+      "invalid_one": "Projektfilen har {{count}} fejl og kan ikke åbnes.",
+      "invalid_other": "Projektfilen har {{count}} fejl og kan ikke åbnes."
+    }
   }
 }

@@ -38,5 +38,52 @@
   "empty": {
     "comingSoon": "Coming soon",
     "comingSoonBody": "This step is part of an upcoming release."
+  },
+  "common": {
+    "cancel": "Cancel"
+  },
+  "project": {
+    "menu": "Project",
+    "new": "New plan…",
+    "open": "Open…",
+    "save": "Save",
+    "demo": "Load demo project",
+    "newTitle": "Start a new plan",
+    "newDescription": "Choose the month you want to plan.",
+    "month": "Month",
+    "year": "Year",
+    "create": "Create plan",
+    "replaceTitle": "Replace the current plan?",
+    "replaceDescription": "Your current plan will be replaced. Save it first if you want to keep a copy.",
+    "replace": "Replace",
+    "created": "New plan for {{month}} created",
+    "demoLoaded": "Demo project loaded",
+    "opened": "Project opened",
+    "saved": "Saved as {{file}}"
+  },
+  "welcome": {
+    "title": "Plan next month's shifts",
+    "subtitle": "Enter your opening hours, your team and their wishes. Shift Planner finds a plan that follows the rules, and you can fine-tune it by hand.",
+    "newTitle": "Start a new plan",
+    "newDescription": "Begin with sensible defaults for the month you choose.",
+    "demoTitle": "Try the demo",
+    "demoDescription": "A fictional team of 9 people with availability and wishes, ready to plan.",
+    "openTitle": "Open a saved plan",
+    "openDescription": "Continue from a .json file you saved earlier.",
+    "chooseFile": "Choose file…",
+    "privacy": "Your data stays in this browser. The server only uses it to calculate the plan and stores nothing."
+  },
+  "errors": {
+    "offline": "Can't reach the planning service. Check that it is running and try again.",
+    "unknown": "Something went wrong. Please try again.",
+    "fileNotJson": "This file isn't a Shift Planner project.",
+    "restoreFailed": "Your autosaved plan couldn't be restored. A backup copy was kept in this browser.",
+    "project": {
+      "missingSchemaVersion": "This file isn't a Shift Planner project (no format version found).",
+      "newerSchemaVersion": "This file was saved by a newer version of Shift Planner (format {{version}}; this app supports up to {{supported}}).",
+      "noMigration": "This file uses format {{version}}, which can't be upgraded automatically.",
+      "invalid_one": "This project file has {{count}} problem and can't be opened.",
+      "invalid_other": "This project file has {{count}} problems and can't be opened."
+    }
   }
 }
